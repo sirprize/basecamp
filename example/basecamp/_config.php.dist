@@ -1,0 +1,34 @@
+<?php
+
+/**
+ * Basecamp API Wrapper for PHP 5.3+ 
+ *
+ * LICENSE
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this package in the file LICENSE.txt
+ *
+ * @category   Sirprize
+ * @package    Basecamp
+ * @subpackage Try
+ * @copyright  Copyright (c) 2010, Christian Hoegl, Switzerland (http://sirprize.me)
+ * @license    MIT License
+ */
+
+define('BASECAMP_EXAMPLE_PROJECT_ID', 'xxxxxx');
+define('BASECAMP_EXAMPLE_USER_ID', 'xxxxxx');
+define('BASECAMP_EXAMPLE_TODOLIST_ID', 'xxxxxx');
+define('BASECAMP_EXAMPLE_PMILESTONE_ID', 'xxxxxx');
+
+set_include_path(implode(PATH_SEPARATOR, array(
+    realpath('/path/to/zend/framework'), # path to zend framework
+	realpath('../lib'), # path to basecamp lib
+	realpath(dirname(__FILE__)),
+    get_include_path()
+)));
+
+$config = array(
+	'baseUri' => 'https://xxxxxx.basecamphq.com',
+	'username' => 'xxxxxx',
+	'password' => 'xxxxxx'
+);
