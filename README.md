@@ -11,7 +11,7 @@ Basecamp API Wrapper
 	require_once 'Sirprize/Basecamp.php';
 	$basecamp = new \Sirprize\Basecamp($config);
 	
-### Fetching a list a projects
+### Fetch all projects
 	$projects = $basecamp->getProjectsInstance()->findAll();
 	
 	foreach($projects as $project)
@@ -42,7 +42,7 @@ Requirements
 ------------
 
 + php 5.3+ (uses namespaces)
-+ recent version of zend framework (tested with 1.10)
++ recent version of zend framework (tested with 1.10) > uses Zend_Http_Client
 
 
 Supported Features
