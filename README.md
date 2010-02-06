@@ -42,26 +42,20 @@ Requirements
 ------------
 
 + php 5.3+ (uses namespaces)
-+ recent version of zend framework (tested with 1.10) > uses Zend_Http_Client
++ Recent version of zend framework (tested with 1.10) > uses Zend_Http_Client
 
 
 Supported Features
 ------------------
 
-+ milestone: fully implemented
-+ person:
-+ project:
-+ todolist:
-+ todolistitems:
++ Milestone: fully implemented
++ Person:
++ Project:
++ Todolist:
++ Todolistitems:
 
 
 Getting Started
 ---------------
 
-Please find plenty of examples in the example/basecamp directory
-
-+ adjust example/basecamp/_config.php with your own settings
-+ make the files in example/basecamp/* executable
-+ example/basecamp/get-projects to get a list of all projects
-+ example/basecamp/get-persons to get a list of all persons
-+ ...
+Please find plenty of examples in the example/basecamp directory and adjust example/basecamp/_config.php with your own settings
