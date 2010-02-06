@@ -1,16 +1,37 @@
 Basecamp API Wrapper
 ====================
 
-### Fetching a list a projects
+### Setup
 	require_once 'Sirprize/Basecamp.php';
 	$config = array('baseUri' => 'https://xxx.basecamphq.com', 'username' => 'xxx', 'password' => 'xxx');
 	$basecamp = new \Sirprize\Basecamp($config);
+	
+### Fetching a list a projects
 	$projects = $basecamp->getProjectsInstance()->findAll();
 	
 	foreach($projects as $project)
 	{
 		print $project->getName()."\n";
 	}
+
+### Create a new milestone
+	$milestones = $basecamp->getMilestoneCollectionInstance();
+	$milestone = $milestones->getMilestoneInstance();
+	
+	require_once 'Sirprize/Basecamp/Date.php';
+	$date = new \Sirprize\Basecamp\Date('2010-03-01');
+
+	require_once 'Sirprize/Basecamp/Id.php';
+	$projectId = new \Sirprize\Basecamp\Id('xxx');
+	$userId = new \Sirprize\Basecamp\Id('xxx');
+
+	$milestone
+		->setProjectId($projectId)
+		->setResponsiblePartyId($userId)
+		->setDeadline($date)
+		->setTitle('Milestoners Everywhere')
+		->setWantsNotification(true)
+	;
 
 Requirements
 ------------
