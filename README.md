@@ -58,4 +58,4 @@ Supported Features
 Getting Started
 ---------------
 
-Please find plenty of examples in the example/basecamp directory and adjust example/basecamp/_config.php with your own settings
+Please find plenty of examples in the `example/basecamp` directory and adjust `example/basecamp/_config.php` with your own settings
