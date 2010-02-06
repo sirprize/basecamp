@@ -1,6 +1,7 @@
 Basecamp API Wrapper
 ====================
 
+### Fetching a list a projects
 	require_once 'Sirprize/Basecamp.php';
 	$config = array('baseUri' => 'https://xxx.basecamphq.com', 'username' => 'xxx', 'password' => 'xxx');
 	$basecamp = new \Sirprize\Basecamp($config);
