@@ -18,7 +18,7 @@
 namespace Sirprize\Basecamp\Milestone\Collection\Observer;
 
 
-require_once 'Sirprize/Basecamp/Milestone/Collection/Observer/Interfaze.php';
+require_once 'Sirprize/Basecamp/Milestone/Collection/Observer/Abstrakt.php';
 
 
 /**
@@ -27,35 +27,31 @@ require_once 'Sirprize/Basecamp/Milestone/Collection/Observer/Interfaze.php';
  * @category  Sirprize
  * @package   Basecamp
  */
-class Stout implements \Sirprize\Basecamp\Milestone\Collection\Observer\Interfaze
+class Stout extends \Sirprize\Basecamp\Milestone\Collection\Observer\Abstrakt
 {
 	
 	
 	public function onStartSuccess(\Sirprize\Basecamp\Milestone\Collection $collection)
 	{
-		$message = "started milestone collection\n";
-		print $message;
+		print $this->_getOnStartSuccessMessage($collection)."\n";
 	}
 	
 	
 	public function onCreateSuccess(\Sirprize\Basecamp\Milestone\Collection $collection)
 	{
-		$message = "milestones have been created for this collection\n";
-		print $message;
+		print $this->_getOnCreateSuccessMessage($collection)."\n";
 	}
 	
 	
 	public function onStartError(\Sirprize\Basecamp\Milestone\Collection $collection)
 	{
-		$message = "milestone collection could not be started\n";
-		print $message;
+		print $this->_getOnStartErrorMessage($collection)."\n";
 	}
 	
 	
 	public function onCreateError(\Sirprize\Basecamp\Milestone\Collection $collection)
 	{
-		$message = "milestone collection could not be created\n";
-		print $message;
+		print $this->_getOnCreateErrorMessage($collection)."\n";
 	}
 	
 }

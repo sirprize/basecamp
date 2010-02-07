@@ -104,6 +104,32 @@ class Basecamp
 	
 	
 	
+	public function getProjectCollectionInstance()
+	{
+		require_once 'Sirprize/Basecamp/Project/Collection.php';
+		$projects = new \Sirprize\Basecamp\Project\Collection();
+		$projects
+			->setBasecamp($this)
+			->setHttpClient($this->_getHttpClient())
+		;
+		return $projects;
+	}
+	
+	
+	
+	public function getPersonCollectionInstance()
+	{
+		require_once 'Sirprize/Basecamp/Person/Collection.php';
+		$persons = new \Sirprize\Basecamp\Person\Collection();
+		$persons
+			->setBasecamp($this)
+			->setHttpClient($this->_getHttpClient())
+		;
+		return $persons;
+	}
+	
+	
+	
 	public function getMilestoneCollectionInstance()
 	{
 		require_once 'Sirprize/Basecamp/Milestone/Collection.php';
@@ -117,6 +143,44 @@ class Basecamp
 	
 	
 	
+	public function getTodolistCollectionInstance()
+	{
+		require_once 'Sirprize/Basecamp/Todolist/Collection.php';
+		$todolists = new \Sirprize\Basecamp\Todolist\Collection();
+		$todolists
+			->setBasecamp($this)
+			->setHttpClient($this->_getHttpClient())
+		;
+		return $todolists;
+	}
+	
+	
+	
+	public function getTodolistItemCollectionInstance()
+	{
+		require_once 'Sirprize/Basecamp/TodolistItem/Collection.php';
+		$todolistitems = new \Sirprize\Basecamp\TodolistItem\Collection();
+		$todolistitems
+			->setBasecamp($this)
+			->setHttpClient($this->_getHttpClient())
+		;
+		return $todolistitems;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*
 	public function getPersonsInstance()
 	{
 		require_once 'Sirprize/Basecamp/Persons.php';
@@ -166,5 +230,5 @@ class Basecamp
 		;
 		return $milestones;
 	}
-	
+	*/
 }

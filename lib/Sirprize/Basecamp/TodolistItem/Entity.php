@@ -15,11 +15,11 @@
  */
 
 
-namespace Sirprize\Basecamp\Milestone;
+namespace Sirprize\Basecamp\TodolistItem;
 
 
 /**
- * Class to represent and modify a milestone
+ * Class to represent and modify a todolistItem
  *
  * @category  Sirprize
  * @package   Basecamp
@@ -28,17 +28,19 @@ class Entity
 {
 	
 	
-	const _ID = 'id';
-	const _TITLE = 'title';
-	const _DEADLINE = 'deadline';
 	const _COMMENTS_COUNT = 'comments-count';
 	const _COMPLETED = 'completed';
-	const _CREATED_ON = 'created-on';
+	const _COMPLEETED_AT = 'completed-at';
+	const _COMPLETER_ID = 'completer-id';
+	const _CONTENT = 'content';
+	const _CREATED_AT = 'created-at';
 	const _CREATOR_ID = 'creator-id';
-	const _PROJECT_ID = 'project-id';
-	const _RESPONSIBLE_PARTY_ID = 'responsible-party-id';
-	const _RESPONSIBLE_PARTY_TYPE = 'responsible-party-type';
-	const _WANTS_NOTIFICATION = 'wants-notification';
+	const _DUE_AT = 'due-at';
+	const _ID = 'id';
+	const _POSITION = 'position';
+	const _TODO_LIST_ID = 'todo-list-id';
+	const _COMPLETED_ON = 'completed-on';
+	const _CREATED_ON = 'created-on';
 	
 	
 	protected $_basecamp = null;
@@ -78,9 +80,9 @@ class Entity
 	/**
 	 * Attach observer object
 	 *
-	 * @return \Sirprize\Basecamp\Milestone
+	 * @return \Sirprize\Basecamp\TodolistItem
 	 */
-	public function attachObserver(\Sirprize\Basecamp\Milestone\Entity\Observer\Abstrakt $observer)
+	public function attachObserver(\Sirprize\Basecamp\TodolistItem\Entity\Observer\Abstrakt $observer)
 	{
 		$exists = false;
 		
@@ -105,9 +107,9 @@ class Entity
 	/**
 	 * Detach observer object
 	 *
-	 * @return \Sirprize\Basecamp\Milestone
+	 * @return \Sirprize\Basecamp\TodolistItem
 	 */
-	public function detachObserver(\Sirprize\Basecamp\Milestone\Entity\Observer\Abstrakt $observer)
+	public function detachObserver(\Sirprize\Basecamp\TodolistItem\Entity\Observer\Abstrakt $observer)
 	{
 		foreach(array_keys($this->_observers) as $key)
 		{
@@ -157,36 +159,85 @@ class Entity
 	}
 	
 	
-	public function getId()
-	{
-		return $this->_getVal(self::_ID);
-	}
 	
-	
-	public function getTitle()
-	{
-		return $this->_getVal(self::_TITLE);
-	}
-	
-	
-	/**
-	 * @return \Sirprize\Basecamp\Date
-	 */
-	public function getDeadline()
-	{
-		return $this->_getVal(self::_DEADLINE);
-	}
-	
+
 	
 	public function getCommentsCount()
 	{
 		return $this->_getVal(self::_COMMENTS_COUNT);
 	}
 	
-	
 	public function getIsCompleted()
 	{
 		return $this->_getVal(self::_COMPLETED);
+	}
+	
+	
+	public function getCompletedAt()
+	{
+		return $this->_getVal(self::_COMPLEETED_AT);
+	}
+	
+	/**
+	 * @return \Sirprize\Basecamp\Id
+	 */
+	public function getCompleterId()
+	{
+		return $this->_getVal(self::_COMPLETER_ID);
+	}
+	
+	
+	public function getContent()
+	{
+		return $this->_getVal(self::_CONTENT);
+	}
+	
+	
+	public function getCraetedAt()
+	{
+		return $this->_getVal(self::_CREATED_AT);
+	}
+	
+	/**
+	 * @return \Sirprize\Basecamp\Id
+	 */
+	public function getCraatorId()
+	{
+		return $this->_getVal(self::_CREATOR_ID);
+	}
+	
+	
+	public function getDueAt()
+	{
+		return $this->_getVal(self::_DUE_AT);
+	}
+	
+	/**
+	 * @return \Sirprize\Basecamp\Id
+	 */
+	public function getId()
+	{
+		return $this->_getVal(self::_ID);
+	}
+	
+	
+	public function getPosition()
+	{
+		return $this->_getVal(self::_POSITION);
+	}
+	
+	/**
+	 * @return \Sirprize\Basecamp\Id
+	 */
+	public function getTodolistId()
+	{
+		return $this->_getVal(self::_TODO_LIST_ID);
+	}
+	
+	
+	public function getCompletedOn()
+	{
+		return $this->_getVal(self::_COMPLETED_ON);
 	}
 	
 	
@@ -196,43 +247,7 @@ class Entity
 	}
 	
 	
-	/**
-	 * @return \Sirprize\Basecamp\Id
-	 */
-	public function getCreatorId()
-	{
-		return $this->_getVal(self::_CREATOR_ID);
-	}
 	
-	
-	/**
-	 * @return \Sirprize\Basecamp\Id
-	 */
-	public function getProjectId()
-	{
-		return $this->_getVal(self::_PROJECT_ID);
-	}
-	
-	
-	/**
-	 * @return \Sirprize\Basecamp\Id
-	 */
-	public function getResponsiblePartyId()
-	{
-		return $this->_getVal(self::_RESPONSIBLE_PARTY_ID);
-	}
-	
-	
-	public function getResponsiblePartyType()
-	{
-		return $this->_getVal(self::_RESPONSIBLE_PARTY_TYPE);
-	}
-	
-	
-	public function getWantsNotification()
-	{
-		return $this->_getVal(self::_WANTS_NOTIFICATION);
-	}
 	
 	
 	
@@ -241,7 +256,7 @@ class Entity
 	 * Load data returned from an api request
 	 *
 	 * @throws \Sirprize\Basecamp\Exception
-	 * @return \Sirprize\Basecamp\Milestone
+	 * @return \Sirprize\Basecamp\TodolistItem
 	 */
 	public function load(\SimpleXMLElement $data, $force = false)
 	{
@@ -255,36 +270,28 @@ class Entity
 		$this->_loaded = true;
 		$data = (array) $data;
 		
-		require_once 'Sirprize/Basecamp/Date.php';
-		$deadline = new \Sirprize\Basecamp\Date($data[self::_DEADLINE]);
-		
 		require_once 'Sirprize/Basecamp/Id.php';
 		$id = new \Sirprize\Basecamp\Id($data[self::_ID]);
-		
-		require_once 'Sirprize/Basecamp/Id.php';
-		$projectId = new \Sirprize\Basecamp\Id($data[self::_PROJECT_ID]);
-		
-		require_once 'Sirprize/Basecamp/Id.php';
+		#$completerId = new \Sirprize\Basecamp\Id($data[self::_COMPLETER_ID]);
 		$creatorId = new \Sirprize\Basecamp\Id($data[self::_CREATOR_ID]);
-		
-		require_once 'Sirprize/Basecamp/Id.php';
-		$responsiblePartyId = new \Sirprize\Basecamp\Id($data[self::_RESPONSIBLE_PARTY_ID]);
+		$todolistId = new \Sirprize\Basecamp\Id($data[self::_TODO_LIST_ID]);
 		
 		$completed = ($data[self::_COMPLETED] == 'true');
-		$wantsNotification = ($data[self::_WANTS_NOTIFICATION] == 'true');
 		
 		$this->_data = array(
-			self::_ID => $id,
-			self::_TITLE => $data[self::_TITLE],
-			self::_DEADLINE => $deadline,
 			self::_COMMENTS_COUNT => $data[self::_COMMENTS_COUNT],
 			self::_COMPLETED => $completed,
-			self::_CREATED_ON => $data[self::_CREATED_ON],
+			#self::_COMPLEETED_AT => $data[self::_COMPLEETED_AT],
+			#self::_COMPLETER_ID => $completerId,
+			#self::_COMPLETED_ON => $data[self::_COMPLETED_ON],
+			self::_CONTENT => $data[self::_CONTENT],
+			self::_CREATED_AT => $data[self::_CREATED_AT],
 			self::_CREATOR_ID => $creatorId,
-			self::_PROJECT_ID => $projectId,
-			self::_RESPONSIBLE_PARTY_ID => $responsiblePartyId,
-			self::_RESPONSIBLE_PARTY_TYPE => $data[self::_RESPONSIBLE_PARTY_TYPE],
-			self::_WANTS_NOTIFICATION => $wantsNotification
+			self::_DUE_AT => $data[self::_DUE_AT],
+			self::_ID => $id,
+			self::_POSITION => $data[self::_POSITION],
+			self::_TODO_LIST_ID => $todolistId,
+			self::_CREATED_ON => $data[self::_CREATED_ON]
 		);
 		
 		return $this;
@@ -293,11 +300,11 @@ class Entity
 	
 	
 	/**
-	 * Create XML to create a new milestone
+	 * Create XML to create a new todolistItem
 	 *
 	 * @throws \Sirprize\Basecamp\Exception
 	 * @return string
-	 */
+	 * /
 	public function getCreateXml()
 	{
 		if($this->_getVal(self::_TITLE) === null)
@@ -318,23 +325,23 @@ class Entity
 			throw new \Sirprize\Basecamp\Exception('call setResponsiblePartyId() before  '.__METHOD__);
 		}
 		
-  		$xml  = '<milestone>';
+  		$xml  = '<todolistItem>';
 		$xml .= '<title>'.$this->_getVal(self::_TITLE).'</title>';
 		$xml .= '<deadline type="date">'.$this->_getVal(self::_DEADLINE).'</deadline>';
 		$xml .= '<responsible-party>'.$this->_getVal(self::_RESPONSIBLE_PARTY_ID).'</responsible-party>';
 		$xml .= '<notify>'.(($this->_getVal(self::_WANTS_NOTIFICATION)) ? 'true' : 'false').'</notify>';
-		$xml .= '</milestone>';
+		$xml .= '</todolistItem>';
 		return $xml;
 	}
 	
 	
 	
 	/**
-	 * Persist this milestone in storage
+	 * Persist this todolistItem in storage
 	 *
 	 * @throws \Sirprize\Basecamp\Exception
 	 * @return boolean
-	 */
+	 * /
 	public function create()
 	{
 		if($this->getProjectId() === null)
@@ -351,7 +358,7 @@ class Entity
 		
 		try {
 			$response = $this->_getHttpClient()
-				->setUri($this->_getBasecamp()->getBaseUri()."/projects/$projectId/milestones/create")
+				->setUri($this->_getBasecamp()->getBaseUri()."/projects/$projectId/todolistItems/create")
 				->setAuth($this->_getBasecamp()->getUsername(), $this->_getBasecamp()->getPassword())
 				->setHeaders('Content-type', 'application/xml')
 				->setHeaders('Accept', 'application/xml')
@@ -378,17 +385,17 @@ class Entity
 			return false;
 		}
 		
-		$this->onCreateLoad($this->_response->getData()->milestone);
+		$this->onCreateLoad($this->_response->getData()->todolistItem);
 		return true;
 	}
 	
 	
 	
 	/**
-	 * Load data from a \Sirprize\Basecamp\Milestone\Collection::create() opteration
+	 * Load data from a \Sirprize\Basecamp\TodolistItem\Collection::create() opteration
 	 *
 	 * @return void
-	 */
+	 * /
 	public function onCreateLoad(\SimpleXMLElement $data)
 	{
 		$this->load($data);
@@ -398,10 +405,10 @@ class Entity
 	
 	
 	/**
-	 * Get notified of an error in a \Sirprize\Basecamp\Milestone\Collection::create() opteration
+	 * Get notified of an error in a \Sirprize\Basecamp\TodolistItem\Collection::create() opteration
 	 *
 	 * @return void
-	 */
+	 * /
 	public function onCreateError()
 	{
 		$this->_onCreateError();
@@ -410,22 +417,22 @@ class Entity
 	
 	
 	/**
-	 * Update this milestone in storage
+	 * Update this todolistItem in storage
 	 *
 	 * @throws \Sirprize\Basecamp\Exception
 	 * @return boolean
-	 */
-	public function update($moveUpcomingMilestones = false, $moveUpcomingMilestonesOffWeekends = false)
+	 * /
+	public function update($moveUpcomingTodolistItems = false, $moveUpcomingTodolistItemsOffWeekends = false)
 	{
 		$xml  = '<request>';
 		$xml .= $this->getCreateXml();
-		$xml .= '<move-upcoming-milestones>'.(($moveUpcomingMilestones) ? 'true' : 'false').'</move-upcoming-milestones>';
-		$xml .= '<move-upcoming-milestones-off-weekends>'.(($moveUpcomingMilestonesOffWeekends) ? 'true' : 'false').'</move-upcoming-milestones-off-weekends>';
+		$xml .= '<move-upcoming-todolistItems>'.(($moveUpcomingTodolistItems) ? 'true' : 'false').'</move-upcoming-todolistItems>';
+		$xml .= '<move-upcoming-todolistItems-off-weekends>'.(($moveUpcomingTodolistItemsOffWeekends) ? 'true' : 'false').'</move-upcoming-todolistItems-off-weekends>';
 		$xml .= '</request>';
 		
 		try {
 			$response = $this->_getHttpClient()
-				->setUri($this->_getBasecamp()->getBaseUri()."/milestones/update/".$this->getId())
+				->setUri($this->_getBasecamp()->getBaseUri()."/todolistItems/update/".$this->getId())
 				->setAuth($this->_getBasecamp()->getUsername(), $this->_getBasecamp()->getPassword())
 				->setHeaders('Content-type', 'application/xml')
 				->setHeaders('Accept', 'application/xml')
@@ -460,18 +467,18 @@ class Entity
 	
 	
 	/**
-	 * Delete this milestone from storage
+	 * Delete this todolistItem from storage
 	 *
 	 * @throws \Sirprize\Basecamp\Exception
 	 * @return boolean
-	 */
+	 * /
 	public function delete()
 	{
 		$id = $this->getId();
 		
 		try {
 			$response = $this->_getHttpClient()
-				->setUri($this->_getBasecamp()->getBaseUri()."/milestones/delete/$id")
+				->setUri($this->_getBasecamp()->getBaseUri()."/todolistItems/delete/$id")
 				->setAuth($this->_getBasecamp()->getUsername(), $this->_getBasecamp()->getPassword())
 				->setHeaders('Content-type', 'application/xml')
 				->setHeaders('Accept', 'application/xml')
@@ -506,11 +513,11 @@ class Entity
 	
 	
 	/**
-	 * Complete this milestone
+	 * Complete this todolistItem
 	 *
 	 * @throws \Sirprize\Basecamp\Exception
 	 * @return boolean
-	 */
+	 * /
 	public function complete()
 	{
 		if(!$this->_loaded)
@@ -521,7 +528,7 @@ class Entity
 		
 		try {
 			$response = $this->_getHttpClient()
-				->setUri($this->_getBasecamp()->getBaseUri()."/milestones/complete/".$this->getId())
+				->setUri($this->_getBasecamp()->getBaseUri()."/todolistItems/complete/".$this->getId())
 				->setAuth($this->_getBasecamp()->getUsername(), $this->_getBasecamp()->getPassword())
 				->setHeaders('Content-type', 'application/xml')
 				->setHeaders('Accept', 'application/xml')
@@ -555,11 +562,11 @@ class Entity
 	
 	
 	/**
-	 * Uncomplete this milestone
+	 * Uncomplete this todolistItem
 	 *
 	 * @throws \Sirprize\Basecamp\Exception
 	 * @return boolean
-	 */
+	 * /
 	public function uncomplete()
 	{
 		if(!$this->_loaded)
@@ -570,7 +577,7 @@ class Entity
 		
 		try {
 			$response = $this->_getHttpClient()
-				->setUri($this->_getBasecamp()->getBaseUri()."/milestones/uncomplete/".$this->getId())
+				->setUri($this->_getBasecamp()->getBaseUri()."/todolistItems/uncomplete/".$this->getId())
 				->setAuth($this->_getBasecamp()->getUsername(), $this->_getBasecamp()->getPassword())
 				->setHeaders('Content-type', 'application/xml')
 				->setHeaders('Accept', 'application/xml')
@@ -600,7 +607,7 @@ class Entity
 		$this->_onUncompleteSuccess();
 		return true;
 	}
-	
+	*/
 	
 	
 	protected function _getBasecamp()

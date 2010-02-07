@@ -24,7 +24,7 @@ Basecamp API Wrapper
 	$milestone = $milestones->getMilestoneInstance();
 	
 	require_once 'Sirprize/Basecamp/Date.php';
-	$date = new \Sirprize\Basecamp\Date('2010-03-01');
+	$deadline = new \Sirprize\Basecamp\Date('2010-03-01');
 
 	require_once 'Sirprize/Basecamp/Id.php';
 	$projectId = new \Sirprize\Basecamp\Id('xxx');
@@ -33,29 +33,30 @@ Basecamp API Wrapper
 	$milestone
 		->setProjectId($projectId)
 		->setResponsiblePartyId($userId)
-		->setDeadline($date)
+		->setDeadline($deadline)
 		->setTitle('Milestoners Everywhere')
 		->setWantsNotification(true)
+		->create()
 	;
 
 Requirements
 ------------
 
 + php 5.3+ (uses namespaces)
-+ Recent version of zend framework (tested with 1.10) > uses Zend_Http_Client
++ Recent version of zend framework (tested with 1.10) > uses Zend_Http_Client & Zend_Log
 
 
 Supported Features
 ------------------
 
 + Milestone: fully implemented
-+ Person:
-+ Project:
-+ Todolist:
-+ Todolistitems:
++ Person: fully implemented
++ Project: fully implemented
++ Todolist: fully implemented
++ Todolistitems: soon (create, update, complete and uncomplete is missing)
 
 
 Getting Started
 ---------------
 
-Please find plenty of examples in the `example/basecamp` directory and adjust `example/basecamp/_config.php` with your own settings
+Please find plenty of working examples in the `basecamp/example/basecamp` directory and adjust `basecamp/example/basecamp/_config.php` with your own settings

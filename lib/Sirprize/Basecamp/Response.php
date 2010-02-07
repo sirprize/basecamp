@@ -29,20 +29,20 @@ class Response
     public function __construct(\Zend_Http_Response $httpResponse)
     {
     	$this->_httpResponse = $httpResponse;
-
-		if(!$httpResponse->isError())
+		
+		if(!$httpResponse->isError() && !preg_match('/^\s*$/', $httpResponse->getBody()))
     	{
 			$this->_data = simplexml_load_string($httpResponse->getBody());
     	}
     }
     
     
-    /*
+    
     public function getHttpResponse()
     {
     	return $this->_httpResponse;
     }
-    */
+    
     
     
     public function getData()

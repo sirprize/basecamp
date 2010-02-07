@@ -15,11 +15,11 @@
  */
 
 
-namespace Sirprize\Basecamp\Milestone;
+namespace Sirprize\Basecamp\Project;
 
 
 /**
- * Class to find and modify milestones
+ * Class to find and modify projects
  *
  * @category  Sirprize
  * @package   Basecamp
@@ -32,7 +32,7 @@ class Collection extends \SplObjectStorage
 	const FIND_UPCOMING = 'upcoming';
 	const FIND_LATE = 'late';
 	const FIND_ALL = 'all';
-	const _MILESTONE = 'milestone';
+	const _PROJECT = 'project';
 	
 	protected $_basecamp = null;
 	protected $_httpClient = null;
@@ -71,9 +71,9 @@ class Collection extends \SplObjectStorage
 	/**
 	 * Attach observer object
 	 *
-	 * @return \Sirprize\Basecamp\Milestone\Collection
+	 * @return \Sirprize\Basecamp\Project\Collection
 	 */
-	public function attachObserver(\Sirprize\Basecamp\Milestone\Collection\Observer\Abstrakt $observer)
+	public function attachObserver(\Sirprize\Basecamp\Project\Collection\Observer\Abstrakt $observer)
 	{
 		$exists = false;
 		
@@ -98,9 +98,9 @@ class Collection extends \SplObjectStorage
 	/**
 	 * Detach observer object
 	 *
-	 * @return \Sirprize\Basecamp\Milestone\Collection
+	 * @return \Sirprize\Basecamp\Project\Collection
 	 */
-	public function detachObserver(\Sirprize\Basecamp\Milestone\Collection\Observer\Abstrakt $observer)
+	public function detachObserver(\Sirprize\Basecamp\Project\Collection\Observer\Abstrakt $observer)
 	{
 		foreach(array_keys($this->_observers) as $key)
 		{
@@ -117,20 +117,20 @@ class Collection extends \SplObjectStorage
 	
 	
 	/**
-	 * Instantiate a new milestone entity
+	 * Instantiate a new project entity
 	 *
-	 * @return \Sirprize\Basecamp\Milestone\Entity
+	 * @return \Sirprize\Basecamp\Project\Entity
 	 */
-	public function getMilestoneInstance()
+	public function getProjectInstance()
 	{
-		require_once 'Sirprize/Basecamp/Milestone/Entity.php';
-		$milestone = new \Sirprize\Basecamp\Milestone\Entity();
-		$milestone
+		require_once 'Sirprize/Basecamp/Project/Entity.php';
+		$project = new \Sirprize\Basecamp\Project\Entity();
+		$project
 			->setHttpClient($this->_getHttpClient())
 			->setBasecamp($this->_getBasecamp())
 		;
 		
-		return $milestone;
+		return $project;
 	}
 	
 	
@@ -138,112 +138,34 @@ class Collection extends \SplObjectStorage
 	/**
 	 * Defined by \SplObjectStorage
 	 *
-	 * Add milestone entity to batch-persist later by create()
+	 * Add project entity
 	 *
-	 * @param \Sirprize\Basecamp\Milestone\Entity $milestone
+	 * @param \Sirprize\Basecamp\Project\Entity $project
 	 * @throws \Sirprize\Basecamp\Exception
-	 * @return \Sirprize\Basecamp\Milestone\Collection
+	 * @return \Sirprize\Basecamp\Project\Collection
 	 */
-	public function attach($milestone, $data = null)
+	public function attach($project, $data = null)
 	{
-		if(!$milestone instanceof \Sirprize\Basecamp\Milestone\Entity)
+		if(!$project instanceof \Sirprize\Basecamp\Project\Entity)
 		{
 			require_once 'Sirprize/Basecamp/Exception.php';
-			throw new \Sirprize\Basecamp\Exception('expecting an instance of \Sirprize\Basecamp\Milestone\Entity');
+			throw new \Sirprize\Basecamp\Exception('expecting an instance of \Sirprize\Basecamp\Project\Entity');
 		}
 		
-		parent::attach($milestone);
+		parent::attach($project);
 		return $this;
 	}
 	
 	
 	
-	/**
-	 * Persist milestone objects that have previously been added by attach()
-	 *
-	 * @throws \Sirprize\Basecamp\Exception
-	 * @return int Number of new milestones that have been created
-	 */
-	public function create(\Sirprize\Basecamp\Id $projectId)
-	{
-		if($this->_started)
-		{
-			require_once 'Sirprize/Basecamp/Exception.php';
-			throw new \Sirprize\Basecamp\Exception('this collection is already persisted in storage');
-		}
-		
-		$xml = '<request>';
-		
-		foreach($this as $milestone)
-		{
-			$xml .= $milestone->getCreateXml();
-		}
-		
-		$xml .= '</request>';
-		
-		try {
-			$response = $this->_getHttpClient()
-				->setUri($this->_getBasecamp()->getBaseUri()."/projects/$projectId/milestones/create")
-				->setAuth($this->_getBasecamp()->getUsername(), $this->_getBasecamp()->getPassword())
-				->setHeaders('Content-Type', 'application/xml')
-				->setHeaders('Accept', 'application/xml')
-				->setRawData($xml)
-				->request('POST')
-			;
-		}
-		catch(\Exception $exception)
-		{
-			// connection error
-			foreach($this as $milestone)
-			{
-				$milestone->onCreateError();
-			}
-			
-			$this->_onCreateError();
-			
-			require_once 'Sirprize/Basecamp/Exception.php';
-			throw new \Sirprize\Basecamp\Exception($exception->getMessage());
-		}
-		
-		require_once 'Sirprize/Basecamp/Response.php';
-		$this->_response = new \Sirprize\Basecamp\Response($response);
-		
-		if($this->_response->isError())
-		{
-			// service error
-			foreach($this as $milestone)
-			{
-				$milestone->onCreateError();
-			}
-			
-			$this->_onCreateError();
-			return 0;
-		}
-		
-		$data = (array) $this->_response->getData();
-		$i = 0;
-		
-		foreach($this as $milestone)
-		{
-			// load full data into milestone
-			$milestone->onCreateLoad($data[self::_MILESTONE][$i++]);
-		}
-		
-		$this->_started = true;
-		$this->_onCreateSuccess();
-		return $this->count();
-	}
-	
-	
 	
 	/**
-	 * Fetch milestones for a given project
+	 * Fetch project by id
 	 *
-	 * @param string $status completed|upcoming|late|all
 	 * @throws \Sirprize\Basecamp\Exception
-	 * @return \Sirprize\Basecamp\Milestone\Collection
+	 * @return \Sirprize\Basecamp\Project\Collection
 	 */
-	public function startByProjectId(\Sirprize\Basecamp\Id $projectId, $status = null)
+	public function startById(\Sirprize\Basecamp\Id $id)
 	{
 		if($this->_started)
 		{
@@ -252,17 +174,9 @@ class Collection extends \SplObjectStorage
 		
 		$this->_started = true;
 		
-		switch($status)
-		{
-			case self::FIND_COMPLETED: $query = '?find='.self::FIND_COMPLETED; break;
-			case self::FIND_UPCOMING: $query = '?find='.self::FIND_UPCOMING; break;
-			case self::FIND_LATE: $query = '?find='.self::FIND_LATE; break;
-			default: $query = '?find=all';
-		}
-		
 		try {
 			$response = $this->_getHttpClient()
-				->setUri($this->_getBasecamp()->getBaseUri()."/projects/$projectId/milestones/list.xml$query")
+				->setUri($this->_getBasecamp()->getBaseUri()."/projects/$id.xml")
 				->setAuth($this->_getBasecamp()->getUsername(), $this->_getBasecamp()->getPassword())
 				->request('GET')
 			;
@@ -293,7 +207,54 @@ class Collection extends \SplObjectStorage
 	
 	
 	/**
-	 * Instantiate milestone objects from api response and populate this collection
+	 * Fetch all projects
+	 *
+	 * @throws \Sirprize\Basecamp\Exception
+	 * @return \Sirprize\Basecamp\Project\Collection
+	 */
+	public function startAll()
+	{
+		if($this->_started)
+		{
+			return $this;
+		}
+		
+		$this->_started = true;
+		
+		try {
+			$response = $this->_getHttpClient()
+				->setUri($this->_getBasecamp()->getBaseUri()."/projects.xml")
+				->setAuth($this->_getBasecamp()->getUsername(), $this->_getBasecamp()->getPassword())
+				->request('GET')
+			;
+		}
+		catch(\Exception $exception)
+		{
+			// connection error
+			$this->_onStartError();
+			
+			require_once 'Sirprize/Basecamp/Exception.php';
+			throw new \Sirprize\Basecamp\Exception($exception->getMessage());
+		}
+		
+		$this->_response = $this->_handleResponse($response);
+		
+		if($this->_response->isError())
+		{
+			// service error
+			$this->_onStartError();
+			return $this;
+		}
+		
+		$this->_onStartSuccess();
+		return $this;
+	}
+	
+	
+	
+	
+	/**
+	 * Instantiate project objects from api response and populate this collection
 	 *
 	 * @return \Sirprize\Basecamp\Response
 	 */
@@ -306,39 +267,39 @@ class Collection extends \SplObjectStorage
 		{
 			return $response;
 		}
-		/*
+		
 		if(isset($response->getData()->id))
 		{
-			// request for a single entity (not supported on milestones)
-			$milestone = $this->getMilestoneInstance();
-			$milestone->load($response->getData());
-			$this->attach($milestone);
+			// request for a single entity
+			$project = $this->getProjectInstance();
+			$project->load($response->getData());
+			$this->attach($project);
 			return $response;
 		}
-		*/
+		
 		$data = (array) $response->getData();
 		
-		if(!isset($data[self::_MILESTONE]))
+		if(!isset($data[self::_PROJECT]))
 		{
 			// list request - 0 items in response
 			return $response;
 		}
 		
-		if(isset($data[self::_MILESTONE]->id))
+		if(isset($data[self::_PROJECT]->id))
 		{
 			// list request - 1 item in response
-			$milestone = $this->getMilestoneInstance();
-			$milestone->load($data[self::_MILESTONE]);
-			$this->attach($milestone);
+			$project = $this->getProjectInstance();
+			$project->load($data[self::_PROJECT]);
+			$this->attach($project);
 			return $response;
 		}
 		
-		foreach($data[self::_MILESTONE] as $row)
+		foreach($data[self::_PROJECT] as $row)
 		{
 			// list request - 2 or more items in response
-			$milestone = $this->getMilestoneInstance();
-			$milestone->load($row);
-			$this->attach($milestone);
+			$project = $this->getProjectInstance();
+			$project->load($row);
+			$this->attach($project);
 		}
 		
 		return $response;
@@ -370,14 +331,6 @@ class Collection extends \SplObjectStorage
 	}
 	
 	
-	protected function _onCreateSuccess()
-	{
-		foreach($this->_observers as $observer)
-		{
-			$observer->onCreateSuccess($this);
-		}
-	}
-	
 	
 	protected function _onStartSuccess()
 	{
@@ -387,14 +340,6 @@ class Collection extends \SplObjectStorage
 		}
 	}
 	
-	
-	protected function _onCreateError()
-	{
-		foreach($this->_observers as $observer)
-		{
-			$observer->onCreateError($this);
-		}
-	}
 	
 	
 	protected function _onStartError()

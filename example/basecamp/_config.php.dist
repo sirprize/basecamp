@@ -32,3 +32,9 @@ $config = array(
 	'username' => 'xxxxxx',
 	'password' => 'xxxxxx'
 );
+
+require_once 'Zend/Log/Writer/Stream.php';
+$logWriter = new Zend_Log_Writer_Stream(dirname(dirname(__FILE__)).'/_logs/'.gmdate('Ymd').'.log');
+
+require_once 'Zend/Log.php';
+$log = new Zend_Log($logWriter);

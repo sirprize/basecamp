@@ -18,7 +18,7 @@
 namespace Sirprize\Basecamp\Milestone\Entity\Observer;
 
 
-require_once 'Sirprize/Basecamp/Milestone/Entity/Observer/Interfaze.php';
+require_once 'Sirprize/Basecamp/Milestone/Entity/Observer/Abstrakt.php';
 
 
 /**
@@ -27,7 +27,7 @@ require_once 'Sirprize/Basecamp/Milestone/Entity/Observer/Interfaze.php';
  * @category  Sirprize
  * @package   Basecamp
  */
-class Log implements \Sirprize\Basecamp\Milestone\Entity\Observer\Interfaze
+class Log extends \Sirprize\Basecamp\Milestone\Entity\Observer\Abstrakt
 {
 	
 	
@@ -55,41 +55,31 @@ class Log implements \Sirprize\Basecamp\Milestone\Entity\Observer\Interfaze
 	
 	public function onCompleteSuccess(\Sirprize\Basecamp\Milestone\Entity $milestone)
 	{
-		$message  = "milestone '".$milestone->getTitle()."'";
-		$message .= " completed in project '".$milestone->getProjectId()."'";
-		$this->_getLog()->info($message);
+		$this->_getLog()->info($this->_getOnCompleteSuccessMessage($milestone));
 	}
 	
 	
 	public function onUncompleteSuccess(\Sirprize\Basecamp\Milestone\Entity $milestone)
 	{
-		$message  = "milestone '".$milestone->getTitle()."'";
-		$message .= " uncompleted in project '".$milestone->getProjectId()."'";
-		$this->_getLog()->info($message);
+		$this->_getLog()->info($this->_getOnUncompleteSuccessMessage($milestone));
 	}
 	
 	
 	public function onCreateSuccess(\Sirprize\Basecamp\Milestone\Entity $milestone)
 	{
-		$message  = "milestone '".$milestone->getTitle()."'";
-		$message .= " created in project '".$milestone->getProjectId()."'";
-		$this->_getLog()->info($message);
+		$this->_getLog()->info($this->_getOnCreateSuccessMessage($milestone));
 	}
 	
 	
 	public function onUpdateSuccess(\Sirprize\Basecamp\Milestone\Entity $milestone)
 	{
-		$message  = "milestone '".$milestone->getTitle()."'";
-		$message .= " updated in project '".$milestone->getProjectId()."'";
-		$this->_getLog()->info($message);
+		$this->_getLog()->info($this->_getOnUpdateSuccessMessage($milestone));
 	}
 	
 	
 	public function onDeleteSuccess(\Sirprize\Basecamp\Milestone\Entity $milestone)
 	{
-		$message  = "milestone '".$milestone->getTitle()."'";
-		$message .= " deleted from project '".$milestone->getProjectId()."'";
-		$this->_getLog()->info($message);
+		$this->_getLog()->info($this->_getOnDeleteSuccessMessage($milestone));
 	}
 	
 	
@@ -99,41 +89,31 @@ class Log implements \Sirprize\Basecamp\Milestone\Entity\Observer\Interfaze
 	
 	public function onCompleteError(\Sirprize\Basecamp\Milestone\Entity $milestone)
 	{
-		$message  = "milestone '".$milestone->getTitle()."'";
-		$message .= " could not be completed in project '".$milestone->getProjectId()."'";
-		$this->_getLog()->err($message);
+		$this->_getLog()->err($this->_getOnCompleteErrorMessage($milestone));
 	}
 	
 	
 	public function onUncompleteError(\Sirprize\Basecamp\Milestone\Entity $milestone)
 	{
-		$message  = "milestone '".$milestone->getTitle()."'";
-		$message .= " could not be uncompleted in project '".$milestone->getProjectId()."'";
-		$this->_getLog()->err($message);
+		$this->_getLog()->err($this->_getOnUncompleteErrorMessage($milestone));
 	}
 	
 	
 	public function onCreateError(\Sirprize\Basecamp\Milestone\Entity $milestone)
 	{
-		$message  = "milestone '".$milestone->getTitle()."'";
-		$message .= " could not be created in project '".$milestone->getProjectId()."'";
-		$this->_getLog()->err($message);
+		$this->_getLog()->err($this->_getOnCreateErrorMessage($milestone));
 	}
 	
 	
 	public function onUpdateError(\Sirprize\Basecamp\Milestone\Entity $milestone)
 	{
-		$message  = "milestone '".$milestone->getTitle()."'";
-		$message .= " could not be updated in project '".$milestone->getProjectId()."'";
-		$this->_getLog()->err($message);
+		$this->_getLog()->err($this->_getOnUpdateErrorMessage($milestone));
 	}
 	
 	
 	public function onDeleteError(\Sirprize\Basecamp\Milestone\Entity $milestone)
 	{
-		$message  = "milestone '".$milestone->getTitle()."'";
-		$message .= " could not be deleted from project '".$milestone->getProjectId()."'";
-		$this->_getLog()->err($message);
+		$this->_getLog()->err($this->_getOnDeleteErrorMessage($milestone));
 	}
 	
 }

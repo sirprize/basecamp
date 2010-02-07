@@ -1,18 +1,9 @@
 Todo
 ====================
 
-+ person
-	+ add remaining api functionality
-
-+ todolist
-	+ add remaining api functionality
-
-+ todolistitem
-	+ add remaining api functionality
-
-+ account (not implemented yet)
-+ companies (not implemented yet)
-+ categories (not implemented yet)
-+ messages (not implemented yet)
-+ comments (not implemented yet)
-+ tiem tracking (not implemented yet)
++ account
++ companies
++ categories
++ messages
++ comments
++ time tracking

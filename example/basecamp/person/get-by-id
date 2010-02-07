@@ -1,0 +1,69 @@
+#!/usr/bin/env php
+<?php
+
+/**
+ * Basecamp API Wrapper for PHP 5.3+ 
+ *
+ * LICENSE
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this package in the file LICENSE.txt
+ *
+ * @category   Sirprize
+ * @package    Basecamp
+ * @subpackage Try
+ * @copyright  Copyright (c) 2010, Christian Hoegl, Switzerland (http://sirprize.me)
+ * @license    MIT License
+ */
+
+require_once '../_config.php';
+
+require_once 'Sirprize/Basecamp.php';
+$basecamp = new \Sirprize\Basecamp($config);
+
+require_once 'Sirprize/Basecamp/Person/Collection/Observer/Stout.php';
+$collectionObserverStout = new \Sirprize\Basecamp\Person\Collection\Observer\Stout();
+
+require_once 'Sirprize/Basecamp/Person/Collection/Observer/Log.php';
+$collectionObserverLog = new \Sirprize\Basecamp\Person\Collection\Observer\Log();
+$collectionObserverLog->setLog($log);
+
+require_once 'Sirprize/Basecamp/Id.php';
+$personId = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_USER_ID);
+
+$persons = $basecamp->getPersonCollectionInstance();
+$persons->attachObserver($collectionObserverStout);
+$persons->attachObserver($collectionObserverLog);
+$persons->startById($personId);
+
+if($persons->getResponse()->isError())
+{
+	die('Error');
+}
+	
+foreach($persons as $person)
+{
+	print "is administrator: ".$person->getIsAdministrator()."\n";
+	print "client id: ".$person->getClientId()."\n";
+	print "created at: ".$person->getCreatedAt()."\n";
+	print "is deleted: ".$person->getIsDeleted()."\n";
+	print "has access to new projects: ".$person->getHasAccessToNewProjects()."\n";
+	print "id: ".$person->getId()."\n";
+	print "im handle: ".$person->getImHandle()."\n";
+	print "im service: ".$person->getImService()."\n";
+	print "phone number fax: ".$person->getPhoneNumberFax()."\n";
+	print "phone number home: ".$person->getPhoneNumberHome()."\n";
+	print "phone number mobile: ".$person->getPhoneNumberMobile()."\n";
+	print "phone number office: ".$person->getPhoneNumberOffice()."\n";
+	print "phone number ext: ".$person->getPhoneNumberOfficeExt()."\n";
+	print "title: ".$person->getTitle()."\n";
+	print "updated at: ".$person->getUpdatedAt()."\n";
+	print "uuid: ".$person->getUuid()."\n";
+	print "firstname: ".$person->getFirstname()."\n";
+	print "lastname: ".$person->getLastname()."\n";
+	print "company id: ".$person->getCompanyId()."\n";
+	print "username: ".$person->getUsername()."\n";
+	print "email address: ".$person->getEmailAddress()."\n";
+	print "avatar url: ".$person->getAvatarUrl()."\n";
+	print "--------------------------\n";
+}

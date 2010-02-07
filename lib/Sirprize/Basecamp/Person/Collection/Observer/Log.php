@@ -15,10 +15,10 @@
  */
 
 
-namespace Sirprize\Basecamp\Milestone\Collection\Observer;
+namespace Sirprize\Basecamp\Person\Collection\Observer;
 
 
-require_once 'Sirprize/Basecamp/Milestone/Collection/Observer/Abstrakt.php';
+require_once 'Sirprize/Basecamp/Person/Collection/Observer/Abstrakt.php';
 
 
 /**
@@ -27,7 +27,7 @@ require_once 'Sirprize/Basecamp/Milestone/Collection/Observer/Abstrakt.php';
  * @category  Sirprize
  * @package   Basecamp
  */
-class Log extends \Sirprize\Basecamp\Milestone\Collection\Observer\Abstrakt
+class Log extends \Sirprize\Basecamp\Person\Collection\Observer\Abstrakt
 {
 	
 	
@@ -53,27 +53,15 @@ class Log extends \Sirprize\Basecamp\Milestone\Collection\Observer\Abstrakt
 	}
 	
 	
-	public function onStartSuccess(\Sirprize\Basecamp\Milestone\Collection $collection)
+	public function onStartSuccess(\Sirprize\Basecamp\Person\Collection $collection)
 	{
 		$this->_getLog()->info($this->_getOnStartSuccessMessage($collection));
 	}
 	
 	
-	public function onCreateSuccess(\Sirprize\Basecamp\Milestone\Collection $collection)
-	{
-		$this->_getLog()->info($this->_getOnStartCreateMessage($collection));
-	}
-	
-	
-	public function onStartError(\Sirprize\Basecamp\Milestone\Collection $collection)
+	public function onStartError(\Sirprize\Basecamp\Person\Collection $collection)
 	{
 		$this->_getLog()->err($this->_getOnStartErrorMessage($collection));
-	}
-	
-	
-	public function onCreateError(\Sirprize\Basecamp\Milestone\Collection $collection)
-	{
-		$this->_getLog()->err($this->_getOnCreateErrorMessage($collection));
 	}
 	
 }

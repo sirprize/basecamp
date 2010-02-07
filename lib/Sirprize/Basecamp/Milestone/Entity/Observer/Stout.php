@@ -18,7 +18,7 @@
 namespace Sirprize\Basecamp\Milestone\Entity\Observer;
 
 
-require_once 'Sirprize/Basecamp/Milestone/Entity/Observer/Interfaze.php';
+require_once 'Sirprize/Basecamp/Milestone/Entity/Observer/Abstrakt.php';
 
 
 /**
@@ -27,47 +27,37 @@ require_once 'Sirprize/Basecamp/Milestone/Entity/Observer/Interfaze.php';
  * @category  Sirprize
  * @package   Basecamp
  */
-class Stout implements \Sirprize\Basecamp\Milestone\Entity\Observer\Interfaze
+class Stout extends \Sirprize\Basecamp\Milestone\Entity\Observer\Abstrakt
 {
 	
 	
 	public function onCompleteSuccess(\Sirprize\Basecamp\Milestone\Entity $milestone)
 	{
-		$message  = "milestone '".$milestone->getTitle()."'";
-		$message .= " completed in project '".$milestone->getProjectId()."'\n";
-		print $message;
+		print $this->_getOnCompleteSuccessMessage($milestone)."\n";
 	}
 	
 	
 	public function onUncompleteSuccess(\Sirprize\Basecamp\Milestone\Entity $milestone)
 	{
-		$message  = "milestone '".$milestone->getTitle()."'";
-		$message .= " uncompleted in project '".$milestone->getProjectId()."'\n";
-		print $message;
+		print $this->_getOnUncompleteSuccessMessage($milestone)."\n";
 	}
 	
 	
 	public function onCreateSuccess(\Sirprize\Basecamp\Milestone\Entity $milestone)
 	{
-		$message  = "milestone '".$milestone->getTitle()."'";
-		$message .= " created in project '".$milestone->getProjectId()."'\n";
-		print $message;
+		print $this->_getOnCreateSuccessMessage($milestone)."\n";
 	}
 	
 	
 	public function onUpdateSuccess(\Sirprize\Basecamp\Milestone\Entity $milestone)
 	{
-		$message  = "milestone '".$milestone->getTitle()."'";
-		$message .= " updated in project '".$milestone->getProjectId()."'\n";
-		print $message;
+		print $this->_getOnUpdateSuccessMessage($milestone)."\n";
 	}
 	
 	
 	public function onDeleteSuccess(\Sirprize\Basecamp\Milestone\Entity $milestone)
 	{
-		$message  = "milestone '".$milestone->getTitle()."'";
-		$message .= " deleted from project '".$milestone->getProjectId()."'\n";
-		print $message;
+		print $this->_getOnDeleteSuccessMessage($milestone)."\n";
 	}
 	
 	
@@ -79,41 +69,31 @@ class Stout implements \Sirprize\Basecamp\Milestone\Entity\Observer\Interfaze
 	
 	public function onCompleteError(\Sirprize\Basecamp\Milestone\Entity $milestone)
 	{
-		$message  = "milestone '".$milestone->getTitle()."'";
-		$message .= " could not be completed in project '".$milestone->getProjectId()."'\n";
-		print $message;
+		print $this->_getOnCompleteErrorMessage($milestone)."\n";
 	}
 	
 	
 	public function onUncompleteError(\Sirprize\Basecamp\Milestone\Entity $milestone)
 	{
-		$message  = "milestone '".$milestone->getTitle()."'";
-		$message .= " could not be uncompleted in project '".$milestone->getProjectId()."'\n";
-		print $message;
+		print $this->_getOnUncompleteErrorMessage($milestone)."\n";
 	}
 	
 	
 	public function onCreateError(\Sirprize\Basecamp\Milestone\Entity $milestone)
 	{
-		$message  = "milestone '".$milestone->getTitle()."'";
-		$message .= " could not be created in project '".$milestone->getProjectId()."'\n";
-		print $message;
+		print $this->_getOnCreateErrorMessage($milestone)."\n";
 	}
 	
 	
 	public function onUpdateError(\Sirprize\Basecamp\Milestone\Entity $milestone)
 	{
-		$message  = "milestone '".$milestone->getTitle()."'";
-		$message .= " could not be updated in project '".$milestone->getProjectId()."'\n";
-		print $message;
+		print $this->_getOnUpdateErrorMessage($milestone)."\n";
 	}
 	
 	
 	public function onDeleteError(\Sirprize\Basecamp\Milestone\Entity $milestone)
 	{
-		$message  = "milestone '".$milestone->getTitle()."'";
-		$message .= " could not be deleted from project '".$milestone->getProjectId()."'\n";
-		print $message;
+		print $this->_getOnDeleteErrorMessage($milestone)."\n";
 	}
 	
 }
