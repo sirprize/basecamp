@@ -1,0 +1,70 @@
+h1. Basecamp API Wrapper for php 5.3+
+
+This is a php library to access the Basecamp api. Collection classes provide methods to query the api and wrap each result item in an entity object. Entity objects come with methods such as update() and delete() to persist themselfes via the api. Functionality is provided to attach and detach observers to collections and entities.
+
+h2. Supported Features
+
+* Milestone: fully implemented
+* Person: fully implemented
+* Project: fully implemented
+* Todolist: fully implemented
+* Todolistitems: fully implemented
+
+h2. Requirements
+
+* php 5.3+ (uses namespaces)
+* Recent version of zend framework (tested with 1.10) > uses Zend_Http_Client & Zend_Log (optional)
+
+h2. Getting Started
+
+Please find plenty of working examples in the __basecamp/example/basecamp__ directory and adjust __basecamp/example/basecamp/_config.php__ with your own settings
+
+h3. Setup
+
+bc.. $config = array(
+	'baseUri' => 'https://xxx.basecamphq.com',
+	'username' => 'xxx',
+	'password' => 'xxx'
+);
+
+require_once 'Sirprize/Basecamp.php';
+$basecamp = new \Sirprize\Basecamp($config);
+	
+h3. Fetch all projects
+
+bc.. $projects = $basecamp->getProjectsInstance()->findAll();
+
+foreach($projects as $project)
+{
+	print $project->getName()."\n";
+}
+
+h3. Create a new milestone
+
+bc.. $milestones = $basecamp->getMilestoneCollectionInstance();
+$milestone = $milestones->getMilestoneInstance();
+
+require_once 'Sirprize/Basecamp/Date.php';
+$deadline = new \Sirprize\Basecamp\Date('2010-03-01');
+
+require_once 'Sirprize/Basecamp/Id.php';
+$projectId = new \Sirprize\Basecamp\Id('xxx');
+$userId = new \Sirprize\Basecamp\Id('xxx');
+
+$milestone
+	->setProjectId($projectId)
+	->setResponsiblePartyId($userId)
+	->setDeadline($deadline)
+	->setTitle('Milestoners Everywhere')
+	->setWantsNotification(true)
+	->create()
+;
+
+h2. Todo
+
+* Account
+* Companies
+* Categories
+* Messages
+* Comments
+* Time tracking
