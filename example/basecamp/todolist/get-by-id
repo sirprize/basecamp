@@ -21,48 +21,48 @@ require_once '../_config.php';
 require_once 'Sirprize/Basecamp.php';
 $basecamp = new \Sirprize\Basecamp($config);
 
-require_once 'Sirprize/Basecamp/Todolist/Collection/Observer/Stout.php';
-$collectionObserverStout = new \Sirprize\Basecamp\Todolist\Collection\Observer\Stout();
+require_once 'Sirprize/Basecamp/TodoList/Collection/Observer/Stout.php';
+$collectionObserverStout = new \Sirprize\Basecamp\TodoList\Collection\Observer\Stout();
 
-require_once 'Sirprize/Basecamp/Todolist/Collection/Observer/Log.php';
-$collectionObserverLog = new \Sirprize\Basecamp\Todolist\Collection\Observer\Log();
+require_once 'Sirprize/Basecamp/TodoList/Collection/Observer/Log.php';
+$collectionObserverLog = new \Sirprize\Basecamp\TodoList\Collection\Observer\Log();
 $collectionObserverLog->setLog($log);
 
 require_once 'Sirprize/Basecamp/Id.php';
 $id = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_TODOLIST_ID);
 
-$todolists = $basecamp->getTodolistCollectionInstance();
-$todolists->attachObserver($collectionObserverStout);
-$todolists->attachObserver($collectionObserverLog);
-$todolist = $todolists->startById($id);
+$todoLists = $basecamp->getTodoListCollectionInstance();
+$todoLists->attachObserver($collectionObserverStout);
+$todoLists->attachObserver($collectionObserverLog);
+$todoList = $todoLists->startById($id);
 
-if($todolist === null)
+if($todoList === null)
 {
 	die("Not found\n");
 }
 
-if($todolists->getResponse()->isError())
+if($todoLists->getResponse()->isError())
 {
 	die("Error\n");
 }
 
-print "completed count: ".$todolist->getCompletedCount()."\n";
-print "description: ".$todolist->getDescription()."\n";
-print "id: ".$todolist->getId()."\n";
-print "milestone id: ".$todolist->getMilestoneId()."\n";
-print "name: ".$todolist->getName()."\n";
-print "position: ".$todolist->getPosition()."\n";
-print "private: ".$todolist->getIsPrivate()."\n";
-print "project id: ".$todolist->getProjectId()."\n";
-print "tracked: ".$todolist->getIsTracked()."\n";
-print "uncompleted count: ".$todolist->getUncompletedCount()."\n";
-print "complete: ".$todolist->getIsComplete()."\n";
+print "completed count: ".$todoList->getCompletedCount()."\n";
+print "description: ".$todoList->getDescription()."\n";
+print "id: ".$todoList->getId()."\n";
+print "milestone id: ".$todoList->getMilestoneId()."\n";
+print "name: ".$todoList->getName()."\n";
+print "position: ".$todoList->getPosition()."\n";
+print "private: ".$todoList->getIsPrivate()."\n";
+print "project id: ".$todoList->getProjectId()."\n";
+print "tracked: ".$todoList->getIsTracked()."\n";
+print "uncompleted count: ".$todoList->getUncompletedCount()."\n";
+print "complete: ".$todoList->getIsComplete()."\n";
 
 
-if($todolist->getTodoItems())
+if($todoList->getTodoItems())
 {
-	foreach($todolist->getTodoItems() as $todolistItem)
+	foreach($todoList->getTodoItems() as $todoItem)
 	{
-		print ">> ".$todolistItem->getContent()."\n";
+		print ">> ".$todoItem->getContent()."\n";
 	}
 }

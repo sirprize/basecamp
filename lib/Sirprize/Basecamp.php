@@ -131,28 +131,28 @@ class Basecamp
 	
 	
 	
-	public function getTodolistCollectionInstance()
+	public function getTodoListCollectionInstance()
 	{
-		require_once 'Sirprize/Basecamp/Todolist/Collection.php';
-		$todolists = new \Sirprize\Basecamp\Todolist\Collection();
-		$todolists
+		require_once 'Sirprize/Basecamp/TodoList/Collection.php';
+		$todoLists = new \Sirprize\Basecamp\TodoList\Collection();
+		$todoLists
 			->setBasecamp($this)
 			->setHttpClient($this->_getHttpClient())
 		;
-		return $todolists;
+		return $todoLists;
 	}
 	
 	
 	
-	public function getTodolistItemCollectionInstance()
+	public function getTodoItemCollectionInstance()
 	{
-		require_once 'Sirprize/Basecamp/TodolistItem/Collection.php';
-		$todolistitems = new \Sirprize\Basecamp\TodolistItem\Collection();
-		$todolistitems
+		require_once 'Sirprize/Basecamp/TodoItem/Collection.php';
+		$todoListitems = new \Sirprize\Basecamp\TodoItem\Collection();
+		$todoListitems
 			->setBasecamp($this)
 			->setHttpClient($this->_getHttpClient())
 		;
-		return $todolistitems;
+		return $todoListitems;
 	}
 
 }

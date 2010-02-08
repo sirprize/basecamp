@@ -21,50 +21,50 @@ require_once '../_config.php';
 require_once 'Sirprize/Basecamp.php';
 $basecamp = new \Sirprize\Basecamp($config);
 
-require_once 'Sirprize/Basecamp/Todolist/Collection/Observer/Stout.php';
-$collectionObserverStout = new \Sirprize\Basecamp\Todolist\Collection\Observer\Stout();
+require_once 'Sirprize/Basecamp/TodoList/Collection/Observer/Stout.php';
+$collectionObserverStout = new \Sirprize\Basecamp\TodoList\Collection\Observer\Stout();
 
-require_once 'Sirprize/Basecamp/Todolist/Collection/Observer/Log.php';
-$collectionObserverLog = new \Sirprize\Basecamp\Todolist\Collection\Observer\Log();
+require_once 'Sirprize/Basecamp/TodoList/Collection/Observer/Log.php';
+$collectionObserverLog = new \Sirprize\Basecamp\TodoList\Collection\Observer\Log();
 $collectionObserverLog->setLog($log);
 
-require_once 'Sirprize/Basecamp/Todolist/Entity/Observer/Stout.php';
-$entityObserverStout = new \Sirprize\Basecamp\Todolist\Entity\Observer\Stout();
+require_once 'Sirprize/Basecamp/TodoList/Entity/Observer/Stout.php';
+$entityObserverStout = new \Sirprize\Basecamp\TodoList\Entity\Observer\Stout();
 
-require_once 'Sirprize/Basecamp/Todolist/Entity/Observer/Log.php';
-$entityObserverLog = new \Sirprize\Basecamp\Todolist\Entity\Observer\Log();
+require_once 'Sirprize/Basecamp/TodoList/Entity/Observer/Log.php';
+$entityObserverLog = new \Sirprize\Basecamp\TodoList\Entity\Observer\Log();
 $entityObserverLog->setLog($log);
 
 require_once 'Sirprize/Basecamp/Id.php';
 $projectId = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_PROJECT_ID);
 
-$todolists = $basecamp->getTodolistCollectionInstance();
-$todolists->attachObserver($collectionObserverStout);
-$todolists->attachObserver($collectionObserverLog);
-$todolists->startAllByProjectId($projectId);
+$todoLists = $basecamp->getTodoListCollectionInstance();
+$todoLists->attachObserver($collectionObserverStout);
+$todoLists->attachObserver($collectionObserverLog);
+$todoLists->startAllByProjectId($projectId);
 
 
-if($todolists->getResponse()->isError())
+if($todoLists->getResponse()->isError())
 {
 	die("Error\n");
 }
 
-foreach($todolists as $todolist)
+foreach($todoLists as $todoList)
 {
 	try {
-		$todolist->attachObserver($entityObserverStout);
-		$todolist->attachObserver($entityObserverLog);
+		$todoList->attachObserver($entityObserverStout);
+		$todoList->attachObserver($entityObserverLog);
 		
-		if($todolist->getName() != '@ Inventar')
+		if($todoList->getName() != '@ Inventar')
 		{
-			$todolist
+			$todoList
 				->setName('Ho Ho Ho asdf asdf asdf asdf')
 				->setDescription('Bla Bla Bla aaaaaaaa')
 				->setIsPrivate(true)
 				->update()
 			;
 			
-			if($todolist->getResponse()->isError())
+			if($todoList->getResponse()->isError())
 			{
 				continue;
 			}

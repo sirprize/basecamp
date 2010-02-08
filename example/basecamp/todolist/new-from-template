@@ -21,17 +21,17 @@ require_once '../_config.php';
 require_once 'Sirprize/Basecamp.php';
 $basecamp = new \Sirprize\Basecamp($config);
 
-require_once 'Sirprize/Basecamp/Todolist/Entity/Observer/Stout.php';
-$entityObserverStout = new \Sirprize\Basecamp\Todolist\Entity\Observer\Stout();
+require_once 'Sirprize/Basecamp/TodoList/Entity/Observer/Stout.php';
+$entityObserverStout = new \Sirprize\Basecamp\TodoList\Entity\Observer\Stout();
 
-require_once 'Sirprize/Basecamp/Todolist/Entity/Observer/Log.php';
-$entityObserverLog = new \Sirprize\Basecamp\Todolist\Entity\Observer\Log();
+require_once 'Sirprize/Basecamp/TodoList/Entity/Observer/Log.php';
+$entityObserverLog = new \Sirprize\Basecamp\TodoList\Entity\Observer\Log();
 $entityObserverLog->setLog($log);
 
-$todolists = $basecamp->getTodolistCollectionInstance();
-$todolist = $todolists->getTodolistInstance();
-$todolist->attachObserver($entityObserverStout);
-$todolist->attachObserver($entityObserverLog);
+$todoLists = $basecamp->getTodoListCollectionInstance();
+$todoList = $todoLists->getTodoListInstance();
+$todoList->attachObserver($entityObserverStout);
+$todoList->attachObserver($entityObserverLog);
 
 require_once 'Sirprize/Basecamp/Date.php';
 $date = new \Sirprize\Basecamp\Date('2010-03-01');
@@ -41,9 +41,9 @@ $projectId = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_PROJECT_ID);
 $userId = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_USER_ID);
 $templateId = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_TODOLIST_TEMPLATE_ID);
 
-$todolist
+$todoList
 	->setProjectId($projectId)
 	->setName('Har Har Har To To Tooo')
 ;
 
-$todolist->create($templateId);
+$todoList->create($templateId);

@@ -1,0 +1,62 @@
+2010-02-08T17:47:07+00:00 INFO (6): started todolist collection. found 48 todolists
+2010-02-08T17:47:18+00:00 INFO (6): started todolist collection. found 1 todolists
+2010-02-08T17:47:30+00:00 INFO (6): started todolist collection. found 1 todolists
+2010-02-08T17:47:50+00:00 INFO (6): started todo-item collection. found 5 todo-items
+2010-02-08T17:47:57+00:00 INFO (6): started todo-item collection. found 1 todo-items
+2010-02-08T17:48:04+00:00 INFO (6): todo-item 'Whoaaaa' created in todo-list '8139145
+2010-02-08T17:48:09+00:00 INFO (6): started todo-item collection. found 6 todo-items
+2010-02-08T17:48:10+00:00 INFO (6): todo-item 'Whoaaaa - 2' updated in todo-list '8139145
+2010-02-08T17:48:11+00:00 INFO (6): todo-item 'Whoaaaa - 2' updated in todo-list '8139145
+2010-02-08T17:48:12+00:00 INFO (6): todo-item 'Whoaaaa - 2' updated in todo-list '8139145
+2010-02-08T17:48:13+00:00 INFO (6): todo-item 'Whoaaaa - 2' updated in todo-list '8139145
+2010-02-08T17:48:14+00:00 INFO (6): todo-item 'asdf - 2' updated in todo-list '8139145
+2010-02-08T17:48:15+00:00 INFO (6): todo-item 'asdf - 2' updated in todo-list '8139145
+2010-02-08T17:51:15+00:00 INFO (6): started milestone collection. found 0 milestones
+2010-02-08T17:51:20+00:00 INFO (6): milestone 'Har Har Har' created in project '4311451
+2010-02-08T17:51:24+00:00 INFO (6): started milestone collection. found 1 milestones
+2010-02-08T17:51:31+00:00 INFO (6): started milestone collection. found 1 milestones
+2010-02-08T17:51:32+00:00 INFO (6): milestone 'My New Title' updated in project '4311451
+2010-02-08T17:51:36+00:00 INFO (6): started milestone collection. found 1 milestones
+2010-02-08T17:51:37+00:00 INFO (6): milestone 'My New Title' deleted from project '4311451
+2010-02-08T17:51:46+00:00 INFO (6): started person collection. found 7 persons
+2010-02-08T17:51:52+00:00 INFO (6): started person collection. found 4 persons
+2010-02-08T17:51:58+00:00 INFO (6): started person collection. found 1 persons
+2010-02-08T17:52:02+00:00 INFO (6): started person collection. found 1 persons
+2010-02-08T17:52:16+00:00 INFO (6): started project collection. found 16 projects
+2010-02-08T17:52:21+00:00 INFO (6): started project collection. found 1 projects
+2010-02-08T17:53:21+00:00 INFO (6): started todo-item collection. found 6 todo-items
+2010-02-08T17:53:28+00:00 INFO (6): started todo-item collection. found 1 todo-items
+2010-02-08T17:53:35+00:00 INFO (6): todo-item 'Whoaaaa' created in todo-list '8139145
+2010-02-08T17:53:45+00:00 INFO (6): started todo-item collection. found 7 todo-items
+2010-02-08T17:53:46+00:00 INFO (6): todo-item 'Whoaaaa - 2 - 2' updated in todo-list '8139145
+2010-02-08T17:53:47+00:00 INFO (6): todo-item 'Whoaaaa - 2 - 2' updated in todo-list '8139145
+2010-02-08T17:53:48+00:00 INFO (6): todo-item 'Whoaaaa - 2 - 2' updated in todo-list '8139145
+2010-02-08T17:53:49+00:00 INFO (6): todo-item 'Whoaaaa - 2 - 2' updated in todo-list '8139145
+2010-02-08T17:53:50+00:00 INFO (6): todo-item 'asdf - 2 - 2' updated in todo-list '8139145
+2010-02-08T17:53:51+00:00 INFO (6): todo-item 'Whoaaaa - 2' updated in todo-list '8139145
+2010-02-08T17:53:52+00:00 INFO (6): todo-item 'asdf - 2 - 2' updated in todo-list '8139145
+2010-02-08T17:53:57+00:00 INFO (6): started todo-item collection. found 7 todo-items
+2010-02-08T17:53:58+00:00 INFO (6): todo-item 'Whoaaaa - 2 - 2' completed in todo-list '8139145
+2010-02-08T17:53:59+00:00 INFO (6): todo-item 'Whoaaaa - 2 - 2' completed in todo-list '8139145
+2010-02-08T17:54:00+00:00 INFO (6): todo-item 'Whoaaaa - 2 - 2' completed in todo-list '8139145
+2010-02-08T17:54:01+00:00 INFO (6): todo-item 'Whoaaaa - 2 - 2' completed in todo-list '8139145
+2010-02-08T17:54:02+00:00 INFO (6): todo-item 'asdf - 2 - 2' completed in todo-list '8139145
+2010-02-08T17:54:03+00:00 INFO (6): todo-item 'Whoaaaa - 2' completed in todo-list '8139145
+2010-02-08T17:54:04+00:00 INFO (6): todo-item 'asdf - 2 - 2' completed in todo-list '8139145
+2010-02-08T17:54:08+00:00 INFO (6): started todo-item collection. found 7 todo-items
+2010-02-08T17:54:09+00:00 INFO (6): todo-item 'Whoaaaa - 2' deleted from todo-list '8139145
+2010-02-08T17:54:10+00:00 INFO (6): todo-item 'Whoaaaa - 2 - 2' deleted from todo-list '8139145
+2010-02-08T17:54:11+00:00 INFO (6): todo-item 'Whoaaaa - 2 - 2' deleted from todo-list '8139145
+2010-02-08T17:54:12+00:00 INFO (6): todo-item 'Whoaaaa - 2 - 2' deleted from todo-list '8139145
+2010-02-08T17:54:13+00:00 INFO (6): todo-item 'Whoaaaa - 2 - 2' deleted from todo-list '8139145
+2010-02-08T17:54:14+00:00 INFO (6): todo-item 'asdf - 2 - 2' deleted from todo-list '8139145
+2010-02-08T17:54:15+00:00 INFO (6): todo-item 'asdf - 2 - 2' deleted from todo-list '8139145
+2010-02-08T17:54:22+00:00 INFO (6): todo-item 'Whoaaaa' created in todo-list '8139145
+2010-02-08T17:54:39+00:00 INFO (6): started todoList collection. found 48 todoLists
+2010-02-08T17:54:45+00:00 INFO (6): started todoList collection. found 1 todoLists
+2010-02-08T17:54:52+00:00 INFO (6): started todoList collection. found 1 todoLists
+2010-02-08T17:54:58+00:00 INFO (6): todoList 'Har Har Har To To Tooo' created in project '4311451
+2010-02-08T17:55:03+00:00 INFO (6): todoList 'Har Har Har To To Tooo' created in project '4311451
+2010-02-08T17:55:07+00:00 INFO (6): started todoList collection. found 3 todoLists
+2010-02-08T17:55:08+00:00 INFO (6): todoList 'Ho Ho Ho asdf asdf asdf asdf' updated in project '4311451
+2010-02-08T17:55:09+00:00 INFO (6): todoList 'Ho Ho Ho asdf asdf asdf asdf' updated in project '4311451

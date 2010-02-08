@@ -7,8 +7,8 @@ h2. Supported Features
 * Milestone: fully implemented
 * Person: fully implemented
 * Project: fully implemented
-* Todolist: fully implemented
-* Todolistitems: fully implemented
+* TodoList: fully implemented
+* TodoListitems: fully implemented
 
 h2. Requirements
 

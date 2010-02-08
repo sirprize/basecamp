@@ -1,0 +1,61 @@
+#!/usr/bin/env php
+<?php
+
+/**
+ * Basecamp API Wrapper for PHP 5.3+ 
+ *
+ * LICENSE
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this package in the file LICENSE.txt
+ *
+ * @category   Sirprize
+ * @package    Basecamp
+ * @subpackage Try
+ * @copyright  Copyright (c) 2010, Christian Hoegl, Switzerland (http://sirprize.me)
+ * @license    MIT License
+ */
+
+require_once '../_config.php';
+
+require_once 'Sirprize/Basecamp.php';
+$basecamp = new \Sirprize\Basecamp($config);
+
+require_once 'Sirprize/Basecamp/TodoItem/Collection/Observer/Stout.php';
+$collectionObserverStout = new \Sirprize\Basecamp\TodoItem\Collection\Observer\Stout();
+
+require_once 'Sirprize/Basecamp/TodoItem/Collection/Observer/Log.php';
+$collectionObserverLog = new \Sirprize\Basecamp\TodoItem\Collection\Observer\Log();
+$collectionObserverLog->setLog($log);
+
+require_once 'Sirprize/Basecamp/Id.php';
+$id = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_TODOLISTITEM_ID);
+
+$todoItems = $basecamp->getTodoItemCollectionInstance();
+$todoItems->attachObserver($collectionObserverStout);
+$todoItems->attachObserver($collectionObserverLog);
+$todoItem = $todoItems->startById($id);
+
+if($todoItem === null)
+{
+	die("Not found\n");
+}
+
+if($todoItems->getResponse()->isError())
+{
+	die("Error\n");
+}
+
+print "comments count: ".$todoItem->getCommentsCount()."\n";
+print "completed: ".$todoItem->getIsCompleted()."\n";
+print "completed at: ".$todoItem->getCompletedAt()."\n";
+print "completer id: ".$todoItem->getCompleterId()."\n";
+print "content: ".$todoItem->getContent()."\n";
+print "created at: ".$todoItem->getCreatedAt()."\n";
+print "creator id: ".$todoItem->getCreatorId()."\n";
+print "due at: ".$todoItem->getDueAt()."\n";
+print "id: ".$todoItem->getId()."\n";
+print "position: ".$todoItem->getPosition()."\n";
+print "todoList id: ".$todoItem->getTodoListId()."\n";
+print "completed on: ".$todoItem->getCompletedOn()."\n";
+print "created on: ".$todoItem->getCreatedOn()."\n";

@@ -1,0 +1,47 @@
+#!/usr/bin/env php
+<?php
+
+/**
+ * Basecamp API Wrapper for PHP 5.3+ 
+ *
+ * LICENSE
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this package in the file LICENSE.txt
+ *
+ * @category   Sirprize
+ * @package    Basecamp
+ * @subpackage Try
+ * @copyright  Copyright (c) 2010, Christian Hoegl, Switzerland (http://sirprize.me)
+ * @license    MIT License
+ */
+
+require_once '../_config.php';
+
+require_once 'Sirprize/Basecamp.php';
+$basecamp = new \Sirprize\Basecamp($config);
+
+require_once 'Sirprize/Basecamp/TodoItem/Collection/Observer/Stout.php';
+$collectionObserverStout = new \Sirprize\Basecamp\TodoItem\Collection\Observer\Stout();
+
+require_once 'Sirprize/Basecamp/TodoItem/Collection/Observer/Log.php';
+$collectionObserverLog = new \Sirprize\Basecamp\TodoItem\Collection\Observer\Log();
+$collectionObserverLog->setLog($log);
+
+require_once 'Sirprize/Basecamp/Id.php';
+$todoListId = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_TODOLIST_ID);
+
+$todoItems = $basecamp->getTodoItemCollectionInstance();
+$todoItems->attachObserver($collectionObserverStout);
+$todoItems->attachObserver($collectionObserverLog);
+$todoItems->startByTodoListId($todoListId);
+
+if($todoItems->getResponse()->isError())
+{
+	die("Error\n");
+}
+
+foreach($todoItems as $todoItem)
+{
+	print $todoItem->getContent()." - ".$todoItem->getId()."\n";
+}
