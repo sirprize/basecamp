@@ -19,7 +19,7 @@ namespace Sirprize\Basecamp\TodolistItem\Collection\Observer;
 
 
 /**
- * Abstract class to observe and print state changes of the observed todolistItem
+ * Abstract class to observe and print state changes of the observed todo-items
  *
  * @category  Sirprize
  * @package   Basecamp
@@ -35,13 +35,13 @@ abstract class Abstrakt
 	
 	protected function _getOnStartSuccessMessage(\Sirprize\Basecamp\TodolistItem\Collection $collection)
 	{
-		return "started todolistItem collection. found ".$collection->count()." todolistItems";
+		return "started todo-item collection. found ".$collection->count()." todo-items";
 	}
 	
 	
 	protected function _getOnStartErrorMessage(\Sirprize\Basecamp\TodolistItem\Collection $collection)
 	{
-		return "todolistItem collection could not be started";
+		return "todo-item collection could not be started";
 	}
 	
 }

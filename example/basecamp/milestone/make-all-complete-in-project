@@ -45,12 +45,14 @@ $milestones->startByProjectId($projectId, \Sirprize\Basecamp\Milestone\Collectio
 
 if($milestones->getResponse()->isError())
 {
-	die('Error');
+	die("Error\n");
 }
 
 foreach($milestones as $milestone)
 {
-	$milestone->attachObserver($entityObserverStout);
-	$milestone->attachObserver($entityObserverLog);
-	$milestone->complete();
+	$milestone
+		->attachObserver($entityObserverStout)
+		->attachObserver($entityObserverLog)
+		->complete()
+	;
 }

@@ -48,4 +48,4 @@ $milestone
 	->setWantsNotification(true)
 ;
 
-print ($milestone->create()) ? 'OK' : 'ERROR';
+$milestone->create();

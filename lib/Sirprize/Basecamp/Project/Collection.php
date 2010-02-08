@@ -37,6 +37,7 @@ class Collection extends \SplObjectStorage
 	protected $_basecamp = null;
 	protected $_httpClient = null;
 	protected $_started = false;
+	protected $_loaded = false;
 	protected $_response = null;
 	protected $_observers = array();
 	
@@ -163,7 +164,7 @@ class Collection extends \SplObjectStorage
 	 * Fetch project by id
 	 *
 	 * @throws \Sirprize\Basecamp\Exception
-	 * @return \Sirprize\Basecamp\Project\Collection
+	 * @return null|\Sirprize\Basecamp\Project\Entity
 	 */
 	public function startById(\Sirprize\Basecamp\Id $id)
 	{
@@ -190,17 +191,20 @@ class Collection extends \SplObjectStorage
 			throw new \Sirprize\Basecamp\Exception($exception->getMessage());
 		}
 		
-		$this->_response = $this->_handleResponse($response);
+		require_once 'Sirprize/Basecamp/Response.php';
+		$this->_response = new \Sirprize\Basecamp\Response($response);
 		
 		if($this->_response->isError())
 		{
 			// service error
 			$this->_onStartError();
-			return $this;
+			return null;
 		}
 		
+		$this->load($this->_response->getData());
 		$this->_onStartSuccess();
-		return $this;
+		$this->rewind();
+		return $this->current();
 	}
 	
 	
@@ -237,7 +241,8 @@ class Collection extends \SplObjectStorage
 			throw new \Sirprize\Basecamp\Exception($exception->getMessage());
 		}
 		
-		$this->_response = $this->_handleResponse($response);
+		require_once 'Sirprize/Basecamp/Response.php';
+		$this->_response = new \Sirprize\Basecamp\Response($response);
 		
 		if($this->_response->isError())
 		{
@@ -246,6 +251,7 @@ class Collection extends \SplObjectStorage
 			return $this;
 		}
 		
+		$this->load($this->_response->getData());
 		$this->_onStartSuccess();
 		return $this;
 	}
@@ -254,47 +260,47 @@ class Collection extends \SplObjectStorage
 	
 	
 	/**
-	 * Instantiate project objects from api response and populate this collection
+	 * Instantiate project objects with api response data
 	 *
-	 * @return \Sirprize\Basecamp\Response
+	 * @return \Sirprize\Basecamp\Project\Collection
 	 */
-	protected function _handleResponse(\Zend_Http_Response $response)
+	public function load(\SimpleXMLElement $xml)
 	{
-		require_once 'Sirprize/Basecamp/Response.php';
-		$response = new \Sirprize\Basecamp\Response($response);
-		
-		if($response->isError())
+		if($this->_loaded)
 		{
-			return $response;
+			require_once 'Sirprize/Basecamp/Exception.php';
+			throw new \Sirprize\Basecamp\Exception('collection has already been loaded');
 		}
 		
-		if(isset($response->getData()->id))
+		$this->_loaded = true;
+		
+		if(isset($xml->id))
 		{
 			// request for a single entity
 			$project = $this->getProjectInstance();
-			$project->load($response->getData());
+			$project->load($xml);
 			$this->attach($project);
-			return $response;
+			return $this;
 		}
 		
-		$data = (array) $response->getData();
+		$array = (array) $xml;
 		
-		if(!isset($data[self::_PROJECT]))
+		if(!isset($array[self::_PROJECT]))
 		{
 			// list request - 0 items in response
-			return $response;
+			return $this;
 		}
 		
-		if(isset($data[self::_PROJECT]->id))
+		if(isset($array[self::_PROJECT]->id))
 		{
 			// list request - 1 item in response
 			$project = $this->getProjectInstance();
-			$project->load($data[self::_PROJECT]);
+			$project->load($array[self::_PROJECT]);
 			$this->attach($project);
-			return $response;
+			return $this;
 		}
 		
-		foreach($data[self::_PROJECT] as $row)
+		foreach($array[self::_PROJECT] as $row)
 		{
 			// list request - 2 or more items in response
 			$project = $this->getProjectInstance();
@@ -302,7 +308,7 @@ class Collection extends \SplObjectStorage
 			$this->attach($project);
 		}
 		
-		return $response;
+		return $this;
 	}
 	
 	

@@ -33,6 +33,7 @@ class Collection extends \SplObjectStorage
 	protected $_basecamp = null;
 	protected $_httpClient = null;
 	protected $_started = false;
+	protected $_loaded = false;
 	protected $_response = null;
 	protected $_observers = array();
 	
@@ -156,7 +157,7 @@ class Collection extends \SplObjectStorage
 	
 	
 	/**
-	 * Fetch todolistItems for a given project
+	 * Fetch todo-items for a given project
 	 *
 	 * @throws \Sirprize\Basecamp\Exception
 	 * @return \Sirprize\Basecamp\TodolistItem\Collection
@@ -176,7 +177,6 @@ class Collection extends \SplObjectStorage
 				->setAuth($this->_getBasecamp()->getUsername(), $this->_getBasecamp()->getPassword())
 				->request('GET')
 			;
-			#print $response->getBody(); exit;
 		}
 		catch(\Exception $exception)
 		{
@@ -187,7 +187,8 @@ class Collection extends \SplObjectStorage
 			throw new \Sirprize\Basecamp\Exception($exception->getMessage());
 		}
 		
-		$this->_response = $this->_handleResponse($response);
+		require_once 'Sirprize/Basecamp/Response.php';
+		$this->_response = new \Sirprize\Basecamp\Response($response);
 		
 		if($this->_response->isError())
 		{
@@ -196,6 +197,7 @@ class Collection extends \SplObjectStorage
 			return $this;
 		}
 		
+		$this->load($this->_response->getData());
 		$this->_onStartSuccess();
 		return $this;
 	}
@@ -203,48 +205,101 @@ class Collection extends \SplObjectStorage
 	
 	
 	
+	
+	
+	
 	/**
-	 * Instantiate todolistItem objects from api response and populate this collection
+	 * Fetch todo-item by id
 	 *
-	 * @return \Sirprize\Basecamp\Response
+	 * @throws \Sirprize\Basecamp\Exception
+	 * @return null|\Sirprize\Basecamp\TodolistItem\Entity
 	 */
-	protected function _handleResponse(\Zend_Http_Response $response)
+	public function startById(\Sirprize\Basecamp\Id $id)
 	{
-		require_once 'Sirprize/Basecamp/Response.php';
-		$response = new \Sirprize\Basecamp\Response($response);
-		
-		if($response->isError())
+		if($this->_started)
 		{
-			return $response;
+			return $this;
 		}
 		
-		if(isset($response->getData()->id))
+		$this->_started = true;
+		
+		try {
+			$response = $this->_getHttpClient()
+				->setUri($this->_getBasecamp()->getBaseUri()."/todo_items/$id.xml")
+				->setAuth($this->_getBasecamp()->getUsername(), $this->_getBasecamp()->getPassword())
+				->request('GET')
+			;
+		}
+		catch(\Exception $exception)
+		{
+			// connection error
+			$this->_onStartError();
+			
+			require_once 'Sirprize/Basecamp/Exception.php';
+			throw new \Sirprize\Basecamp\Exception($exception->getMessage());
+		}
+		
+		require_once 'Sirprize/Basecamp/Response.php';
+		$this->_response = new \Sirprize\Basecamp\Response($response);
+		
+		if($this->_response->isError())
+		{
+			// service error
+			$this->_onStartError();
+			return null;
+		}
+		
+		$this->load($this->_response->getData());
+		$this->_onStartSuccess();
+		$this->rewind();
+		return $this->current();
+	}
+	
+	
+	
+	
+	/**
+	 * Instantiate todo-item objects with api response data
+	 *
+	 * @return \Sirprize\Basecamp\TodolistItem\Collection
+	 */
+	public function load(\SimpleXMLElement $xml)
+	{
+		if($this->_loaded)
+		{
+			require_once 'Sirprize/Basecamp/Exception.php';
+			throw new \Sirprize\Basecamp\Exception('collection has already been loaded');
+		}
+		
+		$this->_loaded = true;
+		
+		if(isset($xml->id))
 		{
 			// request for a single entity (not supported on todolistItems)
 			$todolistItem = $this->getTodolistItemInstance();
-			$todolistItem->load($response->getData());
+			$todolistItem->load($xml);
 			$this->attach($todolistItem);
-			return $response;
+			return $this;
 		}
 		
-		$data = (array) $response->getData();
+		$array = (array) $xml;
 		
-		if(!isset($data[self::_TODO_ITEM]))
+		if(!isset($array[self::_TODO_ITEM]))
 		{
 			// list request - 0 items in response
-			return $response;
+			return $this;
 		}
 		
-		if(isset($data[self::_TODO_ITEM]->id))
+		if(isset($array[self::_TODO_ITEM]->id))
 		{
 			// list request - 1 item in response
 			$todolistItem = $this->getTodolistItemInstance();
-			$todolistItem->load($data[self::_TODO_ITEM]);
+			$todolistItem->load($array[self::_TODO_ITEM]);
 			$this->attach($todolistItem);
-			return $response;
+			return $this;
 		}
 		
-		foreach($data[self::_TODO_ITEM] as $row)
+		foreach($array[self::_TODO_ITEM] as $row)
 		{
 			// list request - 2 or more items in response
 			$todolistItem = $this->getTodolistItemInstance();
@@ -252,7 +307,7 @@ class Collection extends \SplObjectStorage
 			$this->attach($todolistItem);
 		}
 		
-		return $response;
+		return $this;
 	}
 	
 	

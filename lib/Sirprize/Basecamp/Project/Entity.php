@@ -167,7 +167,7 @@ class Entity
 	 * @throws \Sirprize\Basecamp\Exception
 	 * @return \Sirprize\Basecamp\Project
 	 */
-	public function load(\SimpleXMLElement $data, $force = false)
+	public function load(\SimpleXMLElement $xml, $force = false)
 	{
 		if($this->_loaded && !$force)
 		{
@@ -175,27 +175,27 @@ class Entity
 			throw new \Sirprize\Basecamp\Exception('entity has already been loaded');
 		}
 		
-		#print_r($data); exit;
+		#print_r($xml); exit;
 		$this->_loaded = true;
-		$data = (array) $data;
+		$array = (array) $xml;
 		
 		require_once 'Sirprize/Basecamp/Id.php';
-		$id = new \Sirprize\Basecamp\Id($data[self::_ID]);
+		$id = new \Sirprize\Basecamp\Id($array[self::_ID]);
 		
-		$showAnnouncement = ($data[self::_SHOW_ANNOUNCEMENT] == 'true');
-		$showWriteboards = ($data[self::_SHOW_WRITEBOARDS] == 'true');
+		$showAnnouncement = ($array[self::_SHOW_ANNOUNCEMENT] == 'true');
+		$showWriteboards = ($array[self::_SHOW_WRITEBOARDS] == 'true');
 		
 		$this->_data = array(
-			self::_ANNOUNCEMENT => $data[self::_ANNOUNCEMENT],
-			self::_CREATED_ON => $data[self::_CREATED_ON],
+			self::_ANNOUNCEMENT => $array[self::_ANNOUNCEMENT],
+			self::_CREATED_ON => $array[self::_CREATED_ON],
 			self::_ID => $id,
-			self::_LAST_CHANGED_ON => $data[self::_LAST_CHANGED_ON],
-			self::_NAME => $data[self::_NAME],
+			self::_LAST_CHANGED_ON => $array[self::_LAST_CHANGED_ON],
+			self::_NAME => $array[self::_NAME],
 			self::_SHOW_ANNOUNCEMENT => $showAnnouncement,
 			self::_SHOW_WRITEBOARDS => $showWriteboards,
-			self::_START_PAGE => $data[self::_START_PAGE],
-			self::_STATUS => $data[self::_STATUS],
-			self::_COMPANY => $data[self::_COMPANY]
+			self::_START_PAGE => $array[self::_START_PAGE],
+			self::_STATUS => $array[self::_STATUS],
+			self::_COMPANY => $array[self::_COMPANY]
 		);
 		
 		return $this;

@@ -22,7 +22,7 @@ require_once 'Sirprize/Basecamp/TodolistItem/Collection/Observer/Abstrakt.php';
 
 
 /**
- * Class to observe and print state changes of the observed todolistItem
+ * Class to observe and print state changes of the observed todo-items
  *
  * @category  Sirprize
  * @package   Basecamp

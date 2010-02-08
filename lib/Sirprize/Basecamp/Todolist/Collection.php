@@ -37,6 +37,7 @@ class Collection extends \SplObjectStorage
 	protected $_basecamp = null;
 	protected $_httpClient = null;
 	protected $_started = false;
+	protected $_loaded = false;
 	protected $_response = null;
 	protected $_observers = array();
 	
@@ -204,7 +205,8 @@ class Collection extends \SplObjectStorage
 			throw new \Sirprize\Basecamp\Exception($exception->getMessage());
 		}
 		
-		$this->_response = $this->_handleResponse($response);
+		require_once 'Sirprize/Basecamp/Response.php';
+		$this->_response = new \Sirprize\Basecamp\Response($response);
 		
 		if($this->_response->isError())
 		{
@@ -213,6 +215,7 @@ class Collection extends \SplObjectStorage
 			return $this;
 		}
 		
+		$this->load($this->_response->getData());
 		$this->_onStartSuccess();
 		return $this;
 	}
@@ -263,7 +266,8 @@ class Collection extends \SplObjectStorage
 			throw new \Sirprize\Basecamp\Exception($exception->getMessage());
 		}
 		
-		$this->_response = $this->_handleResponse($response);
+		require_once 'Sirprize/Basecamp/Response.php';
+		$this->_response = new \Sirprize\Basecamp\Response($response);
 		
 		if($this->_response->isError())
 		{
@@ -272,6 +276,7 @@ class Collection extends \SplObjectStorage
 			return $this;
 		}
 		
+		$this->load($this->_response->getData());
 		$this->_onStartSuccess();
 		return $this;
 	}
@@ -283,7 +288,7 @@ class Collection extends \SplObjectStorage
 	 * Fetch one todolist by id (response includes list-items)
 	 *
 	 * @throws \Sirprize\Basecamp\Exception
-	 * @return \Sirprize\Basecamp\Todolist\Collection
+	 * @return null|\Sirprize\Basecamp\Todolist\Entity
 	 */
 	public function startById(\Sirprize\Basecamp\Id $id)
 	{
@@ -310,64 +315,67 @@ class Collection extends \SplObjectStorage
 			throw new \Sirprize\Basecamp\Exception($exception->getMessage());
 		}
 		
-		$this->_response = $this->_handleResponse($response);
+		require_once 'Sirprize/Basecamp/Response.php';
+		$this->_response = new \Sirprize\Basecamp\Response($response);
 		
 		if($this->_response->isError())
 		{
 			// service error
 			$this->_onStartError();
-			return $this;
+			return null;
 		}
 		
+		$this->load($this->_response->getData());
 		$this->_onStartSuccess();
-		return $this;
+		$this->rewind();
+		return $this->current();
 	}
 	
 	
 	
 	
 	/**
-	 * Instantiate todolist objects from api response and populate this collection
+	 * Instantiate todolist objects with api response data
 	 *
-	 * @return \Sirprize\Basecamp\Response
+	 * @return \Sirprize\Basecamp\Todolist\Collection
 	 */
-	protected function _handleResponse(\Zend_Http_Response $response)
+	public function load(\SimpleXMLElement $xml)
 	{
-		require_once 'Sirprize/Basecamp/Response.php';
-		$response = new \Sirprize\Basecamp\Response($response);
-		
-		if($response->isError())
+		if($this->_loaded)
 		{
-			return $response;
+			require_once 'Sirprize/Basecamp/Exception.php';
+			throw new \Sirprize\Basecamp\Exception('collection has already been loaded');
 		}
 		
-		if(isset($response->getData()->id))
+		$this->_loaded = true;
+		
+		if(isset($xml->id))
 		{
 			// request for a single entity
 			$todolist = $this->getTodolistInstance();
-			$todolist->load($response->getData());
+			$todolist->load($xml);
 			$this->attach($todolist);
-			return $response;
+			return $this;
 		}
 		
-		$data = (array) $response->getData();
+		$array = (array) $xml;
 		
-		if(!isset($data[self::_TODOLIST]))
+		if(!isset($array[self::_TODOLIST]))
 		{
 			// list request - 0 items in response
-			return $response;
+			return $this;
 		}
 		
-		if(isset($data[self::_TODOLIST]->id))
+		if(isset($array[self::_TODOLIST]->id))
 		{
 			// list request - 1 item in response
 			$todolist = $this->getTodolistInstance();
-			$todolist->load($data[self::_TODOLIST]);
+			$todolist->load($array[self::_TODOLIST]);
 			$this->attach($todolist);
-			return $response;
+			return $this;
 		}
 		
-		foreach($data[self::_TODOLIST] as $row)
+		foreach($array[self::_TODOLIST] as $row)
 		{
 			// list request - 2 or more items in response
 			$todolist = $this->getTodolistInstance();
@@ -375,7 +383,7 @@ class Collection extends \SplObjectStorage
 			$this->attach($todolist);
 		}
 		
-		return $response;
+		return $this;
 	}
 	
 	

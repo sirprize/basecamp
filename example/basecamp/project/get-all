@@ -35,12 +35,10 @@ $projects->startAll();
 
 if($projects->getResponse()->isError())
 {
-	die('Error');
+	die("Error\n");
 }
 	
 foreach($projects as $project)
 {
-	print "id: ".$project->getId()."\n";
-	print "name: ".$project->getName()."\n";
-	print "--------------------------\n";
+	print $project->getName().' - '.$project->getId()."\n";
 }

@@ -45,15 +45,17 @@ $milestones->startByProjectId($projectId);
 
 if($milestones->getResponse()->isError())
 {
-	die('Error');
+	die("Error\n");
 }
 
 foreach($milestones as $milestone)
 {
 	try {
-		$milestone->attachObserver($entityObserverStout);
-		$milestone->attachObserver($entityObserverLog);
-		$milestone->delete();
+		$milestone
+			->attachObserver($entityObserverStout)
+			->attachObserver($entityObserverLog)
+			->delete()
+		;
 		
 		if($milestone->getResponse()->isError())
 		{

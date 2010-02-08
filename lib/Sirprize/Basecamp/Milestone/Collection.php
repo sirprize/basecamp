@@ -37,6 +37,7 @@ class Collection extends \SplObjectStorage
 	protected $_basecamp = null;
 	protected $_httpClient = null;
 	protected $_started = false;
+	protected $_loaded = false;
 	protected $_response = null;
 	protected $_observers = array();
 	
@@ -176,7 +177,7 @@ class Collection extends \SplObjectStorage
 		
 		foreach($this as $milestone)
 		{
-			$xml .= $milestone->getCreateXml();
+			$xml .= $milestone->getXml();
 		}
 		
 		$xml .= '</request>';
@@ -229,6 +230,7 @@ class Collection extends \SplObjectStorage
 			$milestone->onCreateLoad($data[self::_MILESTONE][$i++]);
 		}
 		
+		$this->_loaded = true;
 		$this->_started = true;
 		$this->_onCreateSuccess();
 		return $this->count();
@@ -276,7 +278,8 @@ class Collection extends \SplObjectStorage
 			throw new \Sirprize\Basecamp\Exception($exception->getMessage());
 		}
 		
-		$this->_response = $this->_handleResponse($response);
+		require_once 'Sirprize/Basecamp/Response.php';
+		$this->_response = new \Sirprize\Basecamp\Response($response);
 		
 		if($this->_response->isError())
 		{
@@ -285,6 +288,7 @@ class Collection extends \SplObjectStorage
 			return $this;
 		}
 		
+		$this->load($this->_response->getData());
 		$this->_onStartSuccess();
 		return $this;
 	}
@@ -293,47 +297,37 @@ class Collection extends \SplObjectStorage
 	
 	
 	/**
-	 * Instantiate milestone objects from api response and populate this collection
+	 * Instantiate milestone objects with api response data
 	 *
-	 * @return \Sirprize\Basecamp\Response
+	 * @return \Sirprize\Basecamp\Milestone\Collection
 	 */
-	protected function _handleResponse(\Zend_Http_Response $response)
+	public function load(\SimpleXMLElement $xml)
 	{
-		require_once 'Sirprize/Basecamp/Response.php';
-		$response = new \Sirprize\Basecamp\Response($response);
-		
-		if($response->isError())
+		if($this->_loaded)
 		{
-			return $response;
+			require_once 'Sirprize/Basecamp/Exception.php';
+			throw new \Sirprize\Basecamp\Exception('collection has already been loaded');
 		}
-		/*
-		if(isset($response->getData()->id))
-		{
-			// request for a single entity (not supported on milestones)
-			$milestone = $this->getMilestoneInstance();
-			$milestone->load($response->getData());
-			$this->attach($milestone);
-			return $response;
-		}
-		*/
-		$data = (array) $response->getData();
 		
-		if(!isset($data[self::_MILESTONE]))
+		$this->_loaded = true;
+		$array = (array) $xml;
+		
+		if(!isset($array[self::_MILESTONE]))
 		{
 			// list request - 0 items in response
-			return $response;
+			return $this;
 		}
 		
-		if(isset($data[self::_MILESTONE]->id))
+		if(isset($array[self::_MILESTONE]->id))
 		{
 			// list request - 1 item in response
 			$milestone = $this->getMilestoneInstance();
-			$milestone->load($data[self::_MILESTONE]);
+			$milestone->load($array[self::_MILESTONE]);
 			$this->attach($milestone);
-			return $response;
+			return $this;
 		}
 		
-		foreach($data[self::_MILESTONE] as $row)
+		foreach($array[self::_MILESTONE] as $row)
 		{
 			// list request - 2 or more items in response
 			$milestone = $this->getMilestoneInstance();
@@ -341,7 +335,7 @@ class Collection extends \SplObjectStorage
 			$this->attach($milestone);
 		}
 		
-		return $response;
+		return $this;
 	}
 	
 	

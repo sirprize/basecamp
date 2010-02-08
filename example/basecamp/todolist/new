@@ -45,4 +45,4 @@ $todolist
 	->setName('Har Har Har To To Tooo')
 ;
 
-print ($todolist->create()) ? 'OK' : 'ERROR';
+$todolist->create();

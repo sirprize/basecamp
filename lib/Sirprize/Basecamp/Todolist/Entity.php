@@ -235,7 +235,9 @@ class Entity
 		return $this->_getVal(self::_UNCOMPLETED_COUNT);
 	}
 	
-	
+	/**
+	 * @return null|\Sirprize\Basecamp\TodolistItems\Collection
+	 */
 	public function getTodoItems()
 	{
 		return $this->_getVal(self::_TODO_ITEMS);
@@ -257,7 +259,7 @@ class Entity
 	 * @throws \Sirprize\Basecamp\Exception
 	 * @return \Sirprize\Basecamp\Todolist
 	 */
-	public function load(\SimpleXMLElement $data, $force = false)
+	public function load(\SimpleXMLElement $xml, $force = false)
 	{
 		if($this->_loaded && !$force)
 		{
@@ -265,39 +267,45 @@ class Entity
 			throw new \Sirprize\Basecamp\Exception('entity has already been loaded');
 		}
 		
-		#print_r($data);
 		$this->_loaded = true;
-		$data = (array) $data;
+		$array = (array) $xml;
+		$todolistItems = null;
+		
+		if(isset($array[self::_TODO_ITEMS]))
+		{
+			$todolistItems = $this->_getBasecamp()->getTodolistItemCollectionInstance();
+			$todolistItems->load($array[self::_TODO_ITEMS]);
+		}
 		
 		require_once 'Sirprize/Basecamp/Id.php';
-		$id = new \Sirprize\Basecamp\Id($data[self::_ID]);
+		$id = new \Sirprize\Basecamp\Id($array[self::_ID]);
 		
 		require_once 'Sirprize/Basecamp/Id.php';
-		$projectId = new \Sirprize\Basecamp\Id($data[self::_PROJECT_ID]);
+		$projectId = new \Sirprize\Basecamp\Id($array[self::_PROJECT_ID]);
 		
 		require_once 'Sirprize/Basecamp/Id.php';
 		$milestoneId
-			= ($data[self::_MILESTONE_ID] != '')
-			? new \Sirprize\Basecamp\Id($data[self::_MILESTONE_ID])
+			= ($array[self::_MILESTONE_ID] != '')
+			? new \Sirprize\Basecamp\Id($array[self::_MILESTONE_ID])
 			: null
 		;
 		
-		$private = ($data[self::_PRIVATE] == 'true');
-		$tracked = ($data[self::_TRACKED] == 'true');
-		$complete = ($data[self::_COMPLETE] == 'true');
+		$private = ($array[self::_PRIVATE] == 'true');
+		$tracked = ($array[self::_TRACKED] == 'true');
+		$complete = ($array[self::_COMPLETE] == 'true');
 		
 		$this->_data = array(
-			self::_COMPLETED_COUNT => $data[self::_COMPLETED_COUNT],
-			self::_DESCRIPTION => $data[self::_DESCRIPTION],
+			self::_COMPLETED_COUNT => $array[self::_COMPLETED_COUNT],
+			self::_DESCRIPTION => $array[self::_DESCRIPTION],
 			self::_ID => $id,
 			self::_MILESTONE_ID => $milestoneId,
-			self::_NAME => $data[self::_NAME],
-			self::_POSITION => $data[self::_POSITION],
+			self::_NAME => $array[self::_NAME],
+			self::_POSITION => $array[self::_POSITION],
 			self::_PRIVATE => $private,
 			self::_PROJECT_ID => $projectId,
 			self::_TRACKED => $tracked,
-			self::_UNCOMPLETED_COUNT => $data[self::_UNCOMPLETED_COUNT],
-			#self::_TODO_ITEMS => $data[self::_TODO_ITEMS],
+			self::_UNCOMPLETED_COUNT => $array[self::_UNCOMPLETED_COUNT],
+			self::_TODO_ITEMS => $todolistItems,
 			self::_COMPLETE => $complete
 		);
 		
@@ -312,7 +320,7 @@ class Entity
 	 * @throws \Sirprize\Basecamp\Exception
 	 * @return string
 	 */
-	public function getCreateXml(\Sirprize\Basecamp\Id $todoListTemplateId = null)
+	public function getXml(\Sirprize\Basecamp\Id $todoListTemplateId = null)
 	{
 		if($this->getName() === null)
 		{
@@ -343,6 +351,8 @@ class Entity
 	/**
 	 * Persist this todolist in storage
 	 *
+	 * Note: complete data (id etc) is not automatically loaded upon creation
+	 *
 	 * @throws \Sirprize\Basecamp\Exception
 	 * @return boolean
 	 */
@@ -355,7 +365,7 @@ class Entity
 		}
 		
 		$projectId = $this->getProjectId();
-		$xml = $this->getCreateXml($todoListTemplateId);
+		$xml = $this->getXml($todoListTemplateId);
 		
 		try {
 			$response = $this->_getHttpClient()
@@ -398,12 +408,19 @@ class Entity
 	/**
 	 * Update this todolist in storage
 	 *
+	 *
 	 * @throws \Sirprize\Basecamp\Exception
 	 * @return boolean
 	 */
 	public function update()
 	{
-		$xml = $this->getCreateXml();
+		if(!$this->_loaded)
+		{
+			require_once 'Sirprize/Basecamp/Exception.php';
+			throw new \Sirprize\Basecamp\Exception('call load() before '.__METHOD__);
+		}
+		
+		$xml = $this->getXml();
 		$id = $this->getId();
 		
 		try {

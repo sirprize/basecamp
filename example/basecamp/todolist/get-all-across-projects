@@ -35,11 +35,18 @@ $todolists->startAllByResponsibiltyParty('');
 
 if($todolists->getResponse()->isError())
 {
-	die('Error');
+	die("Error\n");
 }
 
 foreach($todolists as $todolist)
 {
-	print "name: ".$todolist->getName()."\n";
-	print "--------------------------\n";
+	print $todolist->getName().' - '.$todolist->getId()."\n";
+	
+	if($todolist->getTodoItems())
+	{
+		foreach($todolist->getTodoItems() as $todolistItem)
+		{
+			print ">> ".$todolistItem->getContent()."\n";
+		}
+	}
 }

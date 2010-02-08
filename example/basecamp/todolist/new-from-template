@@ -46,4 +46,4 @@ $todolist
 	->setName('Har Har Har To To Tooo')
 ;
 
-print ($todolist->create($templateId)) ? 'OK' : 'ERROR';
+$todolist->create($templateId);

@@ -34,24 +34,25 @@ $projectId = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_PROJECT_ID);
 $projects = $basecamp->getProjectCollectionInstance();
 $projects->attachObserver($collectionObserverStout);
 $projects->attachObserver($collectionObserverLog);
-$projects->startById($projectId);
+$project = $projects->startById($projectId);
+
+if($project === null)
+{
+	die("Not found\n");
+}
 
 if($projects->getResponse()->isError())
 {
-	die('Error');
+	die("Error\n");
 }
-	
-foreach($projects as $project)
-{
-	#print "announcement: ".$project->getAnnouncement()."\n";
-	print "created on: ".$project->getCreatedOn()."\n";
-	print "id: ".$project->getId()."\n";
-	print "last changed on: ".$project->getLastChangedOn()."\n";
-	print "name: ".$project->getName()."\n";
-	print "show announcement: ".$project->getShowAnnouncement()."\n";
-	print "show writeboards: ".$project->getShowWriteboards()."\n";
-	print "start page: ".$project->getStartPage()."\n";
-	print "status: ".$project->getStatus()."\n";
-	#print "company: ".$project->getCompany()."\n";
-	print "--------------------------\n";
-}
+
+#print "announcement: ".$project->getAnnouncement()."\n";
+print "created on: ".$project->getCreatedOn()."\n";
+print "id: ".$project->getId()."\n";
+print "last changed on: ".$project->getLastChangedOn()."\n";
+print "name: ".$project->getName()."\n";
+print "show announcement: ".$project->getShowAnnouncement()."\n";
+print "show writeboards: ".$project->getShowWriteboards()."\n";
+print "start page: ".$project->getStartPage()."\n";
+print "status: ".$project->getStatus()."\n";
+#print "company: ".$project->getCompany()."\n";

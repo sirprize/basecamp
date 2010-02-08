@@ -34,27 +34,35 @@ $id = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_TODOLIST_ID);
 $todolists = $basecamp->getTodolistCollectionInstance();
 $todolists->attachObserver($collectionObserverStout);
 $todolists->attachObserver($collectionObserverLog);
-$todolists->startById($id);
+$todolist = $todolists->startById($id);
+
+if($todolist === null)
+{
+	die("Not found\n");
+}
 
 if($todolists->getResponse()->isError())
 {
-	die('Error');
+	die("Error\n");
 }
-	
-foreach($todolists as $todolist)
+
+print "completed count: ".$todolist->getCompletedCount()."\n";
+print "description: ".$todolist->getDescription()."\n";
+print "id: ".$todolist->getId()."\n";
+print "milestone id: ".$todolist->getMilestoneId()."\n";
+print "name: ".$todolist->getName()."\n";
+print "position: ".$todolist->getPosition()."\n";
+print "private: ".$todolist->getIsPrivate()."\n";
+print "project id: ".$todolist->getProjectId()."\n";
+print "tracked: ".$todolist->getIsTracked()."\n";
+print "uncompleted count: ".$todolist->getUncompletedCount()."\n";
+print "complete: ".$todolist->getIsComplete()."\n";
+
+
+if($todolist->getTodoItems())
 {
-	print "completed count: ".$todolist->getCompletedCount()."\n";
-	print "description: ".$todolist->getDescription()."\n";
-	print "id: ".$todolist->getId()."\n";
-	print "milestone id: ".$todolist->getMilestoneId()."\n";
-	print "name: ".$todolist->getName()."\n";
-	print "position: ".$todolist->getPosition()."\n";
-	print "private: ".$todolist->getIsPrivate()."\n";
-	print "project id: ".$todolist->getProjectId()."\n";
-	print "tracked: ".$todolist->getIsTracked()."\n";
-	print "uncompleted count: ".$todolist->getUncompletedCount()."\n";
-	print "todo items: ".$todolist->getTodoItems()."\n";
-	print "complete: ".$todolist->getIsComplete()."\n";
-	
-	print "--------------------------\n";
+	foreach($todolist->getTodoItems() as $todolistItem)
+	{
+		print ">> ".$todolistItem->getContent()."\n";
+	}
 }

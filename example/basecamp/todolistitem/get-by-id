@@ -29,19 +29,33 @@ $collectionObserverLog = new \Sirprize\Basecamp\TodolistItem\Collection\Observer
 $collectionObserverLog->setLog($log);
 
 require_once 'Sirprize/Basecamp/Id.php';
-$todolistId = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_TODOLIST_ID);
+$id = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_TODOLISTITEM_ID);
 
 $todolistItems = $basecamp->getTodolistItemCollectionInstance();
 $todolistItems->attachObserver($collectionObserverStout);
 $todolistItems->attachObserver($collectionObserverLog);
-$todolistItems->startByTodolistId($todolistId);
+$todolistItem = $todolistItems->startById($id);
+
+if($todolistItem === null)
+{
+	die("Not found\n");
+}
 
 if($todolistItems->getResponse()->isError())
 {
 	die("Error\n");
 }
 
-foreach($todolistItems as $todolistItem)
-{
-	print $todolistItem->getContent()." - ".$todolistItem->getId()."\n";
-}
+print "comments count: ".$todolistItem->getCommentsCount()."\n";
+print "completed: ".$todolistItem->getIsCompleted()."\n";
+print "completed at: ".$todolistItem->getCompletedAt()."\n";
+print "completer id: ".$todolistItem->getCompleterId()."\n";
+print "content: ".$todolistItem->getContent()."\n";
+print "created at: ".$todolistItem->getCreatedAt()."\n";
+print "creator id: ".$todolistItem->getCreatorId()."\n";
+print "due at: ".$todolistItem->getDueAt()."\n";
+print "id: ".$todolistItem->getId()."\n";
+print "position: ".$todolistItem->getPosition()."\n";
+print "todolist id: ".$todolistItem->getTodolistId()."\n";
+print "completed on: ".$todolistItem->getCompletedOn()."\n";
+print "created on: ".$todolistItem->getCreatedOn()."\n";

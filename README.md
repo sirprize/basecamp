@@ -45,6 +45,10 @@ Requirements
 + php 5.3+ (uses namespaces)
 + Recent version of zend framework (tested with 1.10) > uses Zend_Http_Client & Zend_Log
 
+Getting Started
+---------------
+
+Please find plenty of working examples in the `basecamp/example/basecamp` directory and adjust `basecamp/example/basecamp/_config.php` with your own settings
 
 Supported Features
 ------------------
@@ -53,10 +57,14 @@ Supported Features
 + Person: fully implemented
 + Project: fully implemented
 + Todolist: fully implemented
-+ Todolistitems: soon (create, update, complete and uncomplete is missing)
++ Todolistitems: fully implemented
 
+Todo
+----
 
-Getting Started
----------------
-
-Please find plenty of working examples in the `basecamp/example/basecamp` directory and adjust `basecamp/example/basecamp/_config.php` with your own settings
++ account
++ companies
++ categories
++ messages
++ comments
++ time tracking

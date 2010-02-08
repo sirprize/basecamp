@@ -19,7 +19,7 @@ namespace Sirprize\Basecamp\TodolistItem\Entity\Observer;
 
 
 /**
- * Abstract class to observe and print state changes of the observed todolistItem
+ * Abstract class to observe and print state changes of the observed todo-item
  *
  * @category  Sirprize
  * @package   Basecamp
@@ -44,40 +44,40 @@ abstract class Abstrakt
 	
 	protected function _getOnCompleteSuccessMessage(\Sirprize\Basecamp\TodolistItem\Entity $todolistItem)
 	{
-		$message  = "todolistItem '".$todolistItem->getTitle()."'";
-		$message .= " completed in project '".$todolistItem->getProjectId();
+		$message  = "todo-item '".$todolistItem->getContent()."'";
+		$message .= " completed in todo-list '".$todolistItem->getTodolistId();
 		return $message;
 	}
 	
 	
 	protected function _getOnUncompleteSuccessMessage(\Sirprize\Basecamp\TodolistItem\Entity $todolistItem)
 	{
-		$message  = "todolistItem '".$todolistItem->getTitle()."'";
-		$message .= " uncompleted in project '".$todolistItem->getProjectId();
+		$message  = "todo-item '".$todolistItem->getContent()."'";
+		$message .= " uncompleted in todo-list '".$todolistItem->getTodolistId();
 		return $message;
 	}
 	
 	
 	protected function _getOnCreateSuccessMessage(\Sirprize\Basecamp\TodolistItem\Entity $todolistItem)
 	{
-		$message  = "todolistItem '".$todolistItem->getTitle()."'";
-		$message .= " created in project '".$todolistItem->getProjectId();
+		$message  = "todo-item '".$todolistItem->getContent()."'";
+		$message .= " created in todo-list '".$todolistItem->getTodolistId();
 		return $message;
 	}
 	
 	
 	protected function _getOnUpdateSuccessMessage(\Sirprize\Basecamp\TodolistItem\Entity $todolistItem)
 	{
-		$message  = "todolistItem '".$todolistItem->getTitle()."'";
-		$message .= " updated in project '".$todolistItem->getProjectId();
+		$message  = "todo-item '".$todolistItem->getContent()."'";
+		$message .= " updated in todo-list '".$todolistItem->getTodolistId();
 		return $message;
 	}
 	
 	
 	protected function _getOnDeleteSuccessMessage(\Sirprize\Basecamp\TodolistItem\Entity $todolistItem)
 	{
-		$message  = "todolistItem '".$todolistItem->getTitle()."'";
-		$message .= " deleted from project '".$todolistItem->getProjectId();
+		$message  = "todo-item '".$todolistItem->getContent()."'";
+		$message .= " deleted from todo-list '".$todolistItem->getTodolistId();
 		return $message;
 	}
 	
@@ -90,40 +90,40 @@ abstract class Abstrakt
 	
 	protected function _getOnCompleteErrorMessage(\Sirprize\Basecamp\TodolistItem\Entity $todolistItem)
 	{
-		$message  = "todolistItem '".$todolistItem->getTitle()."'";
-		$message .= " could not be completed in project '".$todolistItem->getProjectId();
+		$message  = "todo-item '".$todolistItem->getContent()."'";
+		$message .= " could not be completed in todo-list '".$todolistItem->getTodolistId();
 		return $message;
 	}
 	
 	
 	protected function _getOnUncompleteErrorMessage(\Sirprize\Basecamp\TodolistItem\Entity $todolistItem)
 	{
-		$message  = "todolistItem '".$todolistItem->getTitle()."'";
-		$message .= " could not be uncompleted in project '".$todolistItem->getProjectId();
+		$message  = "todo-item '".$todolistItem->getContent()."'";
+		$message .= " could not be uncompleted in todo-list '".$todolistItem->getTodolistId();
 		return $message;
 	}
 	
 	
 	protected function _getOnCreateErrorMessage(\Sirprize\Basecamp\TodolistItem\Entity $todolistItem)
 	{
-		$message  = "todolistItem '".$todolistItem->getTitle()."'";
-		$message .= " could not be created in project '".$todolistItem->getProjectId();
+		$message  = "todo-item '".$todolistItem->getContent()."'";
+		$message .= " could not be created in todo-list '".$todolistItem->getTodolistId();
 		return $message;
 	}
 	
 	
 	protected function _getOnUpdateErrorMessage(\Sirprize\Basecamp\TodolistItem\Entity $todolistItem)
 	{
-		$message  = "todolistItem '".$todolistItem->getTitle()."'";
-		$message .= " could not be updated in project '".$todolistItem->getProjectId();
+		$message  = "todo-item '".$todolistItem->getContent()."'";
+		$message .= " could not be updated in todo-list '".$todolistItem->getTodolistId();
 		return $message;
 	}
 	
 	
 	protected function _getOnDeleteErrorMessage(\Sirprize\Basecamp\TodolistItem\Entity $todolistItem)
 	{
-		$message  = "todolistItem '".$todolistItem->getTitle()."'";
-		$message .= " could not be deleted from project '".$todolistItem->getProjectId();
+		$message  = "todo-item '".$todolistItem->getContent()."'";
+		$message .= " could not be deleted from todo-list '".$todolistItem->getTodolistId();
 		return $message;
 	}
 	

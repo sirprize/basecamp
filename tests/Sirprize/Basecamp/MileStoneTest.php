@@ -100,7 +100,7 @@ class Sirprize_Basecamp_MilestoneTest extends PHPUnit_Framework_TestCase
 				->setResponsiblePartyId($responsiblePartyId)
 			;
 			
-			$milestone->getCreateXml();
+			$milestone->getXml();
             $this->fail('Expected \Sirprize\Basecamp\Exception not thrown');
         }
 		catch (\Sirprize\Basecamp\Exception $e)
@@ -130,7 +130,7 @@ class Sirprize_Basecamp_MilestoneTest extends PHPUnit_Framework_TestCase
 				->setResponsiblePartyId($responsiblePartyId)
 			;
 			
-			$milestone->getCreateXml();
+			$milestone->getXml();
             $this->fail('Expected \Sirprize\Basecamp\Exception not thrown');
         }
 		catch (\Sirprize\Basecamp\Exception $e)
@@ -160,7 +160,7 @@ class Sirprize_Basecamp_MilestoneTest extends PHPUnit_Framework_TestCase
 				#->setResponsiblePartyId($responsiblePartyId)
 			;
 			
-			$milestone->getCreateXml();
+			$milestone->getXml();
             $this->fail('Expected \Sirprize\Basecamp\Exception not thrown');
         }
 		catch (\Sirprize\Basecamp\Exception $e)

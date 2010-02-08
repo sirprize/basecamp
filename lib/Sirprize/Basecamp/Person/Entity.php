@@ -238,7 +238,7 @@ class Entity
 	 * @throws \Sirprize\Basecamp\Exception
 	 * @return \Sirprize\Basecamp\Person
 	 */
-	public function load(\SimpleXMLElement $data, $force = false)
+	public function load(\SimpleXMLElement $xml, $force = false)
 	{
 		if($this->_loaded && !$force)
 		{
@@ -246,42 +246,42 @@ class Entity
 			throw new \Sirprize\Basecamp\Exception('entity has already been loaded');
 		}
 		
-		#print_r($data); exit;
+		#print_r($xml); exit;
 		$this->_loaded = true;
-		$data = (array) $data;
+		$array = (array) $xml;
 		
 		require_once 'Sirprize/Basecamp/Id.php';
-		$id = new \Sirprize\Basecamp\Id($data[self::_ID]);
-		$companyId = new \Sirprize\Basecamp\Id($data[self::_COMPANY_ID]);
+		$id = new \Sirprize\Basecamp\Id($array[self::_ID]);
+		$companyId = new \Sirprize\Basecamp\Id($array[self::_COMPANY_ID]);
 		
-		$administrator = ($data[self::_ADMINISTRATOR] == 'true');
-		$deleted = ($data[self::_DELETED] == 'true');
-		$hasAccessToNewProjects = ($data[self::_HAS_ACCESS_TO_NEW_PROJECTS] == 'true');
+		$administrator = ($array[self::_ADMINISTRATOR] == 'true');
+		$deleted = ($array[self::_DELETED] == 'true');
+		$hasAccessToNewProjects = ($array[self::_HAS_ACCESS_TO_NEW_PROJECTS] == 'true');
 		
 		$this->_data = array(
 			self::_ADMINISTRATOR => $administrator,
-			self::_CLIENT_ID => $data[self::_CLIENT_ID],
-			self::_CREATED_AT => $data[self::_CREATED_AT],
+			self::_CLIENT_ID => $array[self::_CLIENT_ID],
+			self::_CREATED_AT => $array[self::_CREATED_AT],
 			self::_DELETED => $deleted,
 			self::_HAS_ACCESS_TO_NEW_PROJECTS => $hasAccessToNewProjects,
 			self::_ID => $id,
-			self::_IM_HANDLE => $data[self::_IM_HANDLE],
-			self::_IM_SERVICE => $data[self::_IM_SERVICE],
-			self::_PHONE_NUMBER_FAX => $data[self::_PHONE_NUMBER_FAX],
-			self::_PHONE_NUMBER_HOME => $data[self::_PHONE_NUMBER_HOME],
-			self::_PHONE_NUMBER_MOBILE => $data[self::_PHONE_NUMBER_MOBILE],
-			self::_PHONE_NUMBER_OFFICE => $data[self::_PHONE_NUMBER_OFFICE],
-			self::_PHONE_NUMBER_OFFICE_EXT => $data[self::_PHONE_NUMBER_OFFICE_EXT],
-			self::_TITLE => $data[self::_TITLE],
-			#self::_TOKEN => $data[self::_TOKEN],
-			self::_UPDATED_AT => $data[self::_UPDATED_AT],
-			self::_UUID => $data[self::_UUID],
-			self::_FIRST_NAME => $data[self::_FIRST_NAME],
-			self::_LAST_NAME => $data[self::_LAST_NAME],
+			self::_IM_HANDLE => $array[self::_IM_HANDLE],
+			self::_IM_SERVICE => $array[self::_IM_SERVICE],
+			self::_PHONE_NUMBER_FAX => $array[self::_PHONE_NUMBER_FAX],
+			self::_PHONE_NUMBER_HOME => $array[self::_PHONE_NUMBER_HOME],
+			self::_PHONE_NUMBER_MOBILE => $array[self::_PHONE_NUMBER_MOBILE],
+			self::_PHONE_NUMBER_OFFICE => $array[self::_PHONE_NUMBER_OFFICE],
+			self::_PHONE_NUMBER_OFFICE_EXT => $array[self::_PHONE_NUMBER_OFFICE_EXT],
+			self::_TITLE => $array[self::_TITLE],
+			#self::_TOKEN => $array[self::_TOKEN],
+			self::_UPDATED_AT => $array[self::_UPDATED_AT],
+			self::_UUID => $array[self::_UUID],
+			self::_FIRST_NAME => $array[self::_FIRST_NAME],
+			self::_LAST_NAME => $array[self::_LAST_NAME],
 			self::_COMPANY_ID => $companyId,
-			self::_USER_NAME => $data[self::_USER_NAME],
-			self::_EMAIL_ADDRESS => $data[self::_EMAIL_ADDRESS],
-			self::_AVATAR_URL => $data[self::_AVATAR_URL]
+			self::_USER_NAME => $array[self::_USER_NAME],
+			self::_EMAIL_ADDRESS => $array[self::_EMAIL_ADDRESS],
+			self::_AVATAR_URL => $array[self::_AVATAR_URL]
 		);
 		
 		return $this;

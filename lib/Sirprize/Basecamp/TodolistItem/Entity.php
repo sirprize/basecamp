@@ -38,7 +38,7 @@ class Entity
 	const _DUE_AT = 'due-at';
 	const _ID = 'id';
 	const _POSITION = 'position';
-	const _TODO_LIST_ID = 'todo-list-id';
+	const _TODOLIST_ID = 'todo-list-id';
 	const _COMPLETED_ON = 'completed-on';
 	const _CREATED_ON = 'created-on';
 	
@@ -124,40 +124,18 @@ class Entity
 	}
 	
 	
-	public function setTitle($title)
+	public function setContent($content)
 	{
-		$this->_data[self::_TITLE] = $title;
+		$this->_data[self::_CONTENT] = $content;
 		return $this;
 	}
 	
 	
-	public function setDeadline(\Sirprize\Basecamp\Date $deadline)
+	public function setTodolistId(\Sirprize\Basecamp\Id $todolistId)
 	{
-		$this->_data[self::_DEADLINE] = $deadline;
+		$this->_data[self::_TODOLIST_ID] = $todolistId;
 		return $this;
 	}
-	
-	
-	public function setProjectId(\Sirprize\Basecamp\Id $projectId)
-	{
-		$this->_data[self::_PROJECT_ID] = $projectId;
-		return $this;
-	}
-	
-	
-	public function setResponsiblePartyId(\Sirprize\Basecamp\Id $responsiblePartyId)
-	{
-		$this->_data[self::_RESPONSIBLE_PARTY_ID] = $responsiblePartyId;
-		return $this;
-	}
-	
-	
-	public function setWantsNotification($wantsNotification)
-	{
-		$this->_data[self::_WANTS_NOTIFICATION] = $wantsNotification;
-		return $this;
-	}
-	
 	
 	
 
@@ -193,7 +171,7 @@ class Entity
 	}
 	
 	
-	public function getCraetedAt()
+	public function getCreatedAt()
 	{
 		return $this->_getVal(self::_CREATED_AT);
 	}
@@ -201,7 +179,7 @@ class Entity
 	/**
 	 * @return \Sirprize\Basecamp\Id
 	 */
-	public function getCraatorId()
+	public function getCreatorId()
 	{
 		return $this->_getVal(self::_CREATOR_ID);
 	}
@@ -231,7 +209,7 @@ class Entity
 	 */
 	public function getTodolistId()
 	{
-		return $this->_getVal(self::_TODO_LIST_ID);
+		return $this->_getVal(self::_TODOLIST_ID);
 	}
 	
 	
@@ -258,7 +236,7 @@ class Entity
 	 * @throws \Sirprize\Basecamp\Exception
 	 * @return \Sirprize\Basecamp\TodolistItem
 	 */
-	public function load(\SimpleXMLElement $data, $force = false)
+	public function load(\SimpleXMLElement $xml, $force = false)
 	{
 		if($this->_loaded && !$force)
 		{
@@ -266,32 +244,32 @@ class Entity
 			throw new \Sirprize\Basecamp\Exception('entity has already been loaded');
 		}
 		
-		#print_r($data); exit;
+		#print_r($xml); exit;
 		$this->_loaded = true;
-		$data = (array) $data;
+		$array = (array) $xml;
 		
 		require_once 'Sirprize/Basecamp/Id.php';
-		$id = new \Sirprize\Basecamp\Id($data[self::_ID]);
-		#$completerId = new \Sirprize\Basecamp\Id($data[self::_COMPLETER_ID]);
-		$creatorId = new \Sirprize\Basecamp\Id($data[self::_CREATOR_ID]);
-		$todolistId = new \Sirprize\Basecamp\Id($data[self::_TODO_LIST_ID]);
+		$id = new \Sirprize\Basecamp\Id($array[self::_ID]);
+		#$completerId = new \Sirprize\Basecamp\Id($array[self::_COMPLETER_ID]);
+		$creatorId = new \Sirprize\Basecamp\Id($array[self::_CREATOR_ID]);
+		$todolistId = new \Sirprize\Basecamp\Id($array[self::_TODOLIST_ID]);
 		
-		$completed = ($data[self::_COMPLETED] == 'true');
+		$completed = ($array[self::_COMPLETED] == 'true');
 		
 		$this->_data = array(
-			self::_COMMENTS_COUNT => $data[self::_COMMENTS_COUNT],
+			self::_COMMENTS_COUNT => $array[self::_COMMENTS_COUNT],
 			self::_COMPLETED => $completed,
-			#self::_COMPLEETED_AT => $data[self::_COMPLEETED_AT],
+			#self::_COMPLEETED_AT => $array[self::_COMPLEETED_AT],
 			#self::_COMPLETER_ID => $completerId,
-			#self::_COMPLETED_ON => $data[self::_COMPLETED_ON],
-			self::_CONTENT => $data[self::_CONTENT],
-			self::_CREATED_AT => $data[self::_CREATED_AT],
+			#self::_COMPLETED_ON => $array[self::_COMPLETED_ON],
+			self::_CONTENT => $array[self::_CONTENT],
+			self::_CREATED_AT => $array[self::_CREATED_AT],
 			self::_CREATOR_ID => $creatorId,
-			self::_DUE_AT => $data[self::_DUE_AT],
+			self::_DUE_AT => $array[self::_DUE_AT],
 			self::_ID => $id,
-			self::_POSITION => $data[self::_POSITION],
-			self::_TODO_LIST_ID => $todolistId,
-			self::_CREATED_ON => $data[self::_CREATED_ON]
+			self::_POSITION => $array[self::_POSITION],
+			self::_TODOLIST_ID => $todolistId,
+			self::_CREATED_ON => $array[self::_CREATED_ON]
 		);
 		
 		return $this;
@@ -304,61 +282,51 @@ class Entity
 	 *
 	 * @throws \Sirprize\Basecamp\Exception
 	 * @return string
-	 * /
-	public function getCreateXml()
+	 */
+	public function getXml(\Sirprize\Basecamp\Id $responsiblePartyId = null, $notify = false)
 	{
-		if($this->_getVal(self::_TITLE) === null)
+		if($this->getContent() === null)
 		{
 			require_once 'Sirprize/Basecamp/Exception.php';
-			throw new \Sirprize\Basecamp\Exception('call setTitle() before '.__METHOD__);
+			throw new \Sirprize\Basecamp\Exception('call setContent() before '.__METHOD__);
 		}
 		
-		if($this->_getVal(self::_DEADLINE) === null)
+  		$xml  = '<todo-item>';
+		$xml .= '<content>'.$this->getContent().'</content>';
+		
+		if($responsiblePartyId)
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
-			throw new \Sirprize\Basecamp\Exception('call setDeadline() before '.__METHOD__);
+			$xml .= '<responsible-party>'.$responsiblePartyId.'</responsible-party>';
+			if($notify) { $xml .= '<notify>true</notify>'; }
 		}
-		
-		if($this->_getVal(self::_RESPONSIBLE_PARTY_ID) === null)
-		{
-			require_once 'Sirprize/Basecamp/Exception.php';
-			throw new \Sirprize\Basecamp\Exception('call setResponsiblePartyId() before  '.__METHOD__);
-		}
-		
-  		$xml  = '<todolistItem>';
-		$xml .= '<title>'.$this->_getVal(self::_TITLE).'</title>';
-		$xml .= '<deadline type="date">'.$this->_getVal(self::_DEADLINE).'</deadline>';
-		$xml .= '<responsible-party>'.$this->_getVal(self::_RESPONSIBLE_PARTY_ID).'</responsible-party>';
-		$xml .= '<notify>'.(($this->_getVal(self::_WANTS_NOTIFICATION)) ? 'true' : 'false').'</notify>';
-		$xml .= '</todolistItem>';
+		$xml .= '</todo-item>';
 		return $xml;
 	}
 	
 	
 	
 	/**
-	 * Persist this todolistItem in storage
+	 * Persist this todo-item in storage
+	 *
+	 * Note: complete data (id etc) is not automatically loaded upon creation
 	 *
 	 * @throws \Sirprize\Basecamp\Exception
 	 * @return boolean
-	 * /
-	public function create()
+	 */
+	public function create(\Sirprize\Basecamp\Id $responsiblePartyId = null, $notify = false)
 	{
-		if($this->getProjectId() === null)
+		if($this->getTodolistId() === null)
 		{
 			require_once 'Sirprize/Basecamp/Exception.php';
-			throw new \Sirprize\Basecamp\Exception('set project-id before  '.__METHOD__);
+			throw new \Sirprize\Basecamp\Exception('set todolist-id before  '.__METHOD__);
 		}
 		
-		$projectId = $this->getProjectId();
-		
-		$xml  = '<request>';
-		$xml .= $this->getCreateXml();
-		$xml .= '</request>';
+		$todolistId = $this->getTodolistId();
+		$xml = $this->getXml($responsiblePartyId, $notify);
 		
 		try {
 			$response = $this->_getHttpClient()
-				->setUri($this->_getBasecamp()->getBaseUri()."/projects/$projectId/todolistItems/create")
+				->setUri($this->_getBasecamp()->getBaseUri()."/todo_lists/$todolistId/todo_items.xml")
 				->setAuth($this->_getBasecamp()->getUsername(), $this->_getBasecamp()->getPassword())
 				->setHeaders('Content-type', 'application/xml')
 				->setHeaders('Accept', 'application/xml')
@@ -369,7 +337,7 @@ class Entity
 		catch(\Exception $exception)
 		{
 			// connection error
-			$this->onCreateError();
+			$this->_onCreateError();
 			
 			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception($exception->getMessage());
@@ -381,63 +349,43 @@ class Entity
 		if($this->_response->isError())
 		{
 			// service error
-			$this->onCreateError();
+			$this->_onCreateError();
 			return false;
 		}
 		
-		$this->onCreateLoad($this->_response->getData()->todolistItem);
+		$this->_onCreateSuccess();
 		return true;
 	}
 	
 	
 	
 	/**
-	 * Load data from a \Sirprize\Basecamp\TodolistItem\Collection::create() opteration
+	 * Update this todo-item in storage
 	 *
-	 * @return void
-	 * /
-	public function onCreateLoad(\SimpleXMLElement $data)
-	{
-		$this->load($data);
-		$this->_onCreateSuccess();
-	}
-	
-	
-	
-	/**
-	 * Get notified of an error in a \Sirprize\Basecamp\TodolistItem\Collection::create() opteration
-	 *
-	 * @return void
-	 * /
-	public function onCreateError()
-	{
-		$this->_onCreateError();
-	}
-	
-	
-	
-	/**
-	 * Update this todolistItem in storage
+	 * Note: complete data (id etc) is not automatically loaded upon update
 	 *
 	 * @throws \Sirprize\Basecamp\Exception
 	 * @return boolean
-	 * /
-	public function update($moveUpcomingTodolistItems = false, $moveUpcomingTodolistItemsOffWeekends = false)
+	 */
+	public function update(\Sirprize\Basecamp\Id $responsiblePartyId = null, $notify = false)
 	{
-		$xml  = '<request>';
-		$xml .= $this->getCreateXml();
-		$xml .= '<move-upcoming-todolistItems>'.(($moveUpcomingTodolistItems) ? 'true' : 'false').'</move-upcoming-todolistItems>';
-		$xml .= '<move-upcoming-todolistItems-off-weekends>'.(($moveUpcomingTodolistItemsOffWeekends) ? 'true' : 'false').'</move-upcoming-todolistItems-off-weekends>';
-		$xml .= '</request>';
+		if(!$this->_loaded)
+		{
+			require_once 'Sirprize/Basecamp/Exception.php';
+			throw new \Sirprize\Basecamp\Exception('call load() before '.__METHOD__);
+		}
+		
+		$xml = $this->getXml();
+		$id = $this->getId();
 		
 		try {
 			$response = $this->_getHttpClient()
-				->setUri($this->_getBasecamp()->getBaseUri()."/todolistItems/update/".$this->getId())
+				->setUri($this->_getBasecamp()->getBaseUri()."/todo_items/$id.xml")
 				->setAuth($this->_getBasecamp()->getUsername(), $this->_getBasecamp()->getPassword())
 				->setHeaders('Content-type', 'application/xml')
 				->setHeaders('Accept', 'application/xml')
 				->setRawData($xml)
-				->request('POST')
+				->request('PUT')
 			;
 		}
 		catch(\Exception $exception)
@@ -459,7 +407,6 @@ class Entity
 			return false;
 		}
 		
-		$this->load($this->_response->getData(), true);
 		$this->_onUpdateSuccess();
 		return true;
 	}
@@ -467,18 +414,18 @@ class Entity
 	
 	
 	/**
-	 * Delete this todolistItem from storage
+	 * Delete this todo-item from storage
 	 *
 	 * @throws \Sirprize\Basecamp\Exception
 	 * @return boolean
-	 * /
+	 */
 	public function delete()
 	{
 		$id = $this->getId();
 		
 		try {
 			$response = $this->_getHttpClient()
-				->setUri($this->_getBasecamp()->getBaseUri()."/todolistItems/delete/$id")
+				->setUri($this->_getBasecamp()->getBaseUri()."/todo_items/$id.xml")
 				->setAuth($this->_getBasecamp()->getUsername(), $this->_getBasecamp()->getPassword())
 				->setHeaders('Content-type', 'application/xml')
 				->setHeaders('Accept', 'application/xml')
@@ -513,11 +460,11 @@ class Entity
 	
 	
 	/**
-	 * Complete this todolistItem
+	 * Complete this todo-item
 	 *
 	 * @throws \Sirprize\Basecamp\Exception
 	 * @return boolean
-	 * /
+	 */
 	public function complete()
 	{
 		if(!$this->_loaded)
@@ -526,13 +473,15 @@ class Entity
 			throw new \Sirprize\Basecamp\Exception('call load() before '.__METHOD__);
 		}
 		
+		$id = $this->getId();
+		
 		try {
 			$response = $this->_getHttpClient()
-				->setUri($this->_getBasecamp()->getBaseUri()."/todolistItems/complete/".$this->getId())
+				->setUri($this->_getBasecamp()->getBaseUri()."/todo_items/$id/complete.xml")
 				->setAuth($this->_getBasecamp()->getUsername(), $this->_getBasecamp()->getPassword())
 				->setHeaders('Content-type', 'application/xml')
 				->setHeaders('Accept', 'application/xml')
-				->request('GET')
+				->request('PUT')
 			;
 		}
 		catch(\Exception $exception)
@@ -554,7 +503,6 @@ class Entity
 			return false;
 		}
 		
-		$this->load($this->_response->getData(), true);
 		$this->_onCompleteSuccess();
 		return true;
 	}
@@ -562,11 +510,11 @@ class Entity
 	
 	
 	/**
-	 * Uncomplete this todolistItem
+	 * Uncomplete this todo-item
 	 *
 	 * @throws \Sirprize\Basecamp\Exception
 	 * @return boolean
-	 * /
+	 */
 	public function uncomplete()
 	{
 		if(!$this->_loaded)
@@ -575,13 +523,15 @@ class Entity
 			throw new \Sirprize\Basecamp\Exception('call load() before '.__METHOD__);
 		}
 		
+		$id = $this->getId();
+		
 		try {
 			$response = $this->_getHttpClient()
-				->setUri($this->_getBasecamp()->getBaseUri()."/todolistItems/uncomplete/".$this->getId())
+				->setUri($this->_getBasecamp()->getBaseUri()."/todo_items/$id/uncomplete.xml")
 				->setAuth($this->_getBasecamp()->getUsername(), $this->_getBasecamp()->getPassword())
 				->setHeaders('Content-type', 'application/xml')
 				->setHeaders('Accept', 'application/xml')
-				->request('GET')
+				->request('PUT')
 			;
 		}
 		catch(\Exception $exception)
@@ -603,11 +553,10 @@ class Entity
 			return false;
 		}
 		
-		$this->load($this->_response->getData(), true);
 		$this->_onUncompleteSuccess();
 		return true;
 	}
-	*/
+	
 	
 	
 	protected function _getBasecamp()

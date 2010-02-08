@@ -33,6 +33,7 @@ class Collection extends \SplObjectStorage
 	protected $_basecamp = null;
 	protected $_httpClient = null;
 	protected $_started = false;
+	protected $_loaded = false;
 	protected $_response = null;
 	protected $_observers = array();
 	
@@ -156,10 +157,62 @@ class Collection extends \SplObjectStorage
 	
 	
 	/**
+	 * Fetch currently logged in user
+	 *
+	 * @throws \Sirprize\Basecamp\Exception
+	 * @return null|\Sirprize\Basecamp\Person\Entity
+	 */
+	public function startMe()
+	{
+		if($this->_started)
+		{
+			return $this;
+		}
+		
+		$this->_started = true;
+		
+		try {
+			$response = $this->_getHttpClient()
+				->setUri($this->_getBasecamp()->getBaseUri()."/me.xml")
+				->setAuth($this->_getBasecamp()->getUsername(), $this->_getBasecamp()->getPassword())
+				->setHeaders('Content-Type', 'application/xml')
+				->setHeaders('Accept', 'application/xml')
+				->request('GET')
+			;
+		}
+		catch(\Exception $exception)
+		{
+			// connection error
+			$this->_onStartError();
+			
+			require_once 'Sirprize/Basecamp/Exception.php';
+			throw new \Sirprize\Basecamp\Exception($exception->getMessage());
+		}
+		
+		require_once 'Sirprize/Basecamp/Response.php';
+		$this->_response = new \Sirprize\Basecamp\Response($response);
+		
+		if($this->_response->isError())
+		{
+			// service error
+			$this->_onStartError();
+			return null;
+		}
+		
+		$this->load($this->_response->getData());
+		$this->_onStartSuccess();
+		$this->rewind();
+		return $this->current();
+	}
+	
+	
+	
+	
+	/**
 	 * Fetch person by id
 	 *
 	 * @throws \Sirprize\Basecamp\Exception
-	 * @return \Sirprize\Basecamp\Person\Collection
+	 * @return null|\Sirprize\Basecamp\Person\Entity
 	 */
 	public function startById(\Sirprize\Basecamp\Id $id)
 	{
@@ -188,7 +241,58 @@ class Collection extends \SplObjectStorage
 			throw new \Sirprize\Basecamp\Exception($exception->getMessage());
 		}
 		
-		$this->_response = $this->_handleResponse($response);
+		require_once 'Sirprize/Basecamp/Response.php';
+		$this->_response = new \Sirprize\Basecamp\Response($response);
+		
+		if($this->_response->isError())
+		{
+			// service error
+			$this->_onStartError();
+			return null;
+		}
+		
+		$this->load($this->_response->getData());
+		$this->_onStartSuccess();
+		$this->rewind();
+		return $this->current();
+	}
+	
+	
+	
+	
+	/**
+	 * Fetch people within project
+	 *
+	 * @throws \Sirprize\Basecamp\Exception
+	 * @return \Sirprize\Basecamp\Person\Entity
+	 */
+	public function startAllByProjectId(\Sirprize\Basecamp\Id $projectId)
+	{
+		if($this->_started)
+		{
+			return $this;
+		}
+		
+		$this->_started = true;
+		
+		try {
+			$response = $this->_getHttpClient()
+				->setUri($this->_getBasecamp()->getBaseUri()."/projects/$projectId/people.xml")
+				->setAuth($this->_getBasecamp()->getUsername(), $this->_getBasecamp()->getPassword())
+				->request('GET')
+			;
+		}
+		catch(\Exception $exception)
+		{
+			// connection error
+			$this->_onStartError();
+			
+			require_once 'Sirprize/Basecamp/Exception.php';
+			throw new \Sirprize\Basecamp\Exception($exception->getMessage());
+		}
+		
+		require_once 'Sirprize/Basecamp/Response.php';
+		$this->_response = new \Sirprize\Basecamp\Response($response);
 		
 		if($this->_response->isError())
 		{
@@ -197,6 +301,7 @@ class Collection extends \SplObjectStorage
 			return $this;
 		}
 		
+		$this->load($this->_response->getData());
 		$this->_onStartSuccess();
 		return $this;
 	}
@@ -205,7 +310,7 @@ class Collection extends \SplObjectStorage
 	
 	
 	/**
-	 * Fetch everbody
+	 * Fetch people across projects (everbody)
 	 *
 	 * @throws \Sirprize\Basecamp\Exception
 	 * @return \Sirprize\Basecamp\Person\Collection
@@ -235,7 +340,8 @@ class Collection extends \SplObjectStorage
 			throw new \Sirprize\Basecamp\Exception($exception->getMessage());
 		}
 		
-		$this->_response = $this->_handleResponse($response);
+		require_once 'Sirprize/Basecamp/Response.php';
+		$this->_response = new \Sirprize\Basecamp\Response($response);
 		
 		if($this->_response->isError())
 		{
@@ -244,6 +350,7 @@ class Collection extends \SplObjectStorage
 			return $this;
 		}
 		
+		$this->load($this->_response->getData());
 		$this->_onStartSuccess();
 		return $this;
 	}
@@ -252,47 +359,47 @@ class Collection extends \SplObjectStorage
 	
 	
 	/**
-	 * Instantiate person objects from api response and populate this collection
+	 * Instantiate person objects with api response data
 	 *
-	 * @return \Sirprize\Basecamp\Response
+	 * @return \Sirprize\Basecamp\Person\Collection
 	 */
-	protected function _handleResponse(\Zend_Http_Response $response)
+	public function load(\SimpleXMLElement $xml)
 	{
-		require_once 'Sirprize/Basecamp/Response.php';
-		$response = new \Sirprize\Basecamp\Response($response);
-		
-		if($response->isError())
+		if($this->_loaded)
 		{
-			return $response;
+			require_once 'Sirprize/Basecamp/Exception.php';
+			throw new \Sirprize\Basecamp\Exception('collection has already been loaded');
 		}
 		
-		if(isset($response->getData()->id))
+		$this->_loaded = true;
+		
+		if(isset($xml->id))
 		{
 			// request for a single entity
 			$person = $this->getPersonInstance();
-			$person->load($response->getData());
+			$person->load($xml);
 			$this->attach($person);
-			return $response;
+			return $this;
 		}
 		
-		$data = (array) $response->getData();
+		$array = (array) $xml;
 		
-		if(!isset($data[self::_PERSON]))
+		if(!isset($array[self::_PERSON]))
 		{
 			// list request - 0 items in response
-			return $response;
+			return $this;
 		}
 		
-		if(isset($data[self::_PERSON]->id))
+		if(isset($array[self::_PERSON]->id))
 		{
 			// list request - 1 item in response
 			$person = $this->getPersonInstance();
-			$person->load($data[self::_PERSON]);
+			$person->load($array[self::_PERSON]);
 			$this->attach($person);
-			return $response;
+			return $this;
 		}
 		
-		foreach($data[self::_PERSON] as $row)
+		foreach($array[self::_PERSON] as $row)
 		{
 			// list request - 2 or more items in response
 			$person = $this->getPersonInstance();
@@ -300,7 +407,7 @@ class Collection extends \SplObjectStorage
 			$this->attach($person);
 		}
 		
-		return $response;
+		return $this;
 	}
 	
 	

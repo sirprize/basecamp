@@ -35,11 +35,10 @@ $persons->startAll();
 
 if($persons->getResponse()->isError())
 {
-	die('Error');
+	die("Error\n");
 }
 	
 foreach($persons as $person)
 {
-	print "id: ".$person->getId()."\n";
-	print "--------------------------\n";
+	print $person->getFirstname().' '.$person->getLastname().' - '.$person->getId()."\n";
 }

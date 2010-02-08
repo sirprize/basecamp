@@ -243,7 +243,7 @@ class Entity
 	 * @throws \Sirprize\Basecamp\Exception
 	 * @return \Sirprize\Basecamp\Milestone
 	 */
-	public function load(\SimpleXMLElement $data, $force = false)
+	public function load(\SimpleXMLElement $xml, $force = false)
 	{
 		if($this->_loaded && !$force)
 		{
@@ -251,39 +251,39 @@ class Entity
 			throw new \Sirprize\Basecamp\Exception('entity has already been loaded');
 		}
 		
-		#print_r($data); exit;
+		#print_r($xml); exit;
 		$this->_loaded = true;
-		$data = (array) $data;
+		$array = (array) $xml;
 		
 		require_once 'Sirprize/Basecamp/Date.php';
-		$deadline = new \Sirprize\Basecamp\Date($data[self::_DEADLINE]);
+		$deadline = new \Sirprize\Basecamp\Date($array[self::_DEADLINE]);
 		
 		require_once 'Sirprize/Basecamp/Id.php';
-		$id = new \Sirprize\Basecamp\Id($data[self::_ID]);
+		$id = new \Sirprize\Basecamp\Id($array[self::_ID]);
 		
 		require_once 'Sirprize/Basecamp/Id.php';
-		$projectId = new \Sirprize\Basecamp\Id($data[self::_PROJECT_ID]);
+		$projectId = new \Sirprize\Basecamp\Id($array[self::_PROJECT_ID]);
 		
 		require_once 'Sirprize/Basecamp/Id.php';
-		$creatorId = new \Sirprize\Basecamp\Id($data[self::_CREATOR_ID]);
+		$creatorId = new \Sirprize\Basecamp\Id($array[self::_CREATOR_ID]);
 		
 		require_once 'Sirprize/Basecamp/Id.php';
-		$responsiblePartyId = new \Sirprize\Basecamp\Id($data[self::_RESPONSIBLE_PARTY_ID]);
+		$responsiblePartyId = new \Sirprize\Basecamp\Id($array[self::_RESPONSIBLE_PARTY_ID]);
 		
-		$completed = ($data[self::_COMPLETED] == 'true');
-		$wantsNotification = ($data[self::_WANTS_NOTIFICATION] == 'true');
+		$completed = ($array[self::_COMPLETED] == 'true');
+		$wantsNotification = ($array[self::_WANTS_NOTIFICATION] == 'true');
 		
 		$this->_data = array(
 			self::_ID => $id,
-			self::_TITLE => $data[self::_TITLE],
+			self::_TITLE => $array[self::_TITLE],
 			self::_DEADLINE => $deadline,
-			self::_COMMENTS_COUNT => $data[self::_COMMENTS_COUNT],
+			self::_COMMENTS_COUNT => $array[self::_COMMENTS_COUNT],
 			self::_COMPLETED => $completed,
-			self::_CREATED_ON => $data[self::_CREATED_ON],
+			self::_CREATED_ON => $array[self::_CREATED_ON],
 			self::_CREATOR_ID => $creatorId,
 			self::_PROJECT_ID => $projectId,
 			self::_RESPONSIBLE_PARTY_ID => $responsiblePartyId,
-			self::_RESPONSIBLE_PARTY_TYPE => $data[self::_RESPONSIBLE_PARTY_TYPE],
+			self::_RESPONSIBLE_PARTY_TYPE => $array[self::_RESPONSIBLE_PARTY_TYPE],
 			self::_WANTS_NOTIFICATION => $wantsNotification
 		);
 		
@@ -298,31 +298,31 @@ class Entity
 	 * @throws \Sirprize\Basecamp\Exception
 	 * @return string
 	 */
-	public function getCreateXml()
+	public function getXml()
 	{
-		if($this->_getVal(self::_TITLE) === null)
+		if($this->getTitle() === null)
 		{
 			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('call setTitle() before '.__METHOD__);
 		}
 		
-		if($this->_getVal(self::_DEADLINE) === null)
+		if($this->getDeadline() === null)
 		{
 			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('call setDeadline() before '.__METHOD__);
 		}
 		
-		if($this->_getVal(self::_RESPONSIBLE_PARTY_ID) === null)
+		if($this->getResponsiblePartyId() === null)
 		{
 			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('call setResponsiblePartyId() before  '.__METHOD__);
 		}
 		
   		$xml  = '<milestone>';
-		$xml .= '<title>'.$this->_getVal(self::_TITLE).'</title>';
-		$xml .= '<deadline type="date">'.$this->_getVal(self::_DEADLINE).'</deadline>';
-		$xml .= '<responsible-party>'.$this->_getVal(self::_RESPONSIBLE_PARTY_ID).'</responsible-party>';
-		$xml .= '<notify>'.(($this->_getVal(self::_WANTS_NOTIFICATION)) ? 'true' : 'false').'</notify>';
+		$xml .= '<title>'.$this->getTitle().'</title>';
+		$xml .= '<deadline type="date">'.$this->getDeadline().'</deadline>';
+		$xml .= '<responsible-party>'.$this->getResponsiblePartyId().'</responsible-party>';
+		$xml .= '<notify>'.(($this->getWantsNotification()) ? 'true' : 'false').'</notify>';
 		$xml .= '</milestone>';
 		return $xml;
 	}
@@ -346,7 +346,7 @@ class Entity
 		$projectId = $this->getProjectId();
 		
 		$xml  = '<request>';
-		$xml .= $this->getCreateXml();
+		$xml .= $this->getXml();
 		$xml .= '</request>';
 		
 		try {
@@ -389,9 +389,9 @@ class Entity
 	 *
 	 * @return void
 	 */
-	public function onCreateLoad(\SimpleXMLElement $data)
+	public function onCreateLoad(\SimpleXMLElement $xml)
 	{
-		$this->load($data);
+		$this->load($xml);
 		$this->_onCreateSuccess();
 	}
 	
@@ -417,8 +417,14 @@ class Entity
 	 */
 	public function update($moveUpcomingMilestones = false, $moveUpcomingMilestonesOffWeekends = false)
 	{
+		if(!$this->_loaded)
+		{
+			require_once 'Sirprize/Basecamp/Exception.php';
+			throw new \Sirprize\Basecamp\Exception('call load() before '.__METHOD__);
+		}
+		
 		$xml  = '<request>';
-		$xml .= $this->getCreateXml();
+		$xml .= $this->getXml();
 		$xml .= '<move-upcoming-milestones>'.(($moveUpcomingMilestones) ? 'true' : 'false').'</move-upcoming-milestones>';
 		$xml .= '<move-upcoming-milestones-off-weekends>'.(($moveUpcomingMilestonesOffWeekends) ? 'true' : 'false').'</move-upcoming-milestones-off-weekends>';
 		$xml .= '</request>';

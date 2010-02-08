@@ -46,7 +46,7 @@ $todolists->startAllByProjectId($projectId);
 
 if($todolists->getResponse()->isError())
 {
-	die('Error');
+	die("Error\n");
 }
 
 foreach($todolists as $todolist)
