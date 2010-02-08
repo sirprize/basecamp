@@ -8,7 +8,7 @@ h2. Supported Features
 * Person: fully implemented
 * Project: fully implemented
 * TodoList: fully implemented
-* TodoListitems: fully implemented
+* TodoItem: fully implemented
 
 h2. Requirements
 
