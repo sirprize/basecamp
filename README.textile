@@ -17,7 +17,7 @@ h2. Requirements
 
 h2. Getting Started
 
-Please find plenty of working examples in the __basecamp/example/basecamp__ directory and adjust __basecamp/example/basecamp/_config.php__ with your own settings
+Please find plenty of working examples in the __basecamp/example/basecamp__ directory and adjust __basecamp/example/basecamp/_config.php__ with your own settings. Here's the basics:
 
 h3. Setup
 
@@ -32,7 +32,7 @@ $basecamp = new \Sirprize\Basecamp($config);
 	
 h3. Fetch all projects
 
-bc.. $projects = $basecamp->getProjectsInstance()->findAll();
+bc.. $projects = $basecamp->getProjectsInstance()->startAll();
 
 foreach($projects as $project)
 {
