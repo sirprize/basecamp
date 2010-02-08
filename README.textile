@@ -4,11 +4,11 @@ This is a php library to access the Basecamp api. Collection classes provide met
 
 h2. Supported Features
 
-* Milestone: fully implemented
 * Person: fully implemented
 * Project: fully implemented
-* TodoList: fully implemented
-* TodoItem: fully implemented
+* Milestone: fully implemented
+* Todolist: fully implemented
+* Todoitems: fully implemented
 
 h2. Requirements
 
@@ -32,7 +32,7 @@ $basecamp = new \Sirprize\Basecamp($config);
 	
 h3. Fetch all projects
 
-bc.. $projects = $basecamp->getProjectsInstance()->startAll();
+bc.. $projects = $basecamp->getProjectCollectionInstance()->startAll();
 
 foreach($projects as $project)
 {
