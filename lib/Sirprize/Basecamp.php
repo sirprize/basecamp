@@ -71,18 +71,6 @@ class Basecamp
 		return $this->_password;
 	}
 	
-	/*
-	public function isValidId($id)
-	{
-		return preg_match('/^[a-zA-Z0-9]+$/', $id);
-	}
-	
-	
-	public function isValidDate($date)
-	{
-		return preg_match('/^\d{4,4}-\d{2,2}-\d{2,2}$/', $date);
-	}
-	*/
 	
 	public function setHttpClient(\Zend_Http_Client $httpClient)
 	{
@@ -166,69 +154,5 @@ class Basecamp
 		;
 		return $todolistitems;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	/*
-	public function getPersonsInstance()
-	{
-		require_once 'Sirprize/Basecamp/Persons.php';
-		$milestones = new \Sirprize\Basecamp\Persons();
-		$milestones
-			->setBasecamp($this)
-			->setHttpClient($this->_getHttpClient())
-		;
-		return $milestones;
-	}
-	
-	
-	
-	public function getProjectsInstance()
-	{
-		require_once 'Sirprize/Basecamp/Projects.php';
-		$milestones = new \Sirprize\Basecamp\Projects();
-		$milestones
-			->setBasecamp($this)
-			->setHttpClient($this->_getHttpClient())
-		;
-		return $milestones;
-	}
-	
-	
-	
-	public function getTodoListsInstance()
-	{
-		require_once 'Sirprize/Basecamp/TodoLists.php';
-		$milestones = new \Sirprize\Basecamp\TodoLists();
-		$milestones
-			->setBasecamp($this)
-			->setHttpClient($this->_getHttpClient())
-		;
-		return $milestones;
-	}
-	
-	
-	
-	public function getTodoListItemsInstance()
-	{
-		require_once 'Sirprize/Basecamp/TodoListItems.php';
-		$milestones = new \Sirprize\Basecamp\TodoListItems();
-		$milestones
-			->setBasecamp($this)
-			->setHttpClient($this->_getHttpClient())
-		;
-		return $milestones;
-	}
-	*/
+
 }

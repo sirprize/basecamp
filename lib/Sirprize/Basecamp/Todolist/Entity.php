@@ -312,7 +312,7 @@ class Entity
 	 * @throws \Sirprize\Basecamp\Exception
 	 * @return string
 	 */
-	public function getCreateXml(Sirprize\Basecamp\Id $todoListTemplateId = null)
+	public function getCreateXml(\Sirprize\Basecamp\Id $todoListTemplateId = null)
 	{
 		if($this->getName() === null)
 		{
@@ -346,7 +346,7 @@ class Entity
 	 * @throws \Sirprize\Basecamp\Exception
 	 * @return boolean
 	 */
-	public function create(Sirprize\Basecamp\Id $todoListTemplateId = null)
+	public function create(\Sirprize\Basecamp\Id $todoListTemplateId = null)
 	{
 		if($this->getProjectId() === null)
 		{

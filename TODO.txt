@@ -7,3 +7,5 @@ Todo
 + messages
 + comments
 + time tracking
+
++ tests - i know :)
