@@ -322,7 +322,7 @@ class Entity
 	 */
 	public function getXml(\Sirprize\Basecamp\Id $todoListTemplateId = null)
 	{
-		if($this->getName() === null)
+		if($this->getName() === null && $todoListTemplateId == null)
 		{
 			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('call setName() before '.__METHOD__);
@@ -353,6 +353,7 @@ class Entity
 	 *
 	 * Note: complete data (id etc) is not automatically loaded upon creation
 	 *
+	 * @param \Sirprize\Basecamp\Id $todoListTemplateId (optional) template id - in this case, setName() is not required
 	 * @throws \Sirprize\Basecamp\Exception
 	 * @return boolean
 	 */
