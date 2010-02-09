@@ -118,7 +118,7 @@ class Collection extends \SplObjectStorage
 	 *
 	 * @return \Sirprize\Basecamp\Person\Entity
 	 */
-	public function getPersonInstance()
+	public function getPersonEntityInstance()
 	{
 		require_once 'Sirprize/Basecamp/Person/Entity.php';
 		$person = new \Sirprize\Basecamp\Person\Entity();
@@ -376,7 +376,7 @@ class Collection extends \SplObjectStorage
 		if(isset($xml->id))
 		{
 			// request for a single entity
-			$person = $this->getPersonInstance();
+			$person = $this->getPersonEntityInstance();
 			$person->load($xml);
 			$this->attach($person);
 			return $this;
@@ -393,7 +393,7 @@ class Collection extends \SplObjectStorage
 		if(isset($array[self::_PERSON]->id))
 		{
 			// list request - 1 item in response
-			$person = $this->getPersonInstance();
+			$person = $this->getPersonEntityInstance();
 			$person->load($array[self::_PERSON]);
 			$this->attach($person);
 			return $this;
@@ -402,7 +402,7 @@ class Collection extends \SplObjectStorage
 		foreach($array[self::_PERSON] as $row)
 		{
 			// list request - 2 or more items in response
-			$person = $this->getPersonInstance();
+			$person = $this->getPersonEntityInstance();
 			$person->load($row);
 			$this->attach($person);
 		}

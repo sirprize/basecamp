@@ -42,7 +42,7 @@ foreach($projects as $project)
 h3. Create a new milestone
 
 bc.. $milestones = $basecamp->getMilestoneCollectionInstance();
-$milestone = $milestones->getMilestoneInstance();
+$milestone = $milestones->getMilestoneEntityInstance();
 
 require_once 'Sirprize/Basecamp/Date.php';
 $deadline = new \Sirprize\Basecamp\Date('2010-03-01');
