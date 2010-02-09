@@ -61,7 +61,7 @@ class Log extends \Sirprize\Basecamp\Milestone\Collection\Observer\Abstrakt
 	
 	public function onCreateSuccess(\Sirprize\Basecamp\Milestone\Collection $collection)
 	{
-		$this->_getLog()->info($this->_getOnStartCreateMessage($collection));
+		$this->_getLog()->info($this->_getOnCreateSuccessMessage($collection));
 	}
 	
 	
