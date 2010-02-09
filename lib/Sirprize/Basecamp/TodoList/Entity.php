@@ -48,6 +48,7 @@ class Entity
 	protected $_loaded = false;
 	protected $_response = null;
 	protected $_observers = array();
+	protected $_todoListTemplateId = null;
 	
 	
 	
@@ -122,6 +123,24 @@ class Entity
 		return $this;
 	}
 	
+	
+	
+	/**
+	 * Set todo-list template id to use when later calling create()
+	 *
+	 * @param \Sirprize\Basecamp\Id $todoListTemplateId If this id is set then setName() is optional on create()
+	 */
+	public function setTodoListTemplateId(\Sirprize\Basecamp\Id $todoListTemplateId)
+	{
+		$this->_todoListTemplateId = $todoListTemplateId;
+		return $this;
+	}
+	
+	
+	public function getTodoListTemplateId()
+	{
+		return $this->_todoListTemplateId;
+	}
 	
 	
 	
@@ -320,9 +339,9 @@ class Entity
 	 * @throws \Sirprize\Basecamp\Exception
 	 * @return string
 	 */
-	public function getXml(\Sirprize\Basecamp\Id $todoListTemplateId = null)
+	public function getXml()
 	{
-		if($this->getName() === null && $todoListTemplateId == null)
+		if($this->getName() === null && $this->getTodoListTemplateId() == null)
 		{
 			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('call setName() before '.__METHOD__);
@@ -338,9 +357,9 @@ class Entity
 			$xml .= '<milestone-id>'.$this->getMilestoneId().'</milestone-id>';
 		}
 		
-		if($todoListTemplateId !== null)
+		if($this->getTodoListTemplateId() !== null)
 		{
-			$xml .= '<todo-list-template-id>'.$todoListTemplateId.'</todo-list-template-id>';
+			$xml .= '<todo-list-template-id>'.$this->getTodoListTemplateId().'</todo-list-template-id>';
 		}
 		$xml .= '</todo-list>';
 		return $xml;
@@ -353,11 +372,10 @@ class Entity
 	 *
 	 * Note: complete data (id etc) is not automatically loaded upon creation
 	 *
-	 * @param \Sirprize\Basecamp\Id $todoListTemplateId (optional) template id - in this case, setName() is not required
 	 * @throws \Sirprize\Basecamp\Exception
 	 * @return boolean
 	 */
-	public function create(\Sirprize\Basecamp\Id $todoListTemplateId = null)
+	public function create()
 	{
 		if($this->getProjectId() === null)
 		{
@@ -366,7 +384,7 @@ class Entity
 		}
 		
 		$projectId = $this->getProjectId();
-		$xml = $this->getXml($todoListTemplateId);
+		$xml = $this->getXml();
 		
 		try {
 			$response = $this->_getHttpClient()

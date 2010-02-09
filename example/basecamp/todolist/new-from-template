@@ -44,6 +44,7 @@ $templateId = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_TODOLIST_TEMPLATE_ID);
 $todoList
 	->setProjectId($projectId)
 	->setName('Har Har Har To To Tooo')
+	->setTodoListTemplateId($templateId)
 ;
 
-$todoList->create($templateId);
+$todoList->create();
