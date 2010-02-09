@@ -19,7 +19,7 @@ namespace Sirprize\Basecamp\TodoList;
 
 
 /**
- * Class to find and modify todoLists
+ * Encapsulate a set of persisted todo-list objects and the operations performed over them
  *
  * @category  Sirprize
  * @package   Basecamp

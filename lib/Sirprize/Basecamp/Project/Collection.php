@@ -19,7 +19,7 @@ namespace Sirprize\Basecamp\Project;
 
 
 /**
- * Class to find and modify projects
+ * Encapsulate a set of persisted project objects and the operations performed over them
  *
  * @category  Sirprize
  * @package   Basecamp

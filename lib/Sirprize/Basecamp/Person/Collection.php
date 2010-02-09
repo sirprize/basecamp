@@ -19,7 +19,7 @@ namespace Sirprize\Basecamp\Person;
 
 
 /**
- * Class to find and modify persons
+ * Encapsulate a set of persisted person objects and the operations performed over them
  *
  * @category  Sirprize
  * @package   Basecamp
