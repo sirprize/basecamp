@@ -252,7 +252,7 @@ class Collection extends \SplObjectStorage
 		
 		try {
 			$response = $this->_getHttpClient()
-				->setUri($this->_getBasecamp()->getBaseUri()."/projects/$projectId/todo_lists.xml")
+				->setUri($this->_getBasecamp()->getBaseUri()."/projects/$projectId/todo_lists.xml$query")
 				->setAuth($this->_getBasecamp()->getUsername(), $this->_getBasecamp()->getPassword())
 				->request('GET')
 			;
