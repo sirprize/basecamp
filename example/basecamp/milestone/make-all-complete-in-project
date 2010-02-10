@@ -41,7 +41,7 @@ $projectId = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_PROJECT_ID);
 $milestones = $basecamp->getMilestoneCollectionInstance();
 $milestones->attachObserver($collectionObserverStout);
 $milestones->attachObserver($collectionObserverLog);
-$milestones->startByProjectId($projectId, \Sirprize\Basecamp\Milestone\Collection::FIND_ALL);
+$milestones->startAllByProjectId($projectId, \Sirprize\Basecamp\Milestone\Collection::FIND_ALL);
 
 if($milestones->getResponse()->isError())
 {

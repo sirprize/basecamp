@@ -245,7 +245,7 @@ class Collection extends \SplObjectStorage
 	 * @throws \Sirprize\Basecamp\Exception
 	 * @return \Sirprize\Basecamp\Milestone\Collection
 	 */
-	public function startByProjectId(\Sirprize\Basecamp\Id $projectId, $status = null)
+	public function startAllByProjectId(\Sirprize\Basecamp\Id $projectId, $status = null)
 	{
 		if($this->_started)
 		{
