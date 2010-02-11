@@ -48,7 +48,7 @@ class Entity
 	protected $_loaded = false;
 	protected $_response = null;
 	protected $_observers = array();
-	protected $_todoListTemplateId = null;
+	protected $_templateId = null;
 	
 	
 	
@@ -128,18 +128,18 @@ class Entity
 	/**
 	 * Set todo-list template id to use when later calling create()
 	 *
-	 * @param \Sirprize\Basecamp\Id $todoListTemplateId If this id is set then setName() is optional on create()
+	 * @param \Sirprize\Basecamp\Id $templateId If this id is set then setName() is optional on create()
 	 */
-	public function setTodoListTemplateId(\Sirprize\Basecamp\Id $todoListTemplateId)
+	public function setTemplateId(\Sirprize\Basecamp\Id $templateId)
 	{
-		$this->_todoListTemplateId = $todoListTemplateId;
+		$this->_templateId = $templateId;
 		return $this;
 	}
 	
 	
-	public function getTodoListTemplateId()
+	public function getTemplateId()
 	{
-		return $this->_todoListTemplateId;
+		return $this->_templateId;
 	}
 	
 	
@@ -341,7 +341,7 @@ class Entity
 	 */
 	public function getXml()
 	{
-		if($this->getName() === null && $this->getTodoListTemplateId() == null)
+		if($this->getName() === null && $this->getTemplateId() == null)
 		{
 			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('call setName() before '.__METHOD__);
@@ -357,9 +357,9 @@ class Entity
 			$xml .= '<milestone-id>'.$this->getMilestoneId().'</milestone-id>';
 		}
 		
-		if($this->getTodoListTemplateId() !== null)
+		if($this->getTemplateId() !== null)
 		{
-			$xml .= '<todo-list-template-id>'.$this->getTodoListTemplateId().'</todo-list-template-id>';
+			$xml .= '<todo-list-template-id>'.$this->getTemplateId().'</todo-list-template-id>';
 		}
 		$xml .= '</todo-list>';
 		return $xml;
