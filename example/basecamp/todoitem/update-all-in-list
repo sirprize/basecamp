@@ -41,7 +41,7 @@ $todoListId = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_TODOLIST_ID);
 $todoItems = $basecamp->getTodoItemCollectionInstance();
 $todoItems->attachObserver($collectionObserverStout);
 $todoItems->attachObserver($collectionObserverLog);
-$todoItems->startByTodoListId($todoListId);
+$todoItems->startAllByTodoListId($todoListId);
 
 if($todoItems->getResponse()->isError())
 {

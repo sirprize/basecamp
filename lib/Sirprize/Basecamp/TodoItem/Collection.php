@@ -162,7 +162,7 @@ class Collection extends \SplObjectStorage
 	 * @throws \Sirprize\Basecamp\Exception
 	 * @return \Sirprize\Basecamp\TodoItem\Collection
 	 */
-	public function startByTodoListId(\Sirprize\Basecamp\Id $todoListId)
+	public function startAllByTodoListId(\Sirprize\Basecamp\Id $todoListId)
 	{
 		if($this->_started)
 		{
