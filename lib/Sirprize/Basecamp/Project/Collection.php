@@ -122,7 +122,7 @@ class Collection extends \SplObjectStorage
 	 *
 	 * @return \Sirprize\Basecamp\Project\Entity
 	 */
-	public function getProjectEntityInstance()
+	public function getEntityInstance()
 	{
 		require_once 'Sirprize/Basecamp/Project/Entity.php';
 		$project = new \Sirprize\Basecamp\Project\Entity();
@@ -277,7 +277,7 @@ class Collection extends \SplObjectStorage
 		if(isset($xml->id))
 		{
 			// request for a single entity
-			$project = $this->getProjectEntityInstance();
+			$project = $this->getEntityInstance();
 			$project->load($xml);
 			$this->attach($project);
 			return $this;
@@ -294,7 +294,7 @@ class Collection extends \SplObjectStorage
 		if(isset($array[self::_PROJECT]->id))
 		{
 			// list request - 1 item in response
-			$project = $this->getProjectEntityInstance();
+			$project = $this->getEntityInstance();
 			$project->load($array[self::_PROJECT]);
 			$this->attach($project);
 			return $this;
@@ -303,7 +303,7 @@ class Collection extends \SplObjectStorage
 		foreach($array[self::_PROJECT] as $row)
 		{
 			// list request - 2 or more items in response
-			$project = $this->getProjectEntityInstance();
+			$project = $this->getEntityInstance();
 			$project->load($row);
 			$this->attach($project);
 		}

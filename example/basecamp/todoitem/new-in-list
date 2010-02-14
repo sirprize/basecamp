@@ -29,7 +29,7 @@ $entityObserverLog = new \Sirprize\Basecamp\TodoItem\Entity\Observer\Log();
 $entityObserverLog->setLog($log);
 
 $todoItems = $basecamp->getTodoItemCollectionInstance();
-$todoItem = $todoItems->getTodoItemEntityInstance();
+$todoItem = $todoItems->getEntityInstance();
 $todoItem->attachObserver($entityObserverStout);
 $todoItem->attachObserver($entityObserverLog);
 

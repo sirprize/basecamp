@@ -29,7 +29,7 @@ $entityObserverLog = new \Sirprize\Basecamp\TodoList\Entity\Observer\Log();
 $entityObserverLog->setLog($log);
 
 $todoLists = $basecamp->getTodoListCollectionInstance();
-$todoList = $todoLists->getTodoListEntityInstance();
+$todoList = $todoLists->getEntityInstance();
 $todoList->attachObserver($entityObserverStout);
 $todoList->attachObserver($entityObserverLog);
 

@@ -29,7 +29,7 @@ $entityObserverLog = new \Sirprize\Basecamp\Milestone\Entity\Observer\Log();
 $entityObserverLog->setLog($log);
 
 $milestones = $basecamp->getMilestoneCollectionInstance();
-$milestone = $milestones->getMilestoneEntityInstance();
+$milestone = $milestones->getEntityInstance();
 $milestone->attachObserver($entityObserverStout);
 $milestone->attachObserver($entityObserverLog);
 
