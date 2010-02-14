@@ -49,6 +49,8 @@ class Entity
 	protected $_response = null;
 	protected $_observers = array();
 	protected $_templateId = null;
+	protected $_todoItems = null;
+	protected $_todoItemsLoaded = false;
 	
 	
 	
@@ -186,6 +188,13 @@ class Entity
 	}
 	
 	
+	public function setTodoItems(\Sirprize\Basecamp\TodoItem\Collection $todoItems)
+	{
+		$this->_todoItems = $todoItems;
+		return $this;
+	}
+	
+	
 	
 	
 	
@@ -255,11 +264,16 @@ class Entity
 	}
 	
 	/**
-	 * @return null|\Sirprize\Basecamp\TodoItems\Collection
+	 * @return \Sirprize\Basecamp\TodoItems\Collection
 	 */
 	public function getTodoItems()
 	{
-		return $this->_getVal(self::_TODO_ITEMS);
+		if($this->_todoItems === null)
+		{
+			$this->_todoItems = $this->_getBasecamp()->getTodoItemCollectionInstance();
+		}
+		
+		return $this->_todoItems;
 	}
 	
 	
@@ -288,12 +302,11 @@ class Entity
 		
 		$this->_loaded = true;
 		$array = (array) $xml;
-		$todoItems = null;
 		
 		if(isset($array[self::_TODO_ITEMS]))
 		{
-			$todoItems = $this->_getBasecamp()->getTodoItemCollectionInstance();
-			$todoItems->load($array[self::_TODO_ITEMS]);
+			$this->getTodoItems()->load($array[self::_TODO_ITEMS]);
+			$this->_todoItemsLoaded = true;
 		}
 		
 		require_once 'Sirprize/Basecamp/Id.php';
@@ -324,10 +337,30 @@ class Entity
 			self::_PROJECT_ID => $projectId,
 			self::_TRACKED => $tracked,
 			self::_UNCOMPLETED_COUNT => $array[self::_UNCOMPLETED_COUNT],
-			self::_TODO_ITEMS => $todoItems,
+			#self::_TODO_ITEMS => $todoItems,
 			self::_COMPLETE => $complete
 		);
 		
+		return $this;
+	}
+	
+	
+	
+	public function startTodoItems()
+	{
+		if(!$this->_loaded)
+		{
+			require_once 'Sirprize/Basecamp/Exception.php';
+			throw new \Sirprize\Basecamp\Exception('call load() before '.__METHOD__);
+		}
+		
+		if($this->_todoItemsLoaded)
+		{
+			return $this;
+		}
+		
+		$this->getTodoItems()->startAllByTodoListId($this->getId());
+		$this->_todoItemsLoaded = true;
 		return $this;
 	}
 	
@@ -348,8 +381,8 @@ class Entity
 		}
 		
   		$xml  = '<todo-list>';
-		$xml .= '<name>'.$this->getName().'</name>';
-		$xml .= '<description>'.$this->getDescription().'</description>';
+		$xml .= '<name>'.htmlentities($this->getName()).'</name>';
+		$xml .= '<description>'.htmlentities($this->getDescription()).'</description>';
 		$xml .= '<private type="boolean">'.(($this->getIsPrivate()) ? 'true' : 'false').'</private>';
 		
 		if($this->getMilestoneId() !== null)

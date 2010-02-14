@@ -292,7 +292,7 @@ class Entity
 		}
 		
   		$xml  = '<todo-item>';
-		$xml .= '<content>'.$this->getContent().'</content>';
+		$xml .= '<content>'.htmlentities($this->getContent()).'</content>';
 		
 		if($responsiblePartyId)
 		{

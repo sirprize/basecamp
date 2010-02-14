@@ -319,7 +319,7 @@ class Entity
 		}
 		
   		$xml  = '<milestone>';
-		$xml .= '<title>'.$this->getTitle().'</title>';
+		$xml .= '<title>'.htmlentities($this->getTitle()).'</title>';
 		$xml .= '<deadline type="date">'.$this->getDeadline().'</deadline>';
 		$xml .= '<responsible-party>'.$this->getResponsiblePartyId().'</responsible-party>';
 		$xml .= '<notify>'.(($this->getWantsNotification()) ? 'true' : 'false').'</notify>';
