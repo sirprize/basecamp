@@ -31,7 +31,7 @@ $collectionObserverLog->setLog($log);
 require_once 'Sirprize/Basecamp/Id.php';
 $projectId = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_PROJECT_ID);
 
-$persons = $basecamp->getPersonCollectionInstance();
+$persons = $basecamp->getPersonsInstance();
 $persons->attachObserver($collectionObserverStout);
 $persons->attachObserver($collectionObserverLog);
 $persons->startAllByProjectId($projectId);

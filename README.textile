@@ -32,7 +32,7 @@ $basecamp = new \Sirprize\Basecamp($config);
 	
 h3. Fetch all projects
 
-bc.. $projects = $basecamp->getProjectCollectionInstance()->startAll();
+bc.. $projects = $basecamp->getProjectsInstance()->startAll();
 
 foreach($projects as $project)
 {
@@ -41,8 +41,8 @@ foreach($projects as $project)
 
 h3. Create a new milestone
 
-bc.. $milestones = $basecamp->getMilestoneCollectionInstance();
-$milestone = $milestones->getEntityInstance();
+bc.. $milestones = $basecamp->getMilestonesInstance();
+$milestone = $milestones->getMilestoneInstance();
 
 require_once 'Sirprize/Basecamp/Date.php';
 $deadline = new \Sirprize\Basecamp\Date('2010-03-01');

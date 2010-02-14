@@ -92,7 +92,7 @@ class Basecamp
 	
 	
 	
-	public function getProjectCollectionInstance()
+	public function getProjectsInstance()
 	{
 		require_once 'Sirprize/Basecamp/Project/Collection.php';
 		$projects = new \Sirprize\Basecamp\Project\Collection();
@@ -105,7 +105,7 @@ class Basecamp
 	
 	
 	
-	public function getPersonCollectionInstance()
+	public function getPersonsInstance()
 	{
 		require_once 'Sirprize/Basecamp/Person/Collection.php';
 		$persons = new \Sirprize\Basecamp\Person\Collection();
@@ -118,7 +118,7 @@ class Basecamp
 	
 	
 	
-	public function getMilestoneCollectionInstance()
+	public function getMilestonesInstance()
 	{
 		require_once 'Sirprize/Basecamp/Milestone/Collection.php';
 		$milestones = new \Sirprize\Basecamp\Milestone\Collection();
@@ -131,7 +131,7 @@ class Basecamp
 	
 	
 	
-	public function getTodoListCollectionInstance()
+	public function getTodoListsInstance()
 	{
 		require_once 'Sirprize/Basecamp/TodoList/Collection.php';
 		$todoLists = new \Sirprize\Basecamp\TodoList\Collection();
@@ -144,7 +144,7 @@ class Basecamp
 	
 	
 	
-	public function getTodoItemCollectionInstance()
+	public function getTodoItemsInstance()
 	{
 		require_once 'Sirprize/Basecamp/TodoItem/Collection.php';
 		$todoListitems = new \Sirprize\Basecamp\TodoItem\Collection();

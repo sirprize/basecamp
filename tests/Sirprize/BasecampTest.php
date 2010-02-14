@@ -123,7 +123,7 @@ class Sirprize_BasecampTest extends PHPUnit_Framework_TestCase
 	
 	public function testMilestoneBatchInstantiator()
     {
-		$milestones = $this->_basecamp->getMilestoneCollectionInstance();
+		$milestones = $this->_basecamp->getMilestonesInstance();
         $this->assertTrue($milestones instanceof \Sirprize\Basecamp\Milestone\Collection);
     }
 	

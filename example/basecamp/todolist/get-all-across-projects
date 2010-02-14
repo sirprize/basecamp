@@ -28,7 +28,7 @@ require_once 'Sirprize/Basecamp/TodoList/Collection/Observer/Log.php';
 $collectionObserverLog = new \Sirprize\Basecamp\TodoList\Collection\Observer\Log();
 $collectionObserverLog->setLog($log);
 
-$todoLists = $basecamp->getTodoListCollectionInstance();
+$todoLists = $basecamp->getTodoListsInstance();
 $todoLists->attachObserver($collectionObserverStout);
 $todoLists->attachObserver($collectionObserverLog);
 $todoLists->startAllByResponsibiltyParty('');

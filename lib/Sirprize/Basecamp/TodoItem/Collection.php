@@ -118,7 +118,7 @@ class Collection extends \SplObjectStorage
 	 *
 	 * @return \Sirprize\Basecamp\TodoItem\Entity
 	 */
-	public function getEntityInstance()
+	public function getTodoItemInstance()
 	{
 		require_once 'Sirprize/Basecamp/TodoItem/Entity.php';
 		$todoItem = new \Sirprize\Basecamp\TodoItem\Entity();
@@ -276,7 +276,7 @@ class Collection extends \SplObjectStorage
 		if(isset($xml->id))
 		{
 			// request for a single entity (not supported on todoItems)
-			$todoItem = $this->getEntityInstance();
+			$todoItem = $this->getTodoItemInstance();
 			$todoItem->load($xml);
 			$this->attach($todoItem);
 			return $this;
@@ -293,7 +293,7 @@ class Collection extends \SplObjectStorage
 		if(isset($array[self::_TODO_ITEM]->id))
 		{
 			// list request - 1 item in response
-			$todoItem = $this->getEntityInstance();
+			$todoItem = $this->getTodoItemInstance();
 			$todoItem->load($array[self::_TODO_ITEM]);
 			$this->attach($todoItem);
 			return $this;
@@ -302,7 +302,7 @@ class Collection extends \SplObjectStorage
 		foreach($array[self::_TODO_ITEM] as $row)
 		{
 			// list request - 2 or more items in response
-			$todoItem = $this->getEntityInstance();
+			$todoItem = $this->getTodoItemInstance();
 			$todoItem->load($row);
 			$this->attach($todoItem);
 		}

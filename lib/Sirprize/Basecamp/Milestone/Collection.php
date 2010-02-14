@@ -122,7 +122,7 @@ class Collection extends \SplObjectStorage
 	 *
 	 * @return \Sirprize\Basecamp\Milestone\Entity
 	 */
-	public function getEntityInstance()
+	public function getMilestoneInstance()
 	{
 		require_once 'Sirprize/Basecamp/Milestone/Entity.php';
 		$milestone = new \Sirprize\Basecamp\Milestone\Entity();
@@ -321,7 +321,7 @@ class Collection extends \SplObjectStorage
 		if(isset($array[self::_MILESTONE]->id))
 		{
 			// list request - 1 item in response
-			$milestone = $this->getEntityInstance();
+			$milestone = $this->getMilestoneInstance();
 			$milestone->load($array[self::_MILESTONE]);
 			$this->attach($milestone);
 			return $this;
@@ -330,7 +330,7 @@ class Collection extends \SplObjectStorage
 		foreach($array[self::_MILESTONE] as $row)
 		{
 			// list request - 2 or more items in response
-			$milestone = $this->getEntityInstance();
+			$milestone = $this->getMilestoneInstance();
 			$milestone->load($row);
 			$this->attach($milestone);
 		}

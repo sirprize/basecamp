@@ -38,7 +38,7 @@ $entityObserverLog->setLog($log);
 require_once 'Sirprize/Basecamp/Id.php';
 $projectId = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_PROJECT_ID);
 
-$milestones = $basecamp->getMilestoneCollectionInstance();
+$milestones = $basecamp->getMilestonesInstance();
 $milestones->attachObserver($collectionObserverStout);
 $milestones->attachObserver($collectionObserverLog);
 $milestones->startAllByProjectId($projectId, \Sirprize\Basecamp\Milestone\Collection::FIND_ALL);

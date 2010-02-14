@@ -31,7 +31,7 @@ $collectionObserverLog->setLog($log);
 require_once 'Sirprize/Basecamp/Id.php';
 $id = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_TODOLISTITEM_ID);
 
-$todoItems = $basecamp->getTodoItemCollectionInstance();
+$todoItems = $basecamp->getTodoItemsInstance();
 $todoItems->attachObserver($collectionObserverStout);
 $todoItems->attachObserver($collectionObserverLog);
 $todoItem = $todoItems->startById($id);

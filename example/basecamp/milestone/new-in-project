@@ -28,8 +28,8 @@ require_once 'Sirprize/Basecamp/Milestone/Entity/Observer/Log.php';
 $entityObserverLog = new \Sirprize\Basecamp\Milestone\Entity\Observer\Log();
 $entityObserverLog->setLog($log);
 
-$milestones = $basecamp->getMilestoneCollectionInstance();
-$milestone = $milestones->getEntityInstance();
+$milestones = $basecamp->getMilestonesInstance();
+$milestone = $milestones->getMilestoneInstance();
 $milestone->attachObserver($entityObserverStout);
 $milestone->attachObserver($entityObserverLog);
 

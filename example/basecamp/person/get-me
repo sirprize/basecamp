@@ -28,7 +28,7 @@ require_once 'Sirprize/Basecamp/Person/Collection/Observer/Log.php';
 $collectionObserverLog = new \Sirprize\Basecamp\Person\Collection\Observer\Log();
 $collectionObserverLog->setLog($log);
 
-$persons = $basecamp->getPersonCollectionInstance();
+$persons = $basecamp->getPersonsInstance();
 $persons->attachObserver($collectionObserverStout);
 $persons->attachObserver($collectionObserverLog);
 $person = $persons->startMe();

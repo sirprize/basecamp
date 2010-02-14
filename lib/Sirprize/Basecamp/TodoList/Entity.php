@@ -270,7 +270,7 @@ class Entity
 	{
 		if($this->_todoItems === null)
 		{
-			$this->_todoItems = $this->_getBasecamp()->getTodoItemCollectionInstance();
+			$this->_todoItems = $this->_getBasecamp()->getTodoItemsInstance();
 		}
 		
 		return $this->_todoItems;

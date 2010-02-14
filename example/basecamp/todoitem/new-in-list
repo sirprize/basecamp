@@ -28,8 +28,8 @@ require_once 'Sirprize/Basecamp/TodoItem/Entity/Observer/Log.php';
 $entityObserverLog = new \Sirprize\Basecamp\TodoItem\Entity\Observer\Log();
 $entityObserverLog->setLog($log);
 
-$todoItems = $basecamp->getTodoItemCollectionInstance();
-$todoItem = $todoItems->getEntityInstance();
+$todoItems = $basecamp->getTodoItemsInstance();
+$todoItem = $todoItems->getTodoItemInstance();
 $todoItem->attachObserver($entityObserverStout);
 $todoItem->attachObserver($entityObserverLog);
 
