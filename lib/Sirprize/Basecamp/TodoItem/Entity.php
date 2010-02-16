@@ -49,6 +49,9 @@ class Entity
 	protected $_loaded = false;
 	protected $_response = null;
 	protected $_observers = array();
+	protected $_responsiblePartyId = null;
+	protected $_notify = false;
+	
 	
 	
 	
@@ -120,6 +123,20 @@ class Entity
 			}
 		}
 		
+		return $this;
+	}
+	
+	
+	public function setResponsiblePartyId(\Sirprize\Basecamp\Id $responsiblePartyId)
+	{
+		$this->_responsiblePartyId = $responsiblePartyId;
+		return $this;
+	}
+	
+	
+	public function setNotify($flap)
+	{
+		$this->_notify = $notify;
 		return $this;
 	}
 	
@@ -283,7 +300,7 @@ class Entity
 	 * @throws \Sirprize\Basecamp\Exception
 	 * @return string
 	 */
-	public function getXml(\Sirprize\Basecamp\Id $responsiblePartyId = null, $notify = false)
+	public function getXml()
 	{
 		if($this->getContent() === null)
 		{
@@ -294,14 +311,16 @@ class Entity
   		$xml  = '<todo-item>';
 		$xml .= '<content>'.htmlentities($this->getContent()).'</content>';
 		
-		if($responsiblePartyId)
+		if($this->_responsiblePartyId !== null)
 		{
-			$xml .= '<responsible-party>'.$responsiblePartyId.'</responsible-party>';
-			if($notify) { $xml .= '<notify>true</notify>'; }
+			$xml .= '<responsible-party>'.$this->_responsiblePartyId.'</responsible-party>';
+			if($this->_notify) { $xml .= '<notify>true</notify>'; }
 		}
+		
 		$xml .= '</todo-item>';
 		return $xml;
 	}
+	
 	
 	
 	
@@ -313,7 +332,7 @@ class Entity
 	 * @throws \Sirprize\Basecamp\Exception
 	 * @return boolean
 	 */
-	public function create(\Sirprize\Basecamp\Id $responsiblePartyId = null, $notify = false)
+	public function create()
 	{
 		if($this->getTodoListId() === null)
 		{
@@ -322,7 +341,7 @@ class Entity
 		}
 		
 		$todoListId = $this->getTodoListId();
-		$xml = $this->getXml($responsiblePartyId, $notify);
+		$xml = $this->getXml();
 		
 		try {
 			$response = $this->_getHttpClient()
@@ -367,7 +386,7 @@ class Entity
 	 * @throws \Sirprize\Basecamp\Exception
 	 * @return boolean
 	 */
-	public function update(\Sirprize\Basecamp\Id $responsiblePartyId = null, $notify = false)
+	public function update()
 	{
 		if(!$this->_loaded)
 		{
