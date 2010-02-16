@@ -19,7 +19,7 @@ namespace Sirprize\Basecamp\TodoList;
 
 
 /**
- * Class to represent and modify a todo-list
+ * Represent and modify a todo-list
  *
  * @category  Sirprize
  * @package   Basecamp
@@ -362,6 +362,28 @@ class Entity
 		$this->getTodoItems()->startAllByTodoListId($this->getId());
 		$this->_todoItemsLoaded = true;
 		return $this;
+	}
+	
+	
+	
+	
+	public function findTodoItemByContent($content)
+	{
+		if(!$this->_loaded)
+		{
+			require_once 'Sirprize/Basecamp/Exception.php';
+			throw new \Sirprize\Basecamp\Exception('call load() before '.__METHOD__);
+		}
+		
+		foreach($this->getTodoItems() as $todoItem)
+		{
+			if($content == $todoItem->getContent())
+			{
+				return $todoItem;
+			}
+		}
+		
+		return null;
 	}
 	
 	

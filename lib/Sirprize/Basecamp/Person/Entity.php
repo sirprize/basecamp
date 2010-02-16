@@ -19,7 +19,7 @@ namespace Sirprize\Basecamp\Person;
 
 
 /**
- * Class to represent and modify a person
+ * Represent and modify a person
  *
  * @category  Sirprize
  * @package   Basecamp

@@ -19,7 +19,7 @@ namespace Sirprize\Basecamp\Milestone;
 
 
 /**
- * Class to represent and modify a milestone
+ * Represent and modify a milestone
  *
  * @category  Sirprize
  * @package   Basecamp

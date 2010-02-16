@@ -19,7 +19,7 @@ namespace Sirprize\Basecamp\Project;
 
 
 /**
- * Class to represent and modify a project
+ * Represent and modify a project
  *
  * @category  Sirprize
  * @package   Basecamp
@@ -49,6 +49,12 @@ class Entity
 	protected $_data = array();
 	protected $_loaded = false;
 	protected $_response = null;
+	
+	// sub-elements
+	protected $_milestones = null;
+	protected $_todoLists = null;
+	#protected $_hasError = false;
+	protected $_subElementsStarted = false;
 	
 	
 	
@@ -231,6 +237,296 @@ class Entity
 	protected function _getVal($name)
 	{
 		return (isset($this->_data[$name])) ? $this->_data[$name] : null;
+	}
+	
+	
+	
+
+
+
+
+
+	
+	
+	
+	
+	public function startSubElements()
+	{
+		if(!$this->_loaded)
+		{
+			require_once 'Sirprize/Basecamp/Exception.php';
+			throw new \Sirprize\Basecamp\Exception('call load() before '.__METHOD__);
+		}
+		
+		if($this->_subElementsStarted === true)
+		{
+			return $this;
+		}
+		
+		$this->_startMilestones();
+		$this->_startTodoLists();
+		$this->_subElementsStarted = true;
+		return $this;
+	}
+	
+	
+	
+	public function getMilestones()
+	{
+		if(!$this->_subElementsStarted)
+		{
+			require_once 'Sirprize/Basecamp/Exception.php';
+			throw new \Sirprize\Basecamp\Exception('call startSubElements() before '.__METHOD__);
+		}
+		
+		return $this->_milestones;
+	}
+	
+	
+	
+	public function getTodoLists()
+	{
+		if(!$this->_subElementsStarted)
+		{
+			require_once 'Sirprize/Basecamp/Exception.php';
+			throw new \Sirprize\Basecamp\Exception('call startSubElements() before '.__METHOD__);
+		}
+		
+		return $this->_todoLists;
+	}
+	
+	
+	/*
+	public function hasError()
+	{
+		return $this->_hasError;
+	}
+	*/
+	
+	
+	
+	public function findMilestoneByTitle($title)
+	{
+		if(!$this->_subElementsStarted)
+		{
+			require_once 'Sirprize/Basecamp/Exception.php';
+			throw new \Sirprize\Basecamp\Exception('call startSubElements() before '.__METHOD__);
+		}
+		
+		foreach($this->_milestones as $milestone)
+		{
+			if($title == $milestone->getTitle())
+			{
+				return $milestone;
+			}
+		}
+		
+		return null;
+	}
+	
+	
+	
+	public function findTodoListByName($name)
+	{
+		if(!$this->_subElementsStarted)
+		{
+			require_once 'Sirprize/Basecamp/Exception.php';
+			throw new \Sirprize\Basecamp\Exception('call startSubElements() before '.__METHOD__);
+		}
+		
+		foreach($this->_todoLists as $todoList)
+		{
+			if($name == $todoList->getName())
+			{
+				return $todoList;
+			}
+		}
+		
+		return null;
+	}
+	
+	
+	
+	public function findTodoListById(\Sirprize\Basecamp\Id $id)
+	{
+		if(!$this->_subElementsStarted)
+		{
+			require_once 'Sirprize/Basecamp/Exception.php';
+			throw new \Sirprize\Basecamp\Exception('call startSubElements() before '.__METHOD__);
+		}
+		
+		foreach($this->_todoLists as $todoList)
+		{
+			if((string)$id == (string)$todoList->getId())
+			{
+				return $todoList;
+			}
+		}
+		
+		return null;
+	}
+	
+	
+	
+	public function deleteMilestones()
+	{
+		if(!$this->_subElementsStarted)
+		{
+			require_once 'Sirprize/Basecamp/Exception.php';
+			throw new \Sirprize\Basecamp\Exception('call startSubElements() before '.__METHOD__);
+		}
+		/*
+		if($this->_milestones->getResponse()->isError())
+		{
+			return $this;;
+		}
+		*/
+		foreach($this->_milestones as $milestone)
+		{
+			$milestone->delete();
+		}
+		
+		$this->_milestones = $this->_getBasecamp()->getMilestonesInstance();
+		return $this;
+	}
+	
+	
+	
+	public function deleteTodoLists()
+	{
+		if(!$this->_subElementsStarted)
+		{
+			require_once 'Sirprize/Basecamp/Exception.php';
+			throw new \Sirprize\Basecamp\Exception('call startSubElements() before '.__METHOD__);
+		}
+		/*
+		if($this->_todoLists->getResponse()->isError())
+		{
+			return $this;;
+		}
+		*/
+		foreach($this->_todoLists as $todoList)
+		{
+			$todoList->delete();
+		}
+		
+		$this->_todoLists = $this->_getBasecamp()->getTodoListsInstance();
+		return $this;
+	}
+	
+	
+	
+	public function addMilestones(\Sirprize\Basecamp\Milestone\Collection $milestones, $reloadWhenFinished = true)
+	{
+		$reload = false;
+		
+		foreach($milestones as $milestone)
+		{
+			if($this->findMilestoneByTitle($milestone->getTitle()))
+			{
+				continue;
+			}
+			
+			$milestone->create($this->getId());
+			$reload = true;
+		}
+		
+		if($reload && $reloadWhenFinished)
+		{
+			$this->_startMilestones();
+		}
+		
+		return $this;
+	}
+	
+	
+	
+	public function addTodoLists(\Sirprize\Basecamp\TodoList\Collection $todoLists, $reloadWhenFinished = true)
+	{
+		$reload = false;
+		
+		foreach($todoLists as $todoList)
+		{
+			if($this->findTodoListByName($todoList->getName()))
+			{
+				continue;
+			}
+			
+			$todoList->create($this->getId());
+			$reload = true;
+		}
+		
+		if($reload && $reloadWhenFinished)
+		{
+			$this->_startTodoLists();
+		}
+		
+		return $this;
+	}
+	
+	
+	
+	public function addTodoItems(\Sirprize\Basecamp\TodoItem\Collection $todoItems, $reloadWhenFinished = true)
+	{
+		$reload = false;
+		
+		foreach($todoItems as $todoItem)
+		{
+			$todoList = $this->findTodoListById($todoItem->getTodoListId());
+			
+			if($todoList && $todoList->findTodoItemByContent($todoItem->getContent()))
+			{
+				continue;
+			}
+			
+			$todoItem->create();
+			$reload = true;
+		}
+		
+		if($reload && $reloadWhenFinished)
+		{
+			$this->_startTodoLists();
+		}
+		
+		return $this;
+	}
+	
+	
+	
+	protected function _startMilestones()
+	{
+		$this->_milestones =
+			$this->_getBasecamp()
+			->getMilestonesInstance()
+			->startAllByProjectId($this->getId())
+		;
+		/*
+		if($this->_milestones->getResponse()->isError())
+		{
+			$this->_hasError = true;
+		}
+		*/
+	}
+	
+	
+	
+	protected function _startTodoLists()
+	{
+		$this->_todoLists =
+			$this->_getBasecamp()
+			->getTodoListsInstance()
+			->startAllByProjectId($this->getId())
+		;
+		/*
+		if($this->_todoLists->getResponse()->isError())
+		{
+			$this->_hasError = true;
+		}
+		*/
+		foreach($this->_todoLists as $todoList)
+		{
+			$todoList->startTodoItems();
+		}
 	}
 	
 }
