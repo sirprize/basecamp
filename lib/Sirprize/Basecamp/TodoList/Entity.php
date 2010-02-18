@@ -369,12 +369,13 @@ class Entity
 	
 	public function findTodoItemByContent($content)
 	{
+		/*
 		if(!$this->_loaded)
 		{
 			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('call load() before '.__METHOD__);
 		}
-		
+		*/
 		foreach($this->getTodoItems() as $todoItem)
 		{
 			if($content == $todoItem->getContent())

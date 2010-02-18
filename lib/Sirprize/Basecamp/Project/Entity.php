@@ -273,10 +273,11 @@ class Entity
 	
 	public function getMilestones()
 	{
-		if(!$this->_subElementsStarted)
+		if($this->_milestones === null)
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
-			throw new \Sirprize\Basecamp\Exception('call startSubElements() before '.__METHOD__);
+			$this->_milestones = $this->_getBasecamp()->getMilestonesInstance();
+			#require_once 'Sirprize/Basecamp/Exception.php';
+			#throw new \Sirprize\Basecamp\Exception('call startSubElements() before '.__METHOD__);
 		}
 		
 		return $this->_milestones;
@@ -286,10 +287,11 @@ class Entity
 	
 	public function getTodoLists()
 	{
-		if(!$this->_subElementsStarted)
+		if($this->_todoLists === null)
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
-			throw new \Sirprize\Basecamp\Exception('call startSubElements() before '.__METHOD__);
+			$this->_todoLists = $this->_getBasecamp()->getTodoListsInstance();
+			#require_once 'Sirprize/Basecamp/Exception.php';
+			#throw new \Sirprize\Basecamp\Exception('call startSubElements() before '.__METHOD__);
 		}
 		
 		return $this->_todoLists;
@@ -307,13 +309,16 @@ class Entity
 	
 	public function findMilestoneByTitle($title)
 	{
+		/*
 		if(!$this->_subElementsStarted)
 		{
 			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('call startSubElements() before '.__METHOD__);
 		}
+		*/
+		$this->startSubElements();
 		
-		foreach($this->_milestones as $milestone)
+		foreach($this->getMilestones() as $milestone)
 		{
 			if($title == $milestone->getTitle())
 			{
@@ -328,13 +333,16 @@ class Entity
 	
 	public function findTodoListByName($name)
 	{
+		/*
 		if(!$this->_subElementsStarted)
 		{
 			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('call startSubElements() before '.__METHOD__);
 		}
+		*/
+		$this->startSubElements();
 		
-		foreach($this->_todoLists as $todoList)
+		foreach($this->getTodoLists() as $todoList)
 		{
 			if($name == $todoList->getName())
 			{
@@ -349,13 +357,16 @@ class Entity
 	
 	public function findTodoListById(\Sirprize\Basecamp\Id $id)
 	{
+		/*
 		if(!$this->_subElementsStarted)
 		{
 			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('call startSubElements() before '.__METHOD__);
 		}
+		*/
+		$this->startSubElements();
 		
-		foreach($this->_todoLists as $todoList)
+		foreach($this->getTodoLists() as $todoList)
 		{
 			if((string)$id == (string)$todoList->getId())
 			{
@@ -370,6 +381,7 @@ class Entity
 	
 	public function deleteMilestones()
 	{
+		/*
 		if(!$this->_subElementsStarted)
 		{
 			require_once 'Sirprize/Basecamp/Exception.php';
@@ -381,7 +393,9 @@ class Entity
 			return $this;;
 		}
 		*/
-		foreach($this->_milestones as $milestone)
+		$this->startSubElements();
+		
+		foreach($this->getMilestones() as $milestone)
 		{
 			$milestone->delete();
 		}
@@ -394,6 +408,7 @@ class Entity
 	
 	public function deleteTodoLists()
 	{
+		/*
 		if(!$this->_subElementsStarted)
 		{
 			require_once 'Sirprize/Basecamp/Exception.php';
@@ -405,7 +420,9 @@ class Entity
 			return $this;;
 		}
 		*/
-		foreach($this->_todoLists as $todoList)
+		$this->startSubElements();
+		
+		foreach($this->getTodoLists() as $todoList)
 		{
 			$todoList->delete();
 		}

@@ -28,29 +28,29 @@ class Basecamp
 	protected $_httpClient = null;
 	
 	
-	public function __construct(array $config)
+	public function __construct(array $config = array())
 	{
-		if(!isset($config['baseUri']))
+		if(isset($config['baseUri']))
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
-			throw new \Sirprize\Basecamp\Exception("'baseUri' must be set in config");
+			$this->_baseUri = $config['baseUri'];
 		}
 		
-		if(!isset($config['username']))
+		if(isset($config['username']))
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
-			throw new \Sirprize\Basecamp\Exception("'username' must be set in config");
+			$this->_username = $config['username'];
 		}
 		
-		if(!isset($config['password']))
+		if(isset($config['password']))
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
-			throw new \Sirprize\Basecamp\Exception("'password' must be set in config");
+			$this->_password = $config['password'];
 		}
-		
-		$this->_baseUri = $config['baseUri'];
-		$this->_username = $config['username'];
-		$this->_password = $config['password'];
+	}
+	
+	
+	public function setBaseUri($baseUri)
+	{
+		$this->_baseUri = $baseUri;
+		return $this;
 	}
 	
 	
@@ -60,9 +60,23 @@ class Basecamp
 	}
 	
 	
+	public function setUsername($username)
+	{
+		$this->_username = $username;
+		return $this;
+	}
+	
+	
 	public function getUsername()
 	{
 		return $this->_username;
+	}
+	
+	
+	public function setPassword($password)
+	{
+		$this->_password = $password;
+		return $this;
 	}
 	
 	

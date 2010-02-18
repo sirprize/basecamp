@@ -728,4 +728,26 @@ class Entity
 		}
 	}
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	protected $_todoLists = null;
+	
+	
+	public function getTodoLists()
+	{
+		if($this->_todoLists === null)
+		{
+			$this->_todoLists = $this->_getBasecamp()->getTodoListsInstance();
+		}
+		
+		return $this->_todoLists;
+	}
+	
 }

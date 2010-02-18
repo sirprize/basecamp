@@ -21,10 +21,14 @@ namespace Sirprize\Basecamp;
 class Import
 {
 	
+	const DATE_FORMAT = 'yyyy-MM-dd';
+	
+	
 	protected $_basecamp = null;
 	protected $_project = null;
-	protected $_schema = null;
-	protected $_responsiblePartyIds = array();
+	#protected $_schema = null;
+	#protected $_responsiblePartyIds = array();
+	
 	
 	
 	public function setBasecamp(\Sirprize\Basecamp $basecamp)
@@ -67,87 +71,98 @@ class Import
 	
 	
 	
-	public function setSchema(\Sirprize\Basecamp\Import\Schema $schema)
+	
+	public function getMilestonesFromXml($file, $referenceDate)
 	{
-		$this->_schema = $schema;
-		return $this;
-	}
-	
-	
-	
-	protected function _getSchema()
-	{
-		if($this->_schema === null)
+		if(!is_readable($file))
 		{
 			require_once 'Sirprize/Basecamp/Exception.php';
-			throw new \Sirprize\Basecamp\Exception('call setSchema() before '.__METHOD__);
+			throw new \Sirprize\Basecamp\Exception("'$file' must be readable");
 		}
 		
-		return $this->_schema;
-	}
-	
-	
-	
-	public function setResponsiblePartyIds(array $responsiblePartyIds)
-	{
-		$this->_responsiblePartyIds = $responsiblePartyIds;
-		return $this;
-	}
-	
-	
-	
-	public function getResponsiblePartyId($key)
-	{
-		return (isset($this->_responsiblePartyIds[$key])) ? $this->_responsiblePartyIds[$key] : null;
-	}
-	
-	
-	
-	public function populate()
-	{
-		$this->_getProject()->startSubElements();
-		$milestones = $this->_assembleMilestones();
-		$this->_getProject()->addMilestones($milestones);
-		$todoLists = $this->_assembleTodoListsForExistingMilestones();
-		$this->_getProject()->addTodoLists($todoLists);
-		$todoItems = $this->_assembleTodoItemsForExistingTodoListsAndMilestones();
-		$this->_getProject()->addTodoItems($todoItems);
-	}
-	
-	
-	
-	public function run(array $data)
-	{
-		if($data['something_done'])
-		{
-			$this->_completeMilestone('milestoneKey');
-			$this->_completeTodoItem('milestoneKey', 'todoListKey', 'todoItemKey');
-		}
-	}
-	
-	
-	
-	protected function _assembleMilestones()
-	{
+		require_once 'Zend/Date.php';
+		$referenceDate = new \Zend_Date($referenceDate, self::DATE_FORMAT);
+		
+		$xml = new \DOMDocument();
+		$xml->load($file);
 		$milestones = $this->_getBasecamp()->getMilestonesInstance();
 		
-		foreach($this->_getSchema()->getMilestones() as $schemaMilestone)
+		
+		foreach($xml->getElementsByTagName('milestone') as $milestoneElement)
 		{
-			$milestone = $this->_getBasecamp()->getMilestonesInstance()->getMilestoneInstance();
+			$title = $milestoneElement->getElementsByTagName('title')->item(0);
+			$title = ($title) ? $title->nodeValue : null;
+	
+			$completed = $milestoneElement->getElementsByTagName('completed')->item(0);
+			$completed = ($completed) ? $completed->nodeValue : false;
+	
+			$responsiblePartyId = $milestoneElement->getElementsByTagName('responsible-party-id')->item(0);
+			$responsiblePartyId = ($responsiblePartyId) ? $responsiblePartyId->nodeValue : null;
+	
+			$deadline = $milestoneElement->getElementsByTagName('deadline')->item(0);
+			$deadline = ($deadline) ? $deadline->nodeValue : null;
+	
+			$referenceDateOffset = $milestoneElement->getElementsByTagName('reference-date-offset')->item(0);
+			$referenceDateOffset = (int)(($referenceDateOffset) ? $referenceDateOffset->nodeValue : 0);
+	
+			$note = $milestoneElement->getElementsByTagName('note')->item(0);
+			$note = ($note) ? $note->nodeValue : null;
+	
+			$visibilityLevel = $milestoneElement->getElementsByTagName('visibility-level')->item(0);
+			$visibilityLevel = ($visibilityLevel) ? $visibilityLevel->nodeValue : null;
+	
+			$responsibleParty = $milestoneElement->getElementsByTagName('responsible-party')->item(0);
+			$responsibleParty = ($responsibleParty) ? $responsibleParty->nodeValue : null;
+			
+			require_once 'Sirprize/Basecamp/Date.php';
+			$deadline = new \Sirprize\Basecamp\Date($this->_calculateDate($deadline, $referenceDateOffset, $referenceDate));
+			
+			require_once 'Sirprize/Basecamp/Id.php';
+			$responsiblePartyId = new \Sirprize\Basecamp\Id($responsiblePartyId);
+			
+			$milestone = $milestones->getMilestoneInstance();
 			$milestone
-				->setProjectId($this->_getProject()->getId())
-				->setTitle($schemaMilestone->getTitle())
-				->setDeadline(new \Sirprize\Basecamp\Date($schemaMilestone->getDeadline()))
+				->setTitle($title)
+				#->setIsCompleted($completed)
+				->setResponsiblePartyId($responsiblePartyId)
+				->setDeadline($deadline)
+				#->setNote($note)
+				#->setVisibilityLevel($visibilityLevel)
+				#->setResponsibleParty($responsibleParty)
 			;
 			
-			$responsibleParty = $schemaMilestone->getResponsibleParty();
-			
-			if($this->getResponsiblePartyId($responsibleParty) !== null)
-			{
-				$milestone->setResponsiblePartyId($this->getResponsiblePartyId($responsibleParty));
-			}
-			
 			$milestones->attach($milestone);
+			#print $milestone->getTitle()."\n";
+			#print $milestone->getDeadline()."\n";
+			
+	
+			foreach($milestoneElement->getElementsByTagName('todo-list') as $todoListElement)
+			{
+				$name = $todoListElement->getElementsByTagName('name')->item(0);
+				$name = ($name) ? $name->nodeValue : null;
+				
+				$todoList = $milestone->getTodoLists()->getTodoListInstance();
+				$todoList->setName($name);
+				$milestone->getTodoLists()->attach($todoList);
+				#print ">> ".$todoList->getName()."\n";
+		
+				foreach($todoListElement->getElementsByTagName('todo-item') as $todoItemElement)
+				{
+					$content = $todoItemElement->getElementsByTagName('content')->item(0);
+					$content = ($content) ? $content->nodeValue : null;
+			
+					$responsiblePartyId = $todoItemElement->getElementsByTagName('responsible-party-id')->item(0);
+					$responsiblePartyId = ($responsiblePartyId) ? $responsiblePartyId->nodeValue : null;
+					
+					$todoItem = $todoList->getTodoItems()->getTodoItemInstance();
+					$todoItem
+						->setContent($content);
+					;
+					
+					$todoList->getTodoItems()->attach($todoItem);
+					#print ">>>> ".$todoItem->getContent()."\n";
+				}
+			}
 		}
 		
 		return $milestones;
@@ -155,107 +170,132 @@ class Import
 	
 	
 	
-	protected function _assembleTodoListsForExistingMilestones()
+	
+	protected function _calculateDate($deadline, $referenceDateOffset, $referenceDate)
 	{
-		$todoLists = $this->_getBasecamp()->getTodoListsInstance();
-		
-		foreach($this->_getSchema()->getMilestones() as $schemaMilestone)
+		if(preg_match('/^\d{4,4}-\d{2,2}-\d{2,2}$/', $deadline))
 		{
-			$title = $schemaMilestone->getTitle();
-			$milestone = $this->_getProject()->findMilestoneByTitle($title);
-			$schemaTodoLists = $schemaMilestone->getTodoLists();
-		
-			if($milestone === null)
-			{
-				continue;
-			}
-		
-			foreach($schemaTodoLists as $schemaTodoList)
-			{
-				$todoList = $this->_getBasecamp()->getTodoListsInstance()->getTodoListInstance();
-				$todoList
-					->setProjectId($this->_getProject()->getId())
-					->setMilestoneId($milestone->getId())
-					->setName($schemaTodoList->getName())
-				;
-				
-				$todoLists->attach($todoList);
-			}
+			return $deadline;
 		}
-		
-		return $todoLists;
+	
+		require_once 'Zend/Date.php';
+		$date = new \Zend_Date($referenceDate, self::DATE_FORMAT);
+	
+		if($referenceDateOffset >= 0)
+		{
+			return $date->addSecond(60 * 60 * 24 * $referenceDateOffset)->toString(self::DATE_FORMAT);
+		}
+	
+		return $date->subSecond(60 * 60 * 24 * $referenceDateOffset * -1)->toString(self::DATE_FORMAT);
 	}
 	
 	
 	
-	protected function _assembleTodoItemsForExistingTodoListsAndMilestones()
+	/**
+	 * Populate a project with milestones, todo-lists and todo-items
+	 *
+	 * @return \Sirprize\Basecamp\Import
+	 */
+	public function populate(\Sirprize\Basecamp\Milestone\Collection $schemaMilestones)
 	{
-		$todoItems = $this->_getBasecamp()->getTodoItemsInstance();
+		$this->_getProject()->startSubElements();
 		
-		foreach($this->_getSchema()->getMilestones() as $schemaMilestone)
+		foreach($schemaMilestones as $schemaMilestone)
 		{
-			$title = $schemaMilestone->getTitle();
-			$milestone = $this->_getProject()->findMilestoneByTitle($title);
-			$schemaTodoLists = $schemaMilestone->getTodoLists();
+			$schemaMilestone->setProjectId($this->_getProject()->getId());
+		}
+		
+		$this->_getProject()->addMilestones($schemaMilestones);
+		
+		
+		foreach($schemaMilestones as $schemaMilestone)
+		{
+			$milestone = $this->_getProject()->findMilestoneByTitle($schemaMilestone->getTitle());
 		
 			if($milestone === null)
 			{
 				continue;
 			}
-		
-			foreach($schemaTodoLists as $schemaTodoList)
+			
+			foreach($schemaMilestone->getTodoLists() as $schemaTodoList)
 			{
-				$name = $schemaTodoList->getName();
-				$todoList = $this->_getProject()->findTodoListByName($name);
-				$schemaTodoItems = $schemaTodoList->getTodoItems();
+				$schemaTodoList
+					->setProjectId($this->_getProject()->getId())
+					->setMilestoneId($milestone->getId())
+				;
+			}
+			
+			$this->_getProject()->addTodoLists($schemaMilestone->getTodoLists());
+		}
+		
+		
+		foreach($schemaMilestones as $schemaMilestone)
+		{
+			$milestone = $this->_getProject()->findMilestoneByTitle($schemaMilestone->getTitle());
+		
+			if($milestone === null)
+			{
+				continue;
+			}
+			
+			foreach($schemaMilestone->getTodoLists() as $schemaTodoList)
+			{
+				$todoList = $this->_getProject()->findTodoListByName($schemaTodoList->getName());
 				
 				if($todoList === null)
 				{
 					continue;
 				}
 				
-				foreach($schemaTodoItems as $schemaTodoItem)
+				foreach($schemaTodoList->getTodoItems() as $schemaTodoItem)
 				{
-					$responsibleParty = $schemaTodoItem->getResponsibleParty();
-					$responsiblePartyId = $this->getResponsiblePartyId($responsibleParty);
-					
-					$todoItem = $todoItems->getTodoItemInstance();
-					$todoItem->setTodoListId($todoList->getId());
-					$todoItem->setContent($schemaTodoItem->getContent());
+					$schemaTodoItem
+						->setTodoListId($todoList->getId())
+					;
+				}
 				
-					if($responsiblePartyId !== null)
-					{
-						$todoItem->setResponsiblePartyId($responsiblePartyId);
-					}
+				$this->_getProject()->addTodoItems($schemaTodoList->getTodoItems());
+			}
+		}
+	}
+	
+	
+	
+	protected function _completeMilestone($schemaMilestones, $milestoneKey)
+	{
+		foreach($schemaMilestones as $key => $schemaMilestone)
+		{
+			if($key != $milestoneKey) { continue; }
+			$milestone = $this->_getProject()->findMilestoneByTitle($schemaMilestone->getTitle());
+			if($milestone !== null) { $milestone->complete(); }
+			break;
+		}
+	}
+	
+	
+	
+	protected function _completeTodoItem($schemaMilestones, $milestoneKey, $todoListKey, $todoItemKey)
+	{
+		foreach($schemaMilestones as $x => $schemaMilestone)
+		{
+			if($x != $milestoneKey) { continue; }
+			$milestone = $this->_getProject()->findMilestoneByTitle($schemaMilestone->getTitle());
+			if($milestone === null) { break; }
+			
+			foreach($schemaMilestone->getTodoLists() as $y => $schemaTodoList)
+			{
+				if($y != $todoListKey) { continue; }
+				$todoList = $this->_getProject()->findTodoListByName($schemaTodoList->getName());
+				if($todoList === null) { break; }
 				
-					$todoItems->attach($todoItem);
+				foreach($schemaTodoList->getTodoItems() as $z => $schemaTodoItem)
+				{
+					if($z != $todoItemKey) { continue; }
+					$todoItem = $todoList->findTodoItemByContent($schemaTodoItem->getContent());
+					if($todoItem !== null) { $todoItem->complete(); }
 				}
 			}
 		}
-		
-		return $todoItems;
-	}
-	
-	
-	
-	protected function _completeMilestone($milestoneKey)
-	{
-		$title = $this->_getSchema()->getMilestone($milestoneKey)->getTitle();
-		$milestone = $this->_getProject()->findMilestoneByTitle($title);
-		if($milestone !== null) { $milestone->complete(); }
-	}
-	
-	
-	
-	protected function _completeTodoItem($milestoneKey, $todoListKey, $todoItemKey)
-	{
-		$name = $this->_getSchema()->getMilestone($milestoneKey)->getTodoList($todoListKey)->getName();
-		$todoList = $this->_getProject()->findTodoListByName($name);
-		if($todoList === null) { return; }
-		
-		$content = $this->_getSchema()->getMilestone($milestoneKey)->getTodoList($todoListKey)->getTodoItem($todoItemKey)->getContent();
-		$todoItem = $todoList->findTodoItemByContent($content);
-		if($todoItem !== null) { $todoItem->complete(); }
 	}
 	
 }
