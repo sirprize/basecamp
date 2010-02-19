@@ -260,14 +260,8 @@ class Entity
 		
 		require_once 'Sirprize/Basecamp/Id.php';
 		$id = new \Sirprize\Basecamp\Id($array[self::_ID]);
-		
-		require_once 'Sirprize/Basecamp/Id.php';
 		$projectId = new \Sirprize\Basecamp\Id($array[self::_PROJECT_ID]);
-		
-		require_once 'Sirprize/Basecamp/Id.php';
 		$creatorId = new \Sirprize\Basecamp\Id($array[self::_CREATOR_ID]);
-		
-		require_once 'Sirprize/Basecamp/Id.php';
 		$responsiblePartyId = new \Sirprize\Basecamp\Id($array[self::_RESPONSIBLE_PARTY_ID]);
 		
 		$completed = ($array[self::_COMPLETED] == 'true');

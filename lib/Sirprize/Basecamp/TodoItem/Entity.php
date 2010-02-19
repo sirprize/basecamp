@@ -38,6 +38,8 @@ class Entity
 	const _DUE_AT = 'due-at';
 	const _ID = 'id';
 	const _POSITION = 'position';
+	const _RESPONSIBLE_PARTY_ID = 'responsible-party-id';
+	const _RESPONSIBLE_PARTY_TYPE = 'responsible-party-type';
 	const _TODOLIST_ID = 'todo-list-id';
 	const _COMPLETED_ON = 'completed-on';
 	const _CREATED_ON = 'created-on';
@@ -134,7 +136,14 @@ class Entity
 	}
 	
 	
-	public function setNotify($flap)
+	public function setDueAt(\Sirprize\Basecamp\Date $dueAt)
+	{
+		$this->_data[self::_DUE_AT] = $dueAt;
+		return $this;
+	}
+	
+	
+	public function setNotify($notify)
 	{
 		$this->_notify = $notify;
 		return $this;
@@ -202,6 +211,9 @@ class Entity
 	}
 	
 	
+	/**
+	 * @return \Sirprize\Basecamp\Date
+	 */
 	public function getDueAt()
 	{
 		return $this->_getVal(self::_DUE_AT);
@@ -219,6 +231,20 @@ class Entity
 	public function getPosition()
 	{
 		return $this->_getVal(self::_POSITION);
+	}
+	
+	/**
+	 * @return null|\Sirprize\Basecamp\Id
+	 */
+	public function getResponsiblePartyId()
+	{
+		return $this->_getVal(self::_RESPONSIBLE_PARTY_ID);
+	}
+	
+	
+	public function getResponsiblePartyType()
+	{
+		return $this->_getVal(self::_RESPONSIBLE_PARTY_TYPE);
 	}
 	
 	/**
@@ -270,8 +296,27 @@ class Entity
 		#$completerId = new \Sirprize\Basecamp\Id($array[self::_COMPLETER_ID]);
 		$creatorId = new \Sirprize\Basecamp\Id($array[self::_CREATOR_ID]);
 		$todoListId = new \Sirprize\Basecamp\Id($array[self::_TODOLIST_ID]);
+		$responsiblePartyId = null;
+		$responsiblePartyType = null;
+		
+		if(isset($array[self::_RESPONSIBLE_PARTY_ID]))
+		{
+			$responsiblePartyId = new \Sirprize\Basecamp\Id($array[self::_RESPONSIBLE_PARTY_ID]);
+		}
+		
+		if(isset($array[self::_RESPONSIBLE_PARTY_TYPE]))
+		{
+			$responsiblePartyType = $array[self::_RESPONSIBLE_PARTY_TYPE];
+		}
 		
 		$completed = ($array[self::_COMPLETED] == 'true');
+		$dueAt = null;
+		
+		if($array[self::_DUE_AT])
+		{
+			$dueAt = preg_replace('/^(\d{4,4}-\d{2,2}-\d{2,2}).*$/', "$1", $array[self::_DUE_AT]);
+			if(!$dueAt) { $dueAt = null; }
+		}
 		
 		$this->_data = array(
 			self::_COMMENTS_COUNT => $array[self::_COMMENTS_COUNT],
@@ -282,9 +327,11 @@ class Entity
 			self::_CONTENT => $array[self::_CONTENT],
 			self::_CREATED_AT => $array[self::_CREATED_AT],
 			self::_CREATOR_ID => $creatorId,
-			self::_DUE_AT => $array[self::_DUE_AT],
+			self::_DUE_AT => $dueAt,
 			self::_ID => $id,
 			self::_POSITION => $array[self::_POSITION],
+			self::_RESPONSIBLE_PARTY_ID => $responsiblePartyId,
+			self::_RESPONSIBLE_PARTY_TYPE => $responsiblePartyType,
 			self::_TODOLIST_ID => $todoListId,
 			self::_CREATED_ON => $array[self::_CREATED_ON]
 		);
@@ -315,6 +362,11 @@ class Entity
 		{
 			$xml .= '<responsible-party>'.$this->_responsiblePartyId.'</responsible-party>';
 			if($this->_notify) { $xml .= '<notify>true</notify>'; }
+		}
+		
+		if($this->getDueAt() !== null)
+		{
+			$xml .= '<due-at>'.$this->getDueAt().'</due-at>';
 		}
 		
 		$xml .= '</todo-item>';
