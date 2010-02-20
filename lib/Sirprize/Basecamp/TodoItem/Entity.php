@@ -356,7 +356,7 @@ class Entity
 		}
 		
   		$xml  = '<todo-item>';
-		$xml .= '<content>'.htmlentities($this->getContent()).'</content>';
+		$xml .= '<content>'.htmlspecialchars($this->getContent(), ENT_NOQUOTES).'</content>';
 		
 		if($this->_responsiblePartyId !== null)
 		{
@@ -407,11 +407,17 @@ class Entity
 		}
 		catch(\Exception $exception)
 		{
-			// connection error
-			$this->_onCreateError();
+			try {
+				// connection error - try again
+				$response = $this->_getHttpClient()->request('POST');
+			}
+			catch(\Exception $exception)
+			{
+				$this->_onCreateError();
 			
-			require_once 'Sirprize/Basecamp/Exception.php';
-			throw new \Sirprize\Basecamp\Exception($exception->getMessage());
+				require_once 'Sirprize/Basecamp/Exception.php';
+				throw new \Sirprize\Basecamp\Exception($exception->getMessage());
+			}
 		}
 		
 		require_once 'Sirprize/Basecamp/Response.php';
@@ -461,11 +467,17 @@ class Entity
 		}
 		catch(\Exception $exception)
 		{
-			// connection error
-			$this->_onUpdateError();
+			try {
+				// connection error - try again
+				$response = $this->_getHttpClient()->request('PUT');
+			}
+			catch(\Exception $exception)
+			{
+				$this->_onUpdateError();
 			
-			require_once 'Sirprize/Basecamp/Exception.php';
-			throw new \Sirprize\Basecamp\Exception($exception->getMessage());
+				require_once 'Sirprize/Basecamp/Exception.php';
+				throw new \Sirprize\Basecamp\Exception($exception->getMessage());
+			}
 		}
 		
 		require_once 'Sirprize/Basecamp/Response.php';
@@ -505,11 +517,17 @@ class Entity
 		}
 		catch(\Exception $exception)
 		{
-			// connection error
-			$this->_onDeleteError();
+			try {
+				// connection error - try again
+				$response = $this->_getHttpClient()->request('DELETE');
+			}
+			catch(\Exception $exception)
+			{
+				$this->_onDeleteError();
 			
-			require_once 'Sirprize/Basecamp/Exception.php';
-			throw new \Sirprize\Basecamp\Exception($exception->getMessage());
+				require_once 'Sirprize/Basecamp/Exception.php';
+				throw new \Sirprize\Basecamp\Exception($exception->getMessage());
+			}
 		}
 		
 		require_once 'Sirprize/Basecamp/Response.php';
@@ -557,11 +575,17 @@ class Entity
 		}
 		catch(\Exception $exception)
 		{
-			// connection error
-			$this->_onCompleteError();
+			try {
+				// connection error - try again
+				$response = $this->_getHttpClient()->request('PUT');
+			}
+			catch(\Exception $exception)
+			{
+				$this->_onCompleteError();
 			
-			require_once 'Sirprize/Basecamp/Exception.php';
-			throw new \Sirprize\Basecamp\Exception($exception->getMessage());
+				require_once 'Sirprize/Basecamp/Exception.php';
+				throw new \Sirprize\Basecamp\Exception($exception->getMessage());
+			}
 		}
 		
 		require_once 'Sirprize/Basecamp/Response.php';
@@ -607,11 +631,17 @@ class Entity
 		}
 		catch(\Exception $exception)
 		{
-			// connection error
-			$this->_onCompleteError();
+			try {
+				// connection error - try again
+				$response = $this->_getHttpClient()->request('PUT');
+			}
+			catch(\Exception $exception)
+			{
+				$this->_onCompleteError();
 			
-			require_once 'Sirprize/Basecamp/Exception.php';
-			throw new \Sirprize\Basecamp\Exception($exception->getMessage());
+				require_once 'Sirprize/Basecamp/Exception.php';
+				throw new \Sirprize\Basecamp\Exception($exception->getMessage());
+			}
 		}
 		
 		require_once 'Sirprize/Basecamp/Response.php';

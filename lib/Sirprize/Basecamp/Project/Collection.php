@@ -174,6 +174,7 @@ class Collection extends \SplObjectStorage
 		}
 		
 		$this->_started = true;
+		$response = null;
 		
 		try {
 			$response = $this->_getHttpClient()
@@ -184,11 +185,17 @@ class Collection extends \SplObjectStorage
 		}
 		catch(\Exception $exception)
 		{
-			// connection error
-			$this->_onStartError();
+			try {
+				// connection error - try again
+				$response = $this->_getHttpClient()->request('GET');
+			}
+			catch(\Exception $exception)
+			{
+				$this->_onStartError();
 			
-			require_once 'Sirprize/Basecamp/Exception.php';
-			throw new \Sirprize\Basecamp\Exception($exception->getMessage());
+				require_once 'Sirprize/Basecamp/Exception.php';
+				throw new \Sirprize\Basecamp\Exception($exception->getMessage());
+			}
 		}
 		
 		require_once 'Sirprize/Basecamp/Response.php';
@@ -234,11 +241,17 @@ class Collection extends \SplObjectStorage
 		}
 		catch(\Exception $exception)
 		{
-			// connection error
-			$this->_onStartError();
+			try {
+				// connection error - try again
+				$response = $this->_getHttpClient()->request('GET');
+			}
+			catch(\Exception $exception)
+			{
+				$this->_onStartError();
 			
-			require_once 'Sirprize/Basecamp/Exception.php';
-			throw new \Sirprize\Basecamp\Exception($exception->getMessage());
+				require_once 'Sirprize/Basecamp/Exception.php';
+				throw new \Sirprize\Basecamp\Exception($exception->getMessage());
+			}
 		}
 		
 		require_once 'Sirprize/Basecamp/Response.php';

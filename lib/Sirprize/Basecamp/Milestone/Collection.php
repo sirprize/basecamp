@@ -194,16 +194,22 @@ class Collection extends \SplObjectStorage
 		}
 		catch(\Exception $exception)
 		{
-			// connection error
-			foreach($this as $milestone)
-			{
-				$milestone->onCreateError();
+			try {
+				// connection error - try again
+				$response = $this->_getHttpClient()->request('POST');
 			}
+			catch(\Exception $exception)
+			{
+				foreach($this as $milestone)
+				{
+					$milestone->onCreateError();
+				}
 			
-			$this->_onCreateError();
+				$this->_onCreateError();
 			
-			require_once 'Sirprize/Basecamp/Exception.php';
-			throw new \Sirprize\Basecamp\Exception($exception->getMessage());
+				require_once 'Sirprize/Basecamp/Exception.php';
+				throw new \Sirprize\Basecamp\Exception($exception->getMessage());
+			}
 		}
 		
 		require_once 'Sirprize/Basecamp/Response.php';
@@ -271,11 +277,18 @@ class Collection extends \SplObjectStorage
 		}
 		catch(\Exception $exception)
 		{
-			// connection error
-			$this->_onStartError();
+			try {
+				// connection error - try again
+				$response = $this->_getHttpClient()->request('GET');
+			}
+			catch(\Exception $exception)
+			{
+				// connection error
+				$this->_onStartError();
 			
-			require_once 'Sirprize/Basecamp/Exception.php';
-			throw new \Sirprize\Basecamp\Exception($exception->getMessage());
+				require_once 'Sirprize/Basecamp/Exception.php';
+				throw new \Sirprize\Basecamp\Exception($exception->getMessage());
+			}
 		}
 		
 		require_once 'Sirprize/Basecamp/Response.php';

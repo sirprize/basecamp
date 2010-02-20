@@ -404,8 +404,8 @@ class Entity
 		}
 		
   		$xml  = '<todo-list>';
-		$xml .= '<name>'.htmlentities($this->getName()).'</name>';
-		$xml .= '<description>'.htmlentities($this->getDescription()).'</description>';
+		$xml .= '<name>'.htmlspecialchars($this->getName(), ENT_NOQUOTES).'</name>';
+		$xml .= '<description>'.htmlspecialchars($this->getDescription(), ENT_NOQUOTES).'</description>';
 		$xml .= '<private type="boolean">'.(($this->getIsPrivate()) ? 'true' : 'false').'</private>';
 		
 		if($this->getMilestoneId() !== null)
@@ -454,11 +454,17 @@ class Entity
 		}
 		catch(\Exception $exception)
 		{
-			// connection error
-			$this->_onCreateError();
+			try {
+				// connection error - try again
+				$response = $this->_getHttpClient()->request('POST');
+			}
+			catch(\Exception $exception)
+			{
+				$this->_onCreateError();
 			
-			require_once 'Sirprize/Basecamp/Exception.php';
-			throw new \Sirprize\Basecamp\Exception($exception->getMessage());
+				require_once 'Sirprize/Basecamp/Exception.php';
+				throw new \Sirprize\Basecamp\Exception($exception->getMessage());
+			}
 		}
 		
 		require_once 'Sirprize/Basecamp/Response.php';
@@ -510,11 +516,17 @@ class Entity
 		}
 		catch(\Exception $exception)
 		{
-			// connection error
-			$this->_onUpdateError();
+			try {
+				// connection error - try again
+				$response = $this->_getHttpClient()->request('PUT');
+			}
+			catch(\Exception $exception)
+			{
+				$this->_onUpdateError();
 			
-			require_once 'Sirprize/Basecamp/Exception.php';
-			throw new \Sirprize\Basecamp\Exception($exception->getMessage());
+				require_once 'Sirprize/Basecamp/Exception.php';
+				throw new \Sirprize\Basecamp\Exception($exception->getMessage());
+			}
 		}
 		
 		require_once 'Sirprize/Basecamp/Response.php';
@@ -554,11 +566,17 @@ class Entity
 		}
 		catch(\Exception $exception)
 		{
-			// connection error
-			$this->_onDeleteError();
+			try {
+				// connection error - try again
+				$response = $this->_getHttpClient()->request('DELETE');
+			}
+			catch(\Exception $exception)
+			{
+				$this->_onDeleteError();
 			
-			require_once 'Sirprize/Basecamp/Exception.php';
-			throw new \Sirprize\Basecamp\Exception($exception->getMessage());
+				require_once 'Sirprize/Basecamp/Exception.php';
+				throw new \Sirprize\Basecamp\Exception($exception->getMessage());
+			}
 		}
 		
 		require_once 'Sirprize/Basecamp/Response.php';

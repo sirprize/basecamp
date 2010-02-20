@@ -15,13 +15,11 @@
  */
 
 
-namespace Sirprize\Basecamp;
+namespace Sirprize\Basecamp\Schema;
 
 
-class Helper
+class Import
 {
-	
-	const DATE_FORMAT = 'yyyy-MM-dd';
 	
 	
 	protected $_basecamp = null;
@@ -48,6 +46,7 @@ class Helper
 	
 	
 	
+	
 	/**
 	 * Create unpersisted tree-structure of milestones, todo-lists and todo-items from an Xml document
 	 *
@@ -56,7 +55,7 @@ class Helper
 	 *
 	 * @return \Sirprize\Basecamp\Milestone\Collection
 	 */
-	public function assembleMilestonesFromXml($file, $referenceDate = null)
+	public function assembleMilestonesAndListsAndItemsFromSchemaFile($file, $referenceDate = null)
 	{
 		if(!is_readable($file))
 		{
@@ -80,8 +79,13 @@ class Helper
 			$referenceDateOffset = $milestoneElement->getElementsByTagName('offset-days-to-reference-date')->item(0);
 			$referenceDateOffset = (($referenceDateOffset) ? $referenceDateOffset->nodeValue : null);
 			
+			if(!$this->_checkBeforeCreatingMilestoneFromSchemaFile($title))
+			{
+				continue;
+			}
+			
 			$milestone = $milestones->getMilestoneInstance();
-			$milestone->setTitle($title);
+			$milestone->setTitle($this->_getTitleForCreatingMilestoneFromSchemaFile($title));
 			
 			if($this->_checkDate($deadline))
 			{
@@ -169,37 +173,6 @@ class Helper
 	
 	
 	
-	protected function _checkDate($date)
-	{
-		return preg_match('/^\d{4,4}-\d{2,2}-\d{2,2}$/', $date);
-	}
-	
-	
-	
-	protected function _calculateEffectiveDate($referenceDate, $referenceDateOffset)
-	{
-		if(!$this->_checkDate($referenceDate))
-		{
-			require_once 'Sirprize/Basecamp/Exception.php';
-			throw new \Sirprize\Basecamp\Exception("invalid reference date '$referenceDate'");
-		}
-		
-		require_once 'Zend/Date.php';
-		$referenceDate = new \Zend_Date($referenceDate, self::DATE_FORMAT);
-		$referenceDateOffset = (int)$referenceDateOffset;
-	
-		if($referenceDateOffset >= 0)
-		{
-			return $referenceDate->addSecond(60 * 60 * 24 * $referenceDateOffset)->toString(self::DATE_FORMAT);
-		}
-	
-		return $referenceDate->subSecond(60 * 60 * 24 * $referenceDateOffset * -1)->toString(self::DATE_FORMAT);
-	}
-	
-	
-	
-	
-	
 	
 	/**
 	 * Populate this project from a tree structure of unpersisted milestones, todo-lists and todo-items
@@ -257,134 +230,44 @@ class Helper
 	
 	
 	
-	
-	
-	const REFERENCE_EXTREMITY_FIRST = 'first';
-	const REFERENCE_EXTREMITY_LAST = 'last';
-	
-	
-	protected function _getReferenceDate(\Sirprize\Basecamp\Project\Entity $project, $referenceExtremity)
+	protected function _checkBeforeCreatingMilestoneFromSchemaFile($title)
 	{
-		$project->getMilestones()->rewind();
-		
-		if(!$project->getMilestones()->count())
-		{
-			return null;
-		}
-		
-		if($referenceExtremity == self::REFERENCE_EXTREMITY_FIRST)
-		{
-			return $project->getMilestones()->current()->getDeadline();
-		}
-		
-		$last = null;
-		
-		while($project->getMilestones()->valid())
-		{
-			$last = $project->getMilestones()->current()->getDeadline();
-			$project->getMilestones()->next();
-		}
-		
-		return $last;
+		return true;
+	}
+	
+	
+	protected function _getTitleForCreatingMilestoneFromSchemaFile($title)
+	{
+		return $title;
 	}
 	
 	
 	
-	protected function _calculateOffsetDays($referenceDate, $effectiveDate, $referenceExtremity, $isMilestone)
+	protected function _checkDate($date)
 	{
+		return preg_match('/^\d{4,4}-\d{2,2}-\d{2,2}$/', $date);
+	}
+	
+	
+	
+	protected function _calculateEffectiveDate($referenceDate, $referenceDateOffset)
+	{
+		if(!$this->_checkDate($referenceDate))
+		{
+			require_once 'Sirprize/Basecamp/Exception.php';
+			throw new \Sirprize\Basecamp\Exception("invalid reference date '$referenceDate'");
+		}
+		
 		require_once 'Zend/Date.php';
-		$referenceDate = new \Zend_Date($referenceDate, self::DATE_FORMAT);
-		$effectiveDate = new \Zend_Date($effectiveDate, self::DATE_FORMAT);
-		
-		$offset
-			= ($referenceExtremity == self::REFERENCE_EXTREMITY_LAST)
-			? ($referenceDate->getTimestamp() - $effectiveDate->getTimestamp()) * -1
-			: $effectiveDate->getTimestamp() - $referenceDate->getTimestamp()
-		;
-		
-		if($isMilestone)
+		require_once 'Sirprize/Basecamp/Date.php';
+		$referenceDate = new \Zend_Date($referenceDate, \Sirprize\Basecamp\Date::FORMAT);
+		$referenceDateOffset = (int)$referenceDateOffset;
+	
+		if($referenceDateOffset >= 0)
 		{
-			return $offset / 60 / 60 / 24;
+			return $referenceDate->addSecond(60 * 60 * 24 * $referenceDateOffset)->toString(\Sirprize\Basecamp\Date::FORMAT);
 		}
-		
-		return // quick fix for todo-item dates which seem to be 1 day off (?)
-			  ($referenceExtremity == self::REFERENCE_EXTREMITY_LAST)
-			? ($offset / 60 / 60 / 24) + 1 // add 1 day
-			: ($offset / 60 / 60 / 24) - 1 // sub 1 day
-		;
+	
+		return $referenceDate->subSecond(60 * 60 * 24 * $referenceDateOffset * -1)->toString(\Sirprize\Basecamp\Date::FORMAT);
 	}
-	
-	
-	
-	public function getProjectXml(\Sirprize\Basecamp\Project\Entity $project, $useRelativeDates = true, $referenceExtremity = self::REFERENCE_EXTREMITY_LAST)
-	{
-		$project->startSubElements();
-		$referenceDate = $this->_getReferenceDate($project, $referenceExtremity);
-		
-		$xml  = "<?xml version=\"1.0\"?>\n";
-		$xml .= "<project>\n";
-		$xml .= "<id>".$project->getId()."</id>\n";
-		$xml .= "<name>".htmlentities($project->getName())."</name>\n";
-		$xml .= "<announcement>".htmlentities($project->getAnnouncement())."</announcement>\n";
-		$xml .= "<status>".$project->getStatus()."</status>\n";
-		$xml .= "<company>".htmlentities(trim($project->getCompany()))."</company>\n";
-		
-		foreach($project->getMilestones() as $milestone)
-		{
-			$xml .= "<milestone>\n";
-			$xml .= "<title>".htmlentities($milestone->getTitle())."</title>\n";
-			$xml .= "<responsible-party-id>".htmlentities($milestone->getResponsiblePartyId())."</responsible-party-id>\n";
-			
-			if($useRelativeDates)
-			{
-				$xml .= "<offset-days-to-reference-date>";
-				$xml .= $this->_calculateOffsetDays($referenceDate, $milestone->getDeadline(), $referenceExtremity, true);
-				$xml .= "</offset-days-to-reference-date>\n";
-			}
-			else {
-				$xml .= "<deadline>".$milestone->getDeadline()."</deadline>\n";
-			}
-			#print $this->_calculateOffsetDays($referenceDate, $milestone->getDeadline(), $referenceExtremity);
-			#print ' - '.$milestone->getTitle()."\n";
-			$todoLists = $project->findTodoListsByMilestoneId($milestone->getId());
-			
-			foreach($todoLists as $todoList)
-			{
-				$xml .= "<todo-list>\n";
-				$xml .= "<name>".htmlentities($todoList->getName())."</name>\n";
-				$xml .= "<description>".htmlentities($todoList->getDescription())."</description>\n";
-				$xml .= "<private type=\"boolean\">".(($todoList->getIsPrivate()) ? 'true' : 'false')."</private>\n";
-				
-				foreach($todoList->getTodoItems() as $todoItem)
-				{
-					$xml .= "<todo-item>\n";
-					$xml .= "<content>".htmlentities($todoItem->getContent())."</content>\n";
-					
-					if($todoItem->getResponsiblePartyId())
-					{
-						$xml .= "<responsible-party-id>".htmlentities($todoItem->getResponsiblePartyId())."</responsible-party-id>\n";
-					}
-					
-					if($todoItem->getDueAt())
-					{
-						if($useRelativeDates)
-						{
-							$xml .= "<offset-days-to-reference-date>";
-							$xml .= $this->_calculateOffsetDays($referenceDate, $todoItem->getDueAt(), $referenceExtremity, false);
-							$xml .= "</offset-days-to-reference-date>\n";
-						}
-						else {
-							$xml .= "<due-at>".htmlentities($todoItem->getDueAt())."</due-at>\n";
-						}
-					}
-					$xml .= "</todo-item>\n";
-				}
-				$xml .= "</todo-list>\n";
-			}
-			$xml .= "</milestone>\n";
-		}
-		$xml .= "</project>";
-		return $xml;
-	}
-	
 }
