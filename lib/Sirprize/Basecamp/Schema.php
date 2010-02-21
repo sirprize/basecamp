@@ -15,14 +15,16 @@
  */
 
 
-namespace Sirprize\Basecamp\Schema;
+namespace Sirprize\Basecamp;
 
 
-class Import
+class Schema
 {
 	
 	
 	protected $_basecamp = null;
+	protected $_milestones = null;
+	
 	
 	
 	
@@ -31,6 +33,7 @@ class Import
 		$this->_basecamp = $basecamp;
 		return $this;
 	}
+	
 	
 	
 	protected function _getBasecamp()
@@ -46,6 +49,18 @@ class Import
 	
 	
 	
+	public function getMilestones()
+	{
+		if($this->_milestones === null)
+		{
+			require_once 'Sirprize/Basecamp/Exception.php';
+			throw new \Sirprize\Basecamp\Exception('call loadFromXml() before '.__METHOD__);
+		}
+		
+		return $this->_milestones;
+	}
+	
+	
 	
 	/**
 	 * Create unpersisted tree-structure of milestones, todo-lists and todo-items from an Xml document
@@ -55,7 +70,7 @@ class Import
 	 *
 	 * @return \Sirprize\Basecamp\Milestone\Collection
 	 */
-	public function assembleMilestonesAndListsAndItemsFromSchemaFile($file, $referenceDate = null)
+	public function loadFromXml($file, $referenceDate = null)
 	{
 		if(!is_readable($file))
 		{
@@ -65,7 +80,7 @@ class Import
 		
 		$xml = new \DOMDocument();
 		$xml->load($file);
-		$milestones = $this->_getBasecamp()->getMilestonesInstance();
+		$this->_milestones = $this->_getBasecamp()->getMilestonesInstance();
 		
 		
 		foreach($xml->getElementsByTagName('milestone') as $milestoneElement)
@@ -79,13 +94,13 @@ class Import
 			$referenceDateOffset = $milestoneElement->getElementsByTagName('offset-days-to-reference-date')->item(0);
 			$referenceDateOffset = (($referenceDateOffset) ? $referenceDateOffset->nodeValue : null);
 			
-			if(!$this->_checkBeforeCreatingMilestoneFromSchemaFile($title))
+			if(!$this->_checkBeforeCreatingMilestone($title))
 			{
 				continue;
 			}
 			
-			$milestone = $milestones->getMilestoneInstance();
-			$milestone->setTitle($this->_getTitleForCreatingMilestoneFromSchemaFile($title));
+			$milestone = $this->_getBasecamp()->getMilestonesInstance()->getMilestoneInstance();
+			$milestone->setTitle($this->_getMilestoneTitle($title));
 			
 			if($this->_checkDate($deadline))
 			{
@@ -94,7 +109,7 @@ class Import
 			}
 			else {
 				require_once 'Sirprize/Basecamp/Date.php';
-				$milestone->setDeadline(new \Sirprize\Basecamp\Date($this->_calculateEffectiveDate($referenceDate, $referenceDateOffset)));
+				$milestone->setDeadline(new \Sirprize\Basecamp\Date($this->_calculateDateFromOffsetDays($referenceDate, $referenceDateOffset)));
 			}
 			
 			if($responsiblePartyId !== null)
@@ -104,7 +119,7 @@ class Import
 				$milestone->setResponsiblePartyId($responsiblePartyId);
 			}
 			
-			$milestones->attach($milestone);
+			$this->_milestones->attach($milestone);
 			
 	
 			foreach($milestoneElement->getElementsByTagName('todo-list') as $todoListElement)
@@ -153,7 +168,7 @@ class Import
 					else if ($referenceDate !== null && $referenceDateOffset !== null)
 					{
 						require_once 'Sirprize/Basecamp/Date.php';
-						$todoItem->setDueAt(new \Sirprize\Basecamp\Date($this->_calculateEffectiveDate($referenceDate, $referenceDateOffset)));
+						$todoItem->setDueAt(new \Sirprize\Basecamp\Date($this->_calculateDateFromOffsetDays($referenceDate, $referenceDateOffset)));
 					}
 					
 					if($responsiblePartyId !== null)
@@ -168,75 +183,19 @@ class Import
 			}
 		}
 		
-		return $milestones;
+		return $this;
 	}
 	
 	
 	
-	
-	/**
-	 * Populate this project from a tree structure of unpersisted milestones, todo-lists and todo-items
-	 *
-	 * @return \Sirprize\Basecamp\Import
-	 */
-	public function populateProject(\Sirprize\Basecamp\Project\Entity $project, \Sirprize\Basecamp\Milestone\Collection $rawMilestones)
-	{
-		$project->startSubElements();
-		
-		foreach($rawMilestones as $rawMilestone)
-		{
-			$rawMilestone->setProjectId($project->getId());
-		}
-		
-		$project->addMilestones($rawMilestones);
-		
-		
-		foreach($rawMilestones as $rawMilestone)
-		{
-			$milestone = $project->findMilestoneByTitle($rawMilestone->getTitle());
-			if($milestone === null) { continue; }
-			
-			foreach($rawMilestone->getTodoLists() as $rawTodoList)
-			{
-				$rawTodoList
-					->setProjectId($project->getId())
-					->setMilestoneId($milestone->getId())
-				;
-			}
-			
-			$project->addTodoLists($rawMilestone->getTodoLists());
-		}
-		
-		
-		foreach($rawMilestones as $rawMilestone)
-		{
-			$milestone = $project->findMilestoneByTitle($rawMilestone->getTitle());
-			if($milestone === null) { continue; }
-			
-			foreach($rawMilestone->getTodoLists() as $rawTodoList)
-			{
-				$todoList = $project->findTodoListByName($rawTodoList->getName());
-				if($todoList === null) { continue; }
-				
-				foreach($rawTodoList->getTodoItems() as $rawTodoItem)
-				{
-					$rawTodoItem->setTodoListId($todoList->getId());
-				}
-				
-				$project->addTodoItems($rawTodoList->getTodoItems());
-			}
-		}
-	}
-	
-	
-	
-	protected function _checkBeforeCreatingMilestoneFromSchemaFile($title)
+	protected function _checkBeforeCreatingMilestone($title)
 	{
 		return true;
 	}
 	
 	
-	protected function _getTitleForCreatingMilestoneFromSchemaFile($title)
+	
+	protected function _getMilestoneTitle($title)
 	{
 		return $title;
 	}
@@ -250,7 +209,7 @@ class Import
 	
 	
 	
-	protected function _calculateEffectiveDate($referenceDate, $referenceDateOffset)
+	protected function _calculateDateFromOffsetDays($referenceDate, $referenceDateOffset)
 	{
 		if(!$this->_checkDate($referenceDate))
 		{

@@ -263,8 +263,14 @@ class Entity
 			return $this;
 		}
 		
-		$this->_startMilestones();
-		$this->_startTodoLists();
+		$this->_milestones = $this->_getBasecamp()->getMilestonesInstance()->startAllByProjectId($this->getId());
+		$this->_todoLists = $this->_getBasecamp()->getTodoListsInstance()->startAllByProjectId($this->getId());
+		
+		foreach($this->_todoLists as $todoList)
+		{
+			$todoList->startTodoItems();
+		}
+		
 		$this->_subElementsStarted = true;
 		return $this;
 	}
@@ -276,8 +282,6 @@ class Entity
 		if($this->_milestones === null)
 		{
 			$this->_milestones = $this->_getBasecamp()->getMilestonesInstance();
-			#require_once 'Sirprize/Basecamp/Exception.php';
-			#throw new \Sirprize\Basecamp\Exception('call startSubElements() before '.__METHOD__);
 		}
 		
 		return $this->_milestones;
@@ -290,34 +294,15 @@ class Entity
 		if($this->_todoLists === null)
 		{
 			$this->_todoLists = $this->_getBasecamp()->getTodoListsInstance();
-			#require_once 'Sirprize/Basecamp/Exception.php';
-			#throw new \Sirprize\Basecamp\Exception('call startSubElements() before '.__METHOD__);
 		}
 		
 		return $this->_todoLists;
 	}
 	
 	
-	/*
-	public function hasError()
-	{
-		return $this->_hasError;
-	}
-	*/
-	
-	
 	
 	public function findMilestoneByTitle($title)
 	{
-		/*
-		if(!$this->_subElementsStarted)
-		{
-			require_once 'Sirprize/Basecamp/Exception.php';
-			throw new \Sirprize\Basecamp\Exception('call startSubElements() before '.__METHOD__);
-		}
-		*/
-		$this->startSubElements();
-		
 		foreach($this->getMilestones() as $milestone)
 		{
 			if($title == $milestone->getTitle())
@@ -333,15 +318,6 @@ class Entity
 	
 	public function findTodoListByName($name)
 	{
-		/*
-		if(!$this->_subElementsStarted)
-		{
-			require_once 'Sirprize/Basecamp/Exception.php';
-			throw new \Sirprize\Basecamp\Exception('call startSubElements() before '.__METHOD__);
-		}
-		*/
-		$this->startSubElements();
-		
 		foreach($this->getTodoLists() as $todoList)
 		{
 			if($name == $todoList->getName())
@@ -357,15 +333,6 @@ class Entity
 	
 	public function findTodoListById(\Sirprize\Basecamp\Id $id)
 	{
-		/*
-		if(!$this->_subElementsStarted)
-		{
-			require_once 'Sirprize/Basecamp/Exception.php';
-			throw new \Sirprize\Basecamp\Exception('call startSubElements() before '.__METHOD__);
-		}
-		*/
-		$this->startSubElements();
-		
 		foreach($this->getTodoLists() as $todoList)
 		{
 			if((string)$id == (string)$todoList->getId())
@@ -381,14 +348,6 @@ class Entity
 	
 	public function findTodoListsByMilestoneId(\Sirprize\Basecamp\Id $milestoneId)
 	{
-		/*
-		if(!$this->_subElementsStarted)
-		{
-			require_once 'Sirprize/Basecamp/Exception.php';
-			throw new \Sirprize\Basecamp\Exception('call startSubElements() before '.__METHOD__);
-		}
-		*/
-		$this->startSubElements();
 		$todoLists = $this->_getBasecamp()->getTodoListsInstance();
 		
 		foreach($this->getTodoLists() as $todoList)
@@ -404,67 +363,8 @@ class Entity
 	
 	
 	
-	
-	
-	public function findMilestoneByIndex(\Sirprize\Basecamp\Milestone\Collection $rawMilestones, $milestoneKey)
-	{
-		foreach($rawMilestones as $key => $rawMilestone)
-		{
-			if($key != $milestoneKey) { continue; }
-			return $this->findMilestoneByTitle($rawMilestone->getTitle());
-		}
-		
-		return null;
-	}
-	
-	
-	
-	public function findTodoItemByIndex(\Sirprize\Basecamp\Milestone\Collection $rawMilestones, $milestoneKey, $todoListKey, $todoItemKey)
-	{
-		foreach($rawMilestones as $x => $rawMilestone)
-		{
-			if($x != $milestoneKey) { continue; }
-			$milestone = $this->findMilestoneByTitle($rawMilestone->getTitle());
-			if($milestone === null) { break; }
-			
-			foreach($rawMilestone->getTodoLists() as $y => $rawTodoList)
-			{
-				if($y != $todoListKey) { continue; }
-				$todoList = $this->findTodoListByName($rawTodoList->getName());
-				if($todoList === null) { break; }
-				
-				foreach($rawTodoList->getTodoItems() as $z => $rawTodoItem)
-				{
-					if($z != $todoItemKey) { continue; }
-					return $todoList->findTodoItemByContent($rawTodoItem->getContent());
-				}
-			}
-		}
-		
-		return null;
-	}
-	
-	
-	
-	
-	
-	
 	public function deleteMilestones()
 	{
-		/*
-		if(!$this->_subElementsStarted)
-		{
-			require_once 'Sirprize/Basecamp/Exception.php';
-			throw new \Sirprize\Basecamp\Exception('call startSubElements() before '.__METHOD__);
-		}
-		/*
-		if($this->_milestones->getResponse()->isError())
-		{
-			return $this;;
-		}
-		*/
-		$this->startSubElements();
-		
 		foreach($this->getMilestones() as $milestone)
 		{
 			$milestone->delete();
@@ -478,20 +378,6 @@ class Entity
 	
 	public function deleteTodoLists()
 	{
-		/*
-		if(!$this->_subElementsStarted)
-		{
-			require_once 'Sirprize/Basecamp/Exception.php';
-			throw new \Sirprize\Basecamp\Exception('call startSubElements() before '.__METHOD__);
-		}
-		/*
-		if($this->_todoLists->getResponse()->isError())
-		{
-			return $this;;
-		}
-		*/
-		$this->startSubElements();
-		
 		foreach($this->getTodoLists() as $todoList)
 		{
 			$todoList->delete();
@@ -503,24 +389,82 @@ class Entity
 	
 	
 	
-	public function addMilestones(\Sirprize\Basecamp\Milestone\Collection $milestones, $reloadWhenFinished = true)
+	public function applySchema(\Sirprize\Basecamp\Schema $schema)
 	{
-		$reload = false;
+		$reloadMilestones = false;
+		$reloadTodoLists = false;
 		
-		foreach($milestones as $milestone)
+		$this->_milestones = $this->_getBasecamp()->getMilestonesInstance()->startAllByProjectId($this->getId());
+		
+		foreach($schema->getMilestones() as $schemaMilestone)
 		{
-			if($this->findMilestoneByTitle($milestone->getTitle()))
+			if($this->findMilestoneByTitle($schemaMilestone->getTitle()))
 			{
 				continue;
 			}
 			
-			$milestone->create($this->getId());
-			$reload = true;
+			$schemaMilestone->setProjectId($this->getId());
+			$schemaMilestone->create();
+			$reloadMilestones = true;
 		}
 		
-		if($reload && $reloadWhenFinished)
+		if($reloadMilestones)
 		{
-			$this->_startMilestones();
+			$this->_milestones = $this->_getBasecamp()->getMilestonesInstance()->startAllByProjectId($this->getId());
+		}
+		
+		$this->_todoLists = $this->_getBasecamp()->getTodoListsInstance()->startAllByProjectId($this->getId());
+		
+		foreach($schema->getMilestones() as $schemaMilestone)
+		{
+			$milestone = $this->findMilestoneByTitle($schemaMilestone->getTitle());
+			if($milestone === null) { continue; }
+			
+			foreach($schemaMilestone->getTodoLists() as $schemaTodoList)
+			{
+				if($this->findTodoListByName($schemaTodoList->getName()))
+				{
+					continue;
+				}
+				
+				$schemaTodoList
+					->setProjectId($this->getId())
+					->setMilestoneId($milestone->getId())
+				;
+				
+				$schemaTodoList->create();
+				$reloadTodoLists = true;
+			}
+		}
+		
+		if($reloadTodoLists)
+		{
+			$this->_todoLists = $this->_getBasecamp()->getTodoListsInstance()->startAllByProjectId($this->getId());
+		}
+		
+		foreach($schema->getMilestones() as $schemaMilestone)
+		{
+			$milestone = $this->findMilestoneByTitle($schemaMilestone->getTitle());
+			if($milestone === null) { continue; }
+			
+			foreach($schemaMilestone->getTodoLists() as $schemaTodoList)
+			{
+				$todoList = $this->findTodoListByName($schemaTodoList->getName());
+				if($todoList === null) { continue; }
+				
+				$todoList->startTodoItems();
+				
+				foreach($schemaTodoList->getTodoItems() as $schemaTodoItem)
+				{
+					if($todoList->findTodoItemByContent($schemaTodoItem->getContent()))
+					{
+						continue;
+					}
+					
+					$schemaTodoItem->setTodoListId($todoList->getId());
+					$schemaTodoItem->create();
+				}
+			}
 		}
 		
 		return $this;
@@ -528,91 +472,42 @@ class Entity
 	
 	
 	
-	public function addTodoLists(\Sirprize\Basecamp\TodoList\Collection $todoLists, $reloadWhenFinished = true)
+	public function findMilestoneBySchemaIndex(\Sirprize\Basecamp\Schema $schema, $milestoneKey)
 	{
-		$reload = false;
-		
-		foreach($todoLists as $todoList)
+		foreach($schema->getMilestones() as $key => $schemaMilestone)
 		{
-			if($this->findTodoListByName($todoList->getName()))
+			if($key != $milestoneKey) { continue; }
+			return $this->findMilestoneByTitle($schemaMilestone->getTitle());
+		}
+		
+		return null;
+	}
+	
+	
+	
+	public function findTodoItemBySchemaIndex(\Sirprize\Basecamp\Schema $schema, $milestoneKey, $todoListKey, $todoItemKey)
+	{
+		foreach($schema->getMilestones() as $x => $schemaMilestone)
+		{
+			if($x != $milestoneKey) { continue; }
+			$milestone = $this->findMilestoneByTitle($schemaMilestone->getTitle());
+			if($milestone === null) { break; }
+			
+			foreach($schemaMilestone->getTodoLists() as $y => $schemaTodoList)
 			{
-				continue;
+				if($y != $todoListKey) { continue; }
+				$todoList = $this->findTodoListByName($schemaTodoList->getName());
+				if($todoList === null) { break; }
+				
+				foreach($schemaTodoList->getTodoItems() as $z => $schemaTodoItem)
+				{
+					if($z != $todoItemKey) { continue; }
+					return $todoList->findTodoItemByContent($schemaTodoItem->getContent());
+				}
 			}
-			
-			$todoList->create($this->getId());
-			$reload = true;
 		}
 		
-		if($reload && $reloadWhenFinished)
-		{
-			$this->_startTodoLists();
-		}
-		
-		return $this;
+		return null;
 	}
 	
-	
-	
-	public function addTodoItems(\Sirprize\Basecamp\TodoItem\Collection $todoItems, $reloadWhenFinished = true)
-	{
-		$reload = false;
-		
-		foreach($todoItems as $todoItem)
-		{
-			$todoList = $this->findTodoListById($todoItem->getTodoListId());
-			
-			if($todoList && $todoList->findTodoItemByContent($todoItem->getContent()))
-			{
-				continue;
-			}
-			
-			$todoItem->create();
-			$reload = true;
-		}
-		
-		if($reload && $reloadWhenFinished)
-		{
-			$this->_startTodoLists();
-		}
-		
-		return $this;
-	}
-	
-	
-	
-	protected function _startMilestones()
-	{
-		$this->_milestones =
-			$this->_getBasecamp()
-			->getMilestonesInstance()
-			->startAllByProjectId($this->getId())
-		;
-		/*
-		if($this->_milestones->getResponse()->isError())
-		{
-			$this->_hasError = true;
-		}
-		*/
-	}
-	
-	
-	
-	protected function _startTodoLists()
-	{
-		$this->_todoLists =
-			$this->_getBasecamp()
-			->getTodoListsInstance()
-			->startAllByProjectId($this->getId())
-		;
-		/*
-		if($this->_todoLists->getResponse()->isError())
-		{
-			$this->_hasError = true;
-		}
-		*/
-		foreach($this->_todoLists as $todoList)
-		{
-			$todoList->startTodoItems();
-		}
-	}
 }
