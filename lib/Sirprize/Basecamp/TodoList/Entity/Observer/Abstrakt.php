@@ -41,7 +41,7 @@ abstract class Abstrakt
 	protected function _getOnCreateSuccessMessage(\Sirprize\Basecamp\TodoList\Entity $todoList)
 	{
 		$message  = "todoList '".$todoList->getName()."'";
-		$message .= " created in project '".$todoList->getProjectId();
+		$message .= " created in project '".$todoList->getProjectId()."'";
 		return $message;
 	}
 	
@@ -49,7 +49,7 @@ abstract class Abstrakt
 	protected function _getOnUpdateSuccessMessage(\Sirprize\Basecamp\TodoList\Entity $todoList)
 	{
 		$message  = "todoList '".$todoList->getName()."'";
-		$message .= " updated in project '".$todoList->getProjectId();
+		$message .= " updated in project '".$todoList->getProjectId()."'";
 		return $message;
 	}
 	
@@ -57,7 +57,7 @@ abstract class Abstrakt
 	protected function _getOnDeleteSuccessMessage(\Sirprize\Basecamp\TodoList\Entity $todoList)
 	{
 		$message  = "todoList '".$todoList->getName()."'";
-		$message .= " deleted from project '".$todoList->getProjectId();
+		$message .= " deleted from project '".$todoList->getProjectId()."'";
 		return $message;
 	}
 	
@@ -71,7 +71,7 @@ abstract class Abstrakt
 	protected function _getOnCreateErrorMessage(\Sirprize\Basecamp\TodoList\Entity $todoList)
 	{
 		$message  = "todoList '".$todoList->getName()."'";
-		$message .= " could not be created in project '".$todoList->getProjectId();
+		$message .= " could not be created in project '".$todoList->getProjectId()."'";
 		return $message;
 	}
 	
@@ -79,7 +79,7 @@ abstract class Abstrakt
 	protected function _getOnUpdateErrorMessage(\Sirprize\Basecamp\TodoList\Entity $todoList)
 	{
 		$message  = "todoList '".$todoList->getName()."'";
-		$message .= " could not be updated in project '".$todoList->getProjectId();
+		$message .= " could not be updated in project '".$todoList->getProjectId()."'";
 		return $message;
 	}
 	
@@ -87,7 +87,7 @@ abstract class Abstrakt
 	protected function _getOnDeleteErrorMessage(\Sirprize\Basecamp\TodoList\Entity $todoList)
 	{
 		$message  = "todoList '".$todoList->getName()."'";
-		$message .= " could not be deleted from project '".$todoList->getProjectId();
+		$message .= " could not be deleted from project '".$todoList->getProjectId()."'";
 		return $message;
 	}
 	

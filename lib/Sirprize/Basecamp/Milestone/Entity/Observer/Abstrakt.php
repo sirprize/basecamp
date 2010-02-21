@@ -45,7 +45,7 @@ abstract class Abstrakt
 	protected function _getOnCompleteSuccessMessage(\Sirprize\Basecamp\Milestone\Entity $milestone)
 	{
 		$message  = "milestone '".$milestone->getTitle()."'";
-		$message .= " completed in project '".$milestone->getProjectId();
+		$message .= " completed in project '".$milestone->getProjectId()."'";
 		return $message;
 	}
 	
@@ -53,7 +53,7 @@ abstract class Abstrakt
 	protected function _getOnUncompleteSuccessMessage(\Sirprize\Basecamp\Milestone\Entity $milestone)
 	{
 		$message  = "milestone '".$milestone->getTitle()."'";
-		$message .= " uncompleted in project '".$milestone->getProjectId();
+		$message .= " uncompleted in project '".$milestone->getProjectId()."'";
 		return $message;
 	}
 	
@@ -61,7 +61,7 @@ abstract class Abstrakt
 	protected function _getOnCreateSuccessMessage(\Sirprize\Basecamp\Milestone\Entity $milestone)
 	{
 		$message  = "milestone '".$milestone->getTitle()."'";
-		$message .= " created in project '".$milestone->getProjectId();
+		$message .= " created in project '".$milestone->getProjectId()."'";
 		return $message;
 	}
 	
@@ -69,7 +69,7 @@ abstract class Abstrakt
 	protected function _getOnUpdateSuccessMessage(\Sirprize\Basecamp\Milestone\Entity $milestone)
 	{
 		$message  = "milestone '".$milestone->getTitle()."'";
-		$message .= " updated in project '".$milestone->getProjectId();
+		$message .= " updated in project '".$milestone->getProjectId()."'";
 		return $message;
 	}
 	
@@ -77,7 +77,7 @@ abstract class Abstrakt
 	protected function _getOnDeleteSuccessMessage(\Sirprize\Basecamp\Milestone\Entity $milestone)
 	{
 		$message  = "milestone '".$milestone->getTitle()."'";
-		$message .= " deleted from project '".$milestone->getProjectId();
+		$message .= " deleted from project '".$milestone->getProjectId()."'";
 		return $message;
 	}
 	
@@ -91,7 +91,7 @@ abstract class Abstrakt
 	protected function _getOnCompleteErrorMessage(\Sirprize\Basecamp\Milestone\Entity $milestone)
 	{
 		$message  = "milestone '".$milestone->getTitle()."'";
-		$message .= " could not be completed in project '".$milestone->getProjectId();
+		$message .= " could not be completed in project '".$milestone->getProjectId()."'";
 		return $message;
 	}
 	
@@ -99,7 +99,7 @@ abstract class Abstrakt
 	protected function _getOnUncompleteErrorMessage(\Sirprize\Basecamp\Milestone\Entity $milestone)
 	{
 		$message  = "milestone '".$milestone->getTitle()."'";
-		$message .= " could not be uncompleted in project '".$milestone->getProjectId();
+		$message .= " could not be uncompleted in project '".$milestone->getProjectId()."'";
 		return $message;
 	}
 	
@@ -107,7 +107,7 @@ abstract class Abstrakt
 	protected function _getOnCreateErrorMessage(\Sirprize\Basecamp\Milestone\Entity $milestone)
 	{
 		$message  = "milestone '".$milestone->getTitle()."'";
-		$message .= " could not be created in project '".$milestone->getProjectId();
+		$message .= " could not be created in project '".$milestone->getProjectId()."'";
 		return $message;
 	}
 	
@@ -115,7 +115,7 @@ abstract class Abstrakt
 	protected function _getOnUpdateErrorMessage(\Sirprize\Basecamp\Milestone\Entity $milestone)
 	{
 		$message  = "milestone '".$milestone->getTitle()."'";
-		$message .= " could not be updated in project '".$milestone->getProjectId();
+		$message .= " could not be updated in project '".$milestone->getProjectId()."'";
 		return $message;
 	}
 	
@@ -123,7 +123,7 @@ abstract class Abstrakt
 	protected function _getOnDeleteErrorMessage(\Sirprize\Basecamp\Milestone\Entity $milestone)
 	{
 		$message  = "milestone '".$milestone->getTitle()."'";
-		$message .= " could not be deleted from project '".$milestone->getProjectId();
+		$message .= " could not be deleted from project '".$milestone->getProjectId()."'";
 		return $message;
 	}
 	

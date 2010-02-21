@@ -91,7 +91,7 @@ abstract class Abstrakt
 	protected function _getOnCompleteErrorMessage(\Sirprize\Basecamp\TodoItem\Entity $todoItem)
 	{
 		$message  = "todo-item '".$todoItem->getContent()."'";
-		$message .= " could not be completed in todo-list '".$todoItem->getTodoListId();
+		$message .= " could not be completed in todo-list '".$todoItem->getTodoListId()."'";
 		return $message;
 	}
 	
@@ -99,7 +99,7 @@ abstract class Abstrakt
 	protected function _getOnUncompleteErrorMessage(\Sirprize\Basecamp\TodoItem\Entity $todoItem)
 	{
 		$message  = "todo-item '".$todoItem->getContent()."'";
-		$message .= " could not be uncompleted in todo-list '".$todoItem->getTodoListId();
+		$message .= " could not be uncompleted in todo-list '".$todoItem->getTodoListId()."'";
 		return $message;
 	}
 	
@@ -107,7 +107,7 @@ abstract class Abstrakt
 	protected function _getOnCreateErrorMessage(\Sirprize\Basecamp\TodoItem\Entity $todoItem)
 	{
 		$message  = "todo-item '".$todoItem->getContent()."'";
-		$message .= " could not be created in todo-list '".$todoItem->getTodoListId();
+		$message .= " could not be created in todo-list '".$todoItem->getTodoListId()."'";
 		return $message;
 	}
 	
@@ -115,7 +115,7 @@ abstract class Abstrakt
 	protected function _getOnUpdateErrorMessage(\Sirprize\Basecamp\TodoItem\Entity $todoItem)
 	{
 		$message  = "todo-item '".$todoItem->getContent()."'";
-		$message .= " could not be updated in todo-list '".$todoItem->getTodoListId();
+		$message .= " could not be updated in todo-list '".$todoItem->getTodoListId()."'";
 		return $message;
 	}
 	
@@ -123,7 +123,7 @@ abstract class Abstrakt
 	protected function _getOnDeleteErrorMessage(\Sirprize\Basecamp\TodoItem\Entity $todoItem)
 	{
 		$message  = "todo-item '".$todoItem->getContent()."'";
-		$message .= " could not be deleted from todo-list '".$todoItem->getTodoListId();
+		$message .= " could not be deleted from todo-list '".$todoItem->getTodoListId()."'";
 		return $message;
 	}
 	
