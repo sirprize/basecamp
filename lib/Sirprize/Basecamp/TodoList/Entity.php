@@ -346,7 +346,7 @@ class Entity
 	
 	
 	
-	public function startTodoItems()
+	public function startTodoItems($force = false)
 	{
 		if(!$this->_loaded)
 		{
@@ -354,12 +354,12 @@ class Entity
 			throw new \Sirprize\Basecamp\Exception('call load() before '.__METHOD__);
 		}
 		
-		if($this->_todoItemsLoaded)
+		if($this->_todoItemsLoaded && !$force)
 		{
 			return $this;
 		}
 		
-		$this->getTodoItems()->startAllByTodoListId($this->getId());
+		$this->getTodoItems()->startAllByTodoListId($this->getId(), $force);
 		$this->_todoItemsLoaded = true;
 		return $this;
 	}
@@ -369,13 +369,6 @@ class Entity
 	
 	public function findTodoItemByContent($content)
 	{
-		/*
-		if(!$this->_loaded)
-		{
-			require_once 'Sirprize/Basecamp/Exception.php';
-			throw new \Sirprize\Basecamp\Exception('call load() before '.__METHOD__);
-		}
-		*/
 		foreach($this->getTodoItems() as $todoItem)
 		{
 			if($content == $todoItem->getContent())

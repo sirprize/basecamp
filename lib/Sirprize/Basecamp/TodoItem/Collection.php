@@ -162,9 +162,9 @@ class Collection extends \SplObjectStorage
 	 * @throws \Sirprize\Basecamp\Exception
 	 * @return \Sirprize\Basecamp\TodoItem\Collection
 	 */
-	public function startAllByTodoListId(\Sirprize\Basecamp\Id $todoListId)
+	public function startAllByTodoListId(\Sirprize\Basecamp\Id $todoListId, $force = false)
 	{
-		if($this->_started)
+		if($this->_started && !$force)
 		{
 			return $this;
 		}
@@ -203,7 +203,7 @@ class Collection extends \SplObjectStorage
 			return $this;
 		}
 		
-		$this->load($this->_response->getData());
+		$this->load($this->_response->getData(), $force);
 		$this->_onStartSuccess();
 		return $this;
 	}
@@ -220,9 +220,9 @@ class Collection extends \SplObjectStorage
 	 * @throws \Sirprize\Basecamp\Exception
 	 * @return null|\Sirprize\Basecamp\TodoItem\Entity
 	 */
-	public function startById(\Sirprize\Basecamp\Id $id)
+	public function startById(\Sirprize\Basecamp\Id $id, $force = false)
 	{
-		if($this->_started)
+		if($this->_started && !$force)
 		{
 			return $this;
 		}
@@ -261,7 +261,7 @@ class Collection extends \SplObjectStorage
 			return null;
 		}
 		
-		$this->load($this->_response->getData());
+		$this->load($this->_response->getData(), $force);
 		$this->_onStartSuccess();
 		$this->rewind();
 		return $this->current();
@@ -275,12 +275,12 @@ class Collection extends \SplObjectStorage
 	 *
 	 * @return \Sirprize\Basecamp\TodoItem\Collection
 	 */
-	public function load(\SimpleXMLElement $xml)
+	public function load(\SimpleXMLElement $xml, $force = false)
 	{
-		if($this->_loaded)
+		if($this->_loaded && !$force)
 		{
 			require_once 'Sirprize/Basecamp/Exception.php';
-			throw new \Sirprize\Basecamp\Exception('collection has already been loaded');
+			throw new \Sirprize\Basecamp\Exception('todo-item collection has already been loaded');
 		}
 		
 		$this->_loaded = true;
@@ -289,7 +289,7 @@ class Collection extends \SplObjectStorage
 		{
 			// request for a single entity (not supported on todoItems)
 			$todoItem = $this->getTodoItemInstance();
-			$todoItem->load($xml);
+			$todoItem->load($xml, $force);
 			$this->attach($todoItem);
 			return $this;
 		}
@@ -306,7 +306,7 @@ class Collection extends \SplObjectStorage
 		{
 			// list request - 1 item in response
 			$todoItem = $this->getTodoItemInstance();
-			$todoItem->load($array[self::_TODO_ITEM]);
+			$todoItem->load($array[self::_TODO_ITEM], $force);
 			$this->attach($todoItem);
 			return $this;
 		}
@@ -315,7 +315,7 @@ class Collection extends \SplObjectStorage
 		{
 			// list request - 2 or more items in response
 			$todoItem = $this->getTodoItemInstance();
-			$todoItem->load($row);
+			$todoItem->load($row, $force);
 			$this->attach($todoItem);
 		}
 		
