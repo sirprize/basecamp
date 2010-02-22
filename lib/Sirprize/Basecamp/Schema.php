@@ -165,7 +165,7 @@ class Schema
 						require_once 'Sirprize/Basecamp/Date.php';
 						$todoItem->setDueAt(new \Sirprize\Basecamp\Date($dueAt));
 					}
-					else if ($referenceDate !== null && $referenceDateOffset !== null)
+					else if($referenceDate !== null && $referenceDateOffset !== null)
 					{
 						require_once 'Sirprize/Basecamp/Date.php';
 						$todoItem->setDueAt(new \Sirprize\Basecamp\Date($this->_calculateDateFromOffsetDays($referenceDate, $referenceDateOffset)));

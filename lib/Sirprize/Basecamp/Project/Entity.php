@@ -53,7 +53,6 @@ class Entity
 	// sub-elements
 	protected $_milestones = null;
 	protected $_todoLists = null;
-	#protected $_hasError = false;
 	protected $_subElementsStarted = false;
 	
 	
@@ -238,25 +237,24 @@ class Entity
 	{
 		return (isset($this->_data[$name])) ? $this->_data[$name] : null;
 	}
-	
-	
-	
 
 
 
-
-
-	
-	
-	
-	
-	public function startSubElements()
+	protected function _checkIsLoaded()
 	{
 		if(!$this->_loaded)
 		{
 			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('call load() before '.__METHOD__);
 		}
+	}
+	
+	
+	
+	
+	public function startSubElements()
+	{
+		$this->_checkIsLoaded();
 		
 		if($this->_subElementsStarted === true)
 		{
@@ -365,6 +363,9 @@ class Entity
 	
 	public function deleteMilestones()
 	{
+		$this->_checkIsLoaded();
+		$this->_milestones = $this->_getBasecamp()->getMilestonesInstance()->startAllByProjectId($this->getId());
+		
 		foreach($this->getMilestones() as $milestone)
 		{
 			$milestone->delete();
@@ -378,6 +379,9 @@ class Entity
 	
 	public function deleteTodoLists()
 	{
+		$this->_checkIsLoaded();
+		$this->_todoLists = $this->_getBasecamp()->getTodoListsInstance()->startAllByProjectId($this->getId());
+		
 		foreach($this->getTodoLists() as $todoList)
 		{
 			$todoList->delete();
@@ -394,6 +398,7 @@ class Entity
 		$reloadMilestones = false;
 		$reloadTodoLists = false;
 		
+		$this->_checkIsLoaded();
 		$this->_milestones = $this->_getBasecamp()->getMilestonesInstance()->startAllByProjectId($this->getId());
 		
 		foreach($schema->getMilestones() as $schemaMilestone)

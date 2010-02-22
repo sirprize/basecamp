@@ -31,7 +31,7 @@ class Export
 	public function getProjectXml(\Sirprize\Basecamp\Project\Entity $project, $useRelativeDates = true, $referenceMilestone = self::REFERENCE_EXTREMITY_LAST)
 	{
 		$project->startSubElements();
-		$referenceDate = $this->_getReferenceDate($project, $referenceMilestone);
+		$referenceDate = $this->_getReferenceDate($project->getMilestones(), $referenceMilestone);
 		
 		if($useRelativeDates && $referenceDate === null)
 		{
@@ -106,34 +106,34 @@ class Export
 	
 	
 	
-	protected function _getReferenceDate(\Sirprize\Basecamp\Project\Entity $project, $referenceMilestone)
+	protected function _getReferenceDate(\Sirprize\Basecamp\Milestone\Collection $milestones, $referenceMilestone)
 	{
-		if(!$project->getMilestones()->count())
+		if(!$milestones->count())
 		{
 			return null;
 		}
 		
 		if($referenceMilestone == self::REFERENCE_EXTREMITY_FIRST)
 		{
-			$project->getMilestones()->rewind();
-			return $project->getMilestones()->current()->getDeadline();
+			$milestones->rewind();
+			return $milestones->current()->getDeadline();
 		}
 		
 		if($referenceMilestone == self::REFERENCE_EXTREMITY_LAST)
 		{
 			$last = null;
-			$project->getMilestones()->rewind();
+			$milestones->rewind();
 		
-			while($project->getMilestones()->valid())
+			while($milestones->valid())
 			{
-				$last = $project->getMilestones()->current()->getDeadline();
-				$project->getMilestones()->next();
+				$last = $milestones->current()->getDeadline();
+				$milestones->next();
 			}
 		
 			return $last;
 		}
 		
-		foreach($project->getMilestones() as $milestone)
+		foreach($milestones as $milestone)
 		{
 			if($milestone->getTitle() == $referenceMilestone)
 			{
