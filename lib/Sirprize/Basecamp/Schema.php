@@ -229,4 +229,27 @@ class Schema
 	
 		return $referenceDate->subSecond(60 * 60 * 24 * $referenceDateOffset * -1)->toString(\Sirprize\Basecamp\Date::FORMAT);
 	}
+	
+	
+	
+	
+	public function dumpIndices()
+	{
+		foreach($this->getMilestones() as $m => $milestone)
+		{
+			print "($m) ".$milestone->getTitle()."\n";
+			
+			foreach($milestone->getTodoLists() as $l => $todoList)
+			{
+				print "    ($m, $l) ".$todoList->getName()."\n";
+				
+				foreach($todoList->getTodoItems() as $i => $todoItem)
+				{
+					print "        ($m, $l, $i) ".$todoItem->getContent()."\n";
+				}
+			}
+			
+			print "------------------------------\n";
+		}
+	}
 }
