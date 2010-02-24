@@ -54,6 +54,8 @@ class Entity
 	protected $_milestones = null;
 	protected $_todoLists = null;
 	protected $_subElementsStarted = false;
+	protected $_milestoneCompletionQueue = array();
+	protected $_todoItemCompletionQueue = array();
 	
 	
 	
@@ -267,6 +269,14 @@ class Entity
 		foreach($this->_todoLists as $todoList)
 		{
 			$todoList->startTodoItems();
+			
+			// wire up milestones with their associated todo-lists and load todo-items
+			$milestone = $this->findMilestoneById($todoList->getMilestoneId());
+			
+			if($milestone)
+			{
+				$milestone->getTodoLists()->attach($todoList);
+			}
 		}
 		
 		$this->_subElementsStarted = true;
@@ -304,6 +314,21 @@ class Entity
 		foreach($this->getMilestones() as $milestone)
 		{
 			if($title == $milestone->getTitle())
+			{
+				return $milestone;
+			}
+		}
+		
+		return null;
+	}
+	
+	
+	
+	public function findMilestoneById(\Sirprize\Basecamp\Id $id)
+	{
+		foreach($this->getMilestones() as $milestone)
+		{
+			if((string)$id == (string)$milestone->getId())
 			{
 				return $milestone;
 			}
@@ -393,10 +418,64 @@ class Entity
 	
 	
 	
+	public function complete()
+	{
+		foreach($this->getMilestones() as $milestone)
+		{
+			$milestone->complete();
+			
+			foreach($milestone->getTodoLists() as $todoList)
+			{
+				foreach($todoList->getTodoItems() as $todoItem)
+				{
+					$todoItem->complete();
+				}
+			}
+		}
+	}
+	
+	
+	
+	public function completeMilestonesIfRelatedTodoItemsAreCompleted()
+	{
+		$this->_checkIsLoaded();
+		$this->startSubElements();
+		
+		foreach($this->getMilestones() as $milestone)
+		{
+			$numItemsTotal = 0;
+			$numItemsCompleted = 0;
+		
+			foreach($milestone->getTodoLists() as $todoList)
+			{
+				foreach($todoList->getTodoItems() as $todoItem)
+				{
+					$numItemsTotal++;
+					
+					if($todoItem->getIsCompleted())
+					{
+						$numItemsCompleted++;
+					}
+				}
+			}
+			
+			if($numItemsCompleted == $numItemsTotal && $numItemsTotal > 0)
+			{
+				if(!$milestone->getIsCompleted())
+				{
+					$milestone->complete();
+				}
+			}
+		}
+	}
+	
+	
+	
 	public function applySchema(\Sirprize\Basecamp\Schema $schema)
 	{
 		$reloadMilestones = false;
 		$reloadTodoLists = false;
+		$reloadTodoItems = false;
 		
 		$this->_checkIsLoaded();
 		$this->_milestones = $this->_getBasecamp()->getMilestonesInstance()->startAllByProjectId($this->getId());
@@ -468,7 +547,24 @@ class Entity
 					
 					$schemaTodoItem->setTodoListId($todoList->getId());
 					$schemaTodoItem->create();
+					$reloadTodoItems = true;
 				}
+			}
+		}
+		
+		// wire up milestones with their associated todo-lists and load todo-items
+		foreach($this->getTodoLists() as $todoList)
+		{
+			if($reloadTodoItems)
+			{
+				$todoList->startTodoItems(true);
+			}
+			
+			$milestone = $this->findMilestoneById($todoList->getMilestoneId());
+			
+			if($milestone)
+			{
+				$milestone->getTodoLists()->attach($todoList);
 			}
 		}
 		
@@ -477,11 +573,11 @@ class Entity
 	
 	
 	
-	public function findMilestoneBySchemaIndex(\Sirprize\Basecamp\Schema $schema, $milestoneKey)
+	public function findMilestoneBySchemaIndex(\Sirprize\Basecamp\Schema $schema, $milestoneSchemaKey)
 	{
 		foreach($schema->getMilestones() as $key => $schemaMilestone)
 		{
-			if($key != $milestoneKey) { continue; }
+			if($key != $milestoneSchemaKey) { continue; }
 			return $this->findMilestoneByTitle($schemaMilestone->getTitle());
 		}
 		
@@ -490,29 +586,88 @@ class Entity
 	
 	
 	
-	public function findTodoItemBySchemaIndex(\Sirprize\Basecamp\Schema $schema, $milestoneKey, $todoListKey, $todoItemKey)
+	public function findTodoItemBySchemaIndex(\Sirprize\Basecamp\Schema $schema, $milestoneSchemaKey, $todoListSchemaKey, $todoItemSchemaKey)
 	{
 		foreach($schema->getMilestones() as $x => $schemaMilestone)
 		{
-			if($x != $milestoneKey) { continue; }
+			if($x != $milestoneSchemaKey) { continue; }
 			$milestone = $this->findMilestoneByTitle($schemaMilestone->getTitle());
 			if($milestone === null) { break; }
 			
 			foreach($schemaMilestone->getTodoLists() as $y => $schemaTodoList)
 			{
-				if($y != $todoListKey) { continue; }
+				if($y != $todoListSchemaKey) { continue; }
 				$todoList = $this->findTodoListByName($schemaTodoList->getName());
 				if($todoList === null) { break; }
 				
 				foreach($schemaTodoList->getTodoItems() as $z => $schemaTodoItem)
 				{
-					if($z != $todoItemKey) { continue; }
+					if($z != $todoItemSchemaKey) { continue; }
 					return $todoList->findTodoItemByContent($schemaTodoItem->getContent());
 				}
 			}
 		}
 		
 		return null;
+	}
+	
+	
+	
+	protected function _addMilestoneToCompletionQueue($milestoneSchemaIndex)
+	{
+		$this->_milestoneCompletionQueue[] = $milestoneSchemaIndex;
+		return $this;
+	}
+	
+	
+	
+	protected function _addTodoItemToCompletionQueue($milestoneSchemaIndex, $todoListSchemaIndex, $todoItemSchemaIndex)
+	{
+		$this->_todoItemCompletionQueue[] = array($milestoneSchemaIndex, $todoListSchemaIndex, $todoItemSchemaIndex);
+		return $this;
+	}
+	
+	
+	
+	protected function _resetCompletionQueues()
+	{
+		$this->_milestoneCompletionQueue = array();
+		$this->_todoItemCompletionQueue = array();
+		return $this;
+	}
+	
+	
+	
+	protected function _processMilestoneCompletionQueue(\Sirprize\Basecamp\Schema $schema)
+	{
+		foreach($this->_milestoneCompletionQueue as $index)
+		{
+			$milestone = $this->findMilestoneBySchemaIndex($schema, $index);
+			
+			if($milestone !== null && !$milestone->getIsCompleted())
+			{
+				$milestone->complete();
+			}
+		}
+		
+		return $this;
+	}
+	
+	
+	
+	protected function _processTodoItemCompletionQueue(\Sirprize\Basecamp\Schema $schema)
+	{
+		foreach($this->_todoItemCompletionQueue as $indices)
+		{
+			$todoItem = $this->findTodoItemBySchemaIndex($schema, $indices[0], $indices[1], $indices[2]);
+			
+			if($todoItem !== null && !$todoItem->getIsCompleted())
+			{
+				$todoItem->complete();
+			}
+		}
+		
+		return $this;
 	}
 	
 }
