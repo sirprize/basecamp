@@ -45,7 +45,7 @@ abstract class Abstrakt
 	protected function _getOnCompleteSuccessMessage(\Sirprize\Basecamp\TodoItem\Entity $todoItem)
 	{
 		$message  = "todo-item '".$todoItem->getContent()."'";
-		$message .= " completed in todo-list '".$todoItem->getTodoListId();
+		$message .= " completed in todo-list '".$todoItem->getTodoListId()."'";
 		return $message;
 	}
 	
@@ -53,7 +53,7 @@ abstract class Abstrakt
 	protected function _getOnUncompleteSuccessMessage(\Sirprize\Basecamp\TodoItem\Entity $todoItem)
 	{
 		$message  = "todo-item '".$todoItem->getContent()."'";
-		$message .= " uncompleted in todo-list '".$todoItem->getTodoListId();
+		$message .= " uncompleted in todo-list '".$todoItem->getTodoListId()."'";
 		return $message;
 	}
 	
@@ -61,7 +61,7 @@ abstract class Abstrakt
 	protected function _getOnCreateSuccessMessage(\Sirprize\Basecamp\TodoItem\Entity $todoItem)
 	{
 		$message  = "todo-item '".$todoItem->getContent()."'";
-		$message .= " created in todo-list '".$todoItem->getTodoListId();
+		$message .= " created in todo-list '".$todoItem->getTodoListId()."'";
 		return $message;
 	}
 	
@@ -69,7 +69,7 @@ abstract class Abstrakt
 	protected function _getOnUpdateSuccessMessage(\Sirprize\Basecamp\TodoItem\Entity $todoItem)
 	{
 		$message  = "todo-item '".$todoItem->getContent()."'";
-		$message .= " updated in todo-list '".$todoItem->getTodoListId();
+		$message .= " updated in todo-list '".$todoItem->getTodoListId()."'";
 		return $message;
 	}
 	
@@ -77,7 +77,7 @@ abstract class Abstrakt
 	protected function _getOnDeleteSuccessMessage(\Sirprize\Basecamp\TodoItem\Entity $todoItem)
 	{
 		$message  = "todo-item '".$todoItem->getContent()."'";
-		$message .= " deleted from todo-list '".$todoItem->getTodoListId();
+		$message .= " deleted from todo-list '".$todoItem->getTodoListId()."'";
 		return $message;
 	}
 	
