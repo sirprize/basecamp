@@ -46,4 +46,22 @@ class Date
 	{
 		return $this->_date;
 	}
+	
+	
+	public function addDays($numDays)
+	{
+		require_once 'Zend/Date.php';
+		$date = new \Zend_Date($this->_date, self::FORMAT);
+		$this->_date = $date->addSecond(60 * 60 * 24 * (int)$numDays)->toString(self::FORMAT);
+		return $this;
+	}
+	
+	
+	public function subDays($numDays)
+	{
+		require_once 'Zend/Date.php';
+		$date = new \Zend_Date($this->_date, self::FORMAT);
+		$this->_date = $date->subSecond(60 * 60 * 24 * (int)$numDays)->toString(self::FORMAT);
+		return $this;
+	}
 }
