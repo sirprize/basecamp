@@ -18,7 +18,7 @@
 define('BASECAMP_EXAMPLE_PROJECT_ID', 'xxxxxx');
 define('BASECAMP_EXAMPLE_USER_ID', 'xxxxxx');
 define('BASECAMP_EXAMPLE_TODOLIST_ID', 'xxxxxx');
-define('BASECAMP_EXAMPLE_PMILESTONE_ID', 'xxxxxx');
+define('BASECAMP_EXAMPLE_MILESTONE_ID', 'xxxxxx');
 define('BASECAMP_EXAMPLE_TODOLIST_TEMPLATE_ID', 'xxxxxx');
 define('BASECAMP_EXAMPLE_TODOLISTITEM_ID', 'xxxxxx');
 
