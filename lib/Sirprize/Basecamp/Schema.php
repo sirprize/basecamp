@@ -70,7 +70,7 @@ class Schema
 	 *
 	 * @return \Sirprize\Basecamp\Milestone\Collection
 	 */
-	public function loadFromXml($file, $referenceDate = null)
+	public function loadFromXml($file, \Sirprize\Basecamp\Date $referenceDate = null)
 	{
 		if(!is_readable($file))
 		{
@@ -102,14 +102,20 @@ class Schema
 			$milestone = $this->_getBasecamp()->getMilestonesInstance()->getMilestoneInstance();
 			$milestone->setTitle($this->_getMilestoneTitle($title));
 			
-			if($this->_checkDate($deadline))
+			require_once 'Sirprize/Basecamp/Date.php';
+			
+			if(\Sirprize\Basecamp\Date::isValid($deadline))
 			{
-				require_once 'Sirprize/Basecamp/Date.php';
+				$milestone->setDeadline(new \Sirprize\Basecamp\Date($deadline));
+			}
+			else if($referenceDate !== null && $referenceDateOffset !== null)
+			{
+				$deadline = $this->_calculateDateFromOffsetDays($referenceDate, $referenceDateOffset);
 				$milestone->setDeadline(new \Sirprize\Basecamp\Date($deadline));
 			}
 			else {
-				require_once 'Sirprize/Basecamp/Date.php';
-				$milestone->setDeadline(new \Sirprize\Basecamp\Date($this->_calculateDateFromOffsetDays($referenceDate, $referenceDateOffset)));
+				require_once 'Sirprize/Basecamp/Exception.php';
+				throw new \Sirprize\Basecamp\Exception("invalid reference date and invalid reference date offset");
 			}
 			
 			if($responsiblePartyId !== null)
@@ -160,15 +166,16 @@ class Schema
 						->setNotify($notify)
 					;
 					
-					if($this->_checkDate($dueAt))
+					require_once 'Sirprize/Basecamp/Date.php';
+					
+					if(\Sirprize\Basecamp\Date::isValid($dueAt))
 					{
-						require_once 'Sirprize/Basecamp/Date.php';
 						$todoItem->setDueAt(new \Sirprize\Basecamp\Date($dueAt));
 					}
 					else if($referenceDate !== null && $referenceDateOffset !== null)
 					{
-						require_once 'Sirprize/Basecamp/Date.php';
-						$todoItem->setDueAt(new \Sirprize\Basecamp\Date($this->_calculateDateFromOffsetDays($referenceDate, $referenceDateOffset)));
+						$dueAt = $this->_calculateDateFromOffsetDays($referenceDate, $referenceDateOffset);
+						$todoItem->setDueAt(new \Sirprize\Basecamp\Date($dueAt));
 					}
 					
 					if($responsiblePartyId !== null)
@@ -202,24 +209,11 @@ class Schema
 	
 	
 	
-	protected function _checkDate($date)
+	protected function _calculateDateFromOffsetDays(\Sirprize\Basecamp\Date $referenceDate, $referenceDateOffset)
 	{
-		return preg_match('/^\d{4,4}-\d{2,2}-\d{2,2}$/', $date);
-	}
-	
-	
-	
-	protected function _calculateDateFromOffsetDays($referenceDate, $referenceDateOffset)
-	{
-		if(!$this->_checkDate($referenceDate))
-		{
-			require_once 'Sirprize/Basecamp/Exception.php';
-			throw new \Sirprize\Basecamp\Exception("invalid reference date '$referenceDate'");
-		}
-		
 		require_once 'Zend/Date.php';
 		require_once 'Sirprize/Basecamp/Date.php';
-		$referenceDate = new \Zend_Date($referenceDate, \Sirprize\Basecamp\Date::FORMAT);
+		$referenceDate = new \Zend_Date((string)$referenceDate, \Sirprize\Basecamp\Date::FORMAT);
 		$referenceDateOffset = (int)$referenceDateOffset;
 	
 		if($referenceDateOffset >= 0)
