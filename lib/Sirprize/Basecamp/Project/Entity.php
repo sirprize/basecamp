@@ -560,6 +560,12 @@ class Entity
 				$todoList->startTodoItems(true);
 			}
 			
+			if(!$todoList->getMilestoneId())
+			{
+				// todo-list is not assigned to a milestone
+				continue;
+			}
+			
 			$milestone = $this->findMilestoneById($todoList->getMilestoneId());
 			
 			if($milestone)
