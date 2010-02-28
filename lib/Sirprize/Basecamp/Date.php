@@ -48,6 +48,12 @@ class Date
 	}
 	
 	
+	public static function isValid($date)
+	{
+		return preg_match('/^\d{4,4}-\d{2,2}-\d{2,2}$/', $date);
+	}
+	
+	
 	public function addDays($numDays)
 	{
 		require_once 'Zend/Date.php';
