@@ -254,7 +254,7 @@ class Entity
 	
 	
 	
-	public function startSubElements()
+	public function startSubElements($loadTodoItems = false)
 	{
 		$this->_checkIsLoaded();
 		
@@ -276,6 +276,11 @@ class Entity
 			if($milestone)
 			{
 				$milestone->getTodoLists()->attach($todoList);
+			}
+			
+			if($loadTodoItems)
+			{
+				$todoList->startTodoItems();
 			}
 		}
 		
