@@ -774,4 +774,19 @@ class Entity
 		return $this->_todoLists;
 	}
 	
+	
+	
+	public function findTodoListByName($name)
+	{
+		foreach($this->getTodoLists() as $todoList)
+		{
+			if($name == $todoList->getName())
+			{
+				return $todoList;
+			}
+		}
+		
+		return null;
+	}
+	
 }
