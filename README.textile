@@ -4,11 +4,11 @@ This is a php library to access the Basecamp api. Collection classes provide met
 
 h2. Supported Features
 
-* Person: fully implemented
-* Project: fully implemented
-* Milestone: fully implemented
-* Todolist: fully implemented
-* Todoitems: fully implemented
+* Person: startMe(), startById(), startAllByProjectId(), startAll() etc
+* Project: startById(), startAll(), copy(), replicate() etc
+* Milestone: startAllByProjectId(), create(), update(), delete(), complete(), uncomplete() etc
+* Todolist: startById(), startAllByProjectId(), startAllByResponsibiltyParty(), create(), update(), delete() etc
+* Todoitems: startAllByTodoListId(), startById(), create(), update(), delete(), complete(), uncomplete() etc
 
 h2. Requirements
 
