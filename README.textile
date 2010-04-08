@@ -29,7 +29,7 @@ bc.. $config = array(
 
 require_once 'Sirprize/Basecamp.php';
 $basecamp = new \Sirprize\Basecamp($config);
-	
+
 h3. Fetch all projects
 
 bc.. $projects = $basecamp->getProjectsInstance()->startAll();
@@ -38,6 +38,40 @@ foreach($projects as $project)
 {
 	print $project->getName()."\n";
 }
+
+h3. Copy a project
+
+bc.. require_once 'Sirprize/Basecamp/Id.php';
+$sourceProjectId = new \Sirprize\Basecamp\Id('xxx');
+$targetProjectId = new \Sirprize\Basecamp\Id('yyy');
+
+$projects = $basecamp->getProjectsInstance();
+$sourceProject = $projects->startById($sourceProjectId);
+
+// this will populate the target-project with the milestones,
+// todo-lists and todo-items from the source-project
+$sourceProject->copy($targetProjectId);
+
+h3. Replicate a project (push deadlines to a new date)
+
+bc.. require_once 'Sirprize/Basecamp/Id.php';
+$sourceProjectId = new \Sirprize\Basecamp\Id('xxx');
+$targetProjectId = new \Sirprize\Basecamp\Id('yyy');
+
+$projects = $basecamp->getProjectsInstance();
+$sourceProject = $projects->startById($sourceProjectId);
+
+require_once 'Sirprize/Basecamp/Date.php';
+$referenceDate = new \Sirprize\Basecamp\Date('2010-12-30');
+
+require_once 'Sirprize/Basecamp/Schema/Export.php';
+$referenceMilestone = \Sirprize\Basecamp\Schema\Export::REFERENCE_EXTREMITY_LAST;
+
+// this will populate the target-project with the milestones,
+// todo-lists and todo-items from the source-project.
+// the last milestone deadline is pushed to 2010-12-30 and
+// all other deadlines will be calculated relative to it
+$sourceProject->replicate($targetProjectId, $referenceDate, $referenceMilestone);
 
 h3. Create a new milestone
 
