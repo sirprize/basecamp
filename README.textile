@@ -17,7 +17,14 @@ h2. Requirements
 
 h2. Getting Started
 
-Please find plenty of working examples in the __basecamp/example/basecamp__ directory and adjust __basecamp/example/basecamp/_config.php__ with your own settings. Here's the basics:
+Please find plenty of working examples in the __basecamp/example/basecamp__ directory. Here's the basics:
+
+h3. First Steps
+
+# create a dummy project in your basecamp account
+# adjust __basecamp/example/basecamp/_config.php__ with your own settings
+# make files executable in __basecamp/example/basecamp/*__
+# run some examples
 
 h3. Setup
 
