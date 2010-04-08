@@ -63,11 +63,6 @@ class Schema
 	
 	
 	/**
-	 * Create unpersisted tree-structure of milestones, todo-lists and todo-items from an Xml document
-	 *
-	 * Deadlines can be set explicitly or they can be calculated based on offset-days-to-reference-date
-	 * if offset-days-to-reference-date is not present, then deadline or the current date will be used
-	 *
 	 * @return \Sirprize\Basecamp\Milestone\Collection
 	 */
 	public function loadFromXml($file, \Sirprize\Basecamp\Date $referenceDate = null)
@@ -80,8 +75,36 @@ class Schema
 		
 		$xml = new \DOMDocument();
 		$xml->load($file);
+		return $this->_load($xml, $referenceDate);
+	}
+	
+	
+	
+	
+	/**
+	 * @return \Sirprize\Basecamp\Milestone\Collection
+	 */
+	public function loadFromString($string, \Sirprize\Basecamp\Date $referenceDate = null)
+	{
+		$xml = new \DOMDocument();
+		$xml->loadXml($string);
+		return $this->_load($xml, $referenceDate);
+	}
+	
+	
+	
+	
+	/**
+	 * Create unpersisted tree-structure of milestones, todo-lists and todo-items from an Xml document
+	 *
+	 * Deadlines can be set explicitly or they can be calculated based on offset-days-to-reference-date
+	 * if offset-days-to-reference-date is not present, then deadline or the current date will be used
+	 *
+	 * @return \Sirprize\Basecamp\Milestone\Collection
+	 */
+	protected function _load(\DOMDocument $xml, \Sirprize\Basecamp\Date $referenceDate = null)
+	{
 		$this->_milestones = $this->_getBasecamp()->getMilestonesInstance();
-		
 		
 		foreach($xml->getElementsByTagName('milestone') as $milestoneElement)
 		{

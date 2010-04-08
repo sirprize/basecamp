@@ -168,5 +168,15 @@ class Basecamp
 		;
 		return $todoListitems;
 	}
+	
+	
+	
+	public function getSchemaInstance()
+	{
+		require_once 'Sirprize/Basecamp/Schema.php';
+		$schema = new \Sirprize\Basecamp\Schema();
+		$schema->setBasecamp($this);
+		return $schema;
+	}
 
 }

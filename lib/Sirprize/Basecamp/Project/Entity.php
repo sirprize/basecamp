@@ -210,6 +210,66 @@ class Entity
 	
 	
 	
+	public function copy(\Sirprize\Basecamp\Id $targetProjectId)
+	{
+		$this->_checkIsLoaded();
+		
+		$projects = $this->_getBasecamp()->getProjectsInstance();
+		$targetProject = $projects->startById($targetProjectId);
+
+		if($targetProject === null)
+		{
+			require_once 'Sirprize/Basecamp/Exception.php';
+			throw new \Sirprize\Basecamp\Exception("target project doesn't exist");
+		}
+
+		if($projects->getResponse()->isError())
+		{
+			require_once 'Sirprize/Basecamp/Exception.php';
+			throw new \Sirprize\Basecamp\Exception("target project couldn't be loaded");
+		}
+		
+		require_once 'Sirprize/Basecamp/Schema/Export.php';
+		$export = new \Sirprize\Basecamp\Schema\Export();
+		$xml = $export->getProjectXml($this, false);
+		$schema = $this->_getBasecamp()->getSchemaInstance();
+		$schema->loadFromString($xml);
+		$targetProject->applySchema($schema);
+		return $targetProject;
+	}
+	
+	
+	
+	public function replicate(\Sirprize\Basecamp\Id $targetProjectId, \Sirprize\Basecamp\Date $referenceDate, $referenceMilestone = null)
+	{
+		$this->_checkIsLoaded();
+		
+		$projects = $this->_getBasecamp()->getProjectsInstance();
+		$targetProject = $projects->startById($targetProjectId);
+
+		if($targetProject === null)
+		{
+			require_once 'Sirprize/Basecamp/Exception.php';
+			throw new \Sirprize\Basecamp\Exception("target project doesn't exist");
+		}
+
+		if($projects->getResponse()->isError())
+		{
+			require_once 'Sirprize/Basecamp/Exception.php';
+			throw new \Sirprize\Basecamp\Exception("target project couldn't be loaded");
+		}
+		
+		require_once 'Sirprize/Basecamp/Schema/Export.php';
+		$export = new \Sirprize\Basecamp\Schema\Export();
+		$xml = $export->getProjectXml($this, true, $referenceMilestone);
+		$schema = $this->_getBasecamp()->getSchemaInstance();
+		$schema->loadFromString($xml, $referenceDate);
+		$targetProject->applySchema($schema);
+		return $targetProject;
+	}
+	
+	
+	
 	protected function _getBasecamp()
 	{
 		if($this->_basecamp === null)

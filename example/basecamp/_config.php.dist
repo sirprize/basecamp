@@ -16,6 +16,7 @@
  */
 
 define('BASECAMP_EXAMPLE_PROJECT_ID', 'xxxxxx');
+define('BASECAMP_EXAMPLE_PROJECT_TARGET_ID', 'xxxxxx'); // to demonstrate project copying
 define('BASECAMP_EXAMPLE_USER_ID', 'xxxxxx');
 define('BASECAMP_EXAMPLE_TODOLIST_ID', 'xxxxxx');
 define('BASECAMP_EXAMPLE_MILESTONE_ID', 'xxxxxx');
@@ -40,3 +41,5 @@ $logWriter = new Zend_Log_Writer_Stream(dirname(dirname(__FILE__)).'/_logs/'.gmd
 
 require_once 'Zend/Log.php';
 $log = new Zend_Log($logWriter);
+
+date_default_timezone_set('UTC');

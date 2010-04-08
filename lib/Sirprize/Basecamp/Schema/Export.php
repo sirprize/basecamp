@@ -28,9 +28,15 @@ class Export
 	
 	
 	
-	public function getProjectXml(\Sirprize\Basecamp\Project\Entity $project, $useRelativeDates = true, $referenceMilestone = self::REFERENCE_EXTREMITY_LAST)
+	public function getProjectXml(\Sirprize\Basecamp\Project\Entity $project, $useRelativeDates = true, $referenceMilestone = null)
 	{
 		$project->startSubElements();
+		
+		if($referenceMilestone === null)
+		{
+			$referenceMilestone = self::REFERENCE_EXTREMITY_LAST;
+		}
+		
 		$referenceDate = $this->_getReferenceDate($project->getMilestones(), $referenceMilestone);
 		
 		if($useRelativeDates && $referenceDate === null)

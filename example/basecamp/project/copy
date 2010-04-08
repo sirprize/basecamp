@@ -1,0 +1,43 @@
+#!/usr/bin/env php
+<?php
+
+/**
+ * Basecamp API Wrapper for PHP 5.3+ 
+ *
+ * LICENSE
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this package in the file LICENSE.txt
+ *
+ * @category   Sirprize
+ * @package    Basecamp
+ * @subpackage Try
+ * @copyright  Copyright (c) 2010, Christian Hoegl, Switzerland (http://sirprize.me)
+ * @license    MIT License
+ */
+
+
+require_once '../_config.php';
+
+require_once 'Sirprize/Basecamp/Cli.php';
+$basecamp = new \Sirprize\Basecamp\Cli($config);
+$basecamp->setLog($log);
+
+require_once 'Sirprize/Basecamp/Id.php';
+$sourceProjectId = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_PROJECT_ID);
+$targetProjectId = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_PROJECT_TARGET_ID);
+
+$projects = $basecamp->getProjectsInstance();
+$sourceProject = $projects->startById($sourceProjectId);
+
+if($sourceProject === null)
+{
+	die("Source project not found\n");
+}
+
+if($projects->getResponse()->isError())
+{
+	die("Source project error\n");
+}
+
+$sourceProject->copy($targetProjectId);
