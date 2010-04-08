@@ -1,6 +1,6 @@
 h1. Basecamp API Wrapper for php 5.3+
 
-This is a php library to access the Basecamp api. Collection classes provide methods to query the api and wrap each result item in an entity object. Entity objects come with methods such as update() and delete() to persist themselfes via the api. Functionality is provided to attach and detach observers to collections and entities - this is useful for logging or to print the current activity to the terminal.
+This is a php library to access the Basecamp api. Collection classes provide methods to query the api and wrap each result item in an entity object. Entity objects come with methods such as update() and delete() to persist themselfes via the api. Functionality is provided to attach and detach observers to collections and entities - this is useful for logging or to print current activity to the terminal.
 
 h2. Supported Features
 
