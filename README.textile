@@ -23,7 +23,7 @@ h3. First Steps
 
 # create a dummy project in your basecamp account
 # adjust __basecamp/example/basecamp/_config.php__ with your own settings
-# make files executable in __basecamp/example/basecamp/*__
+# make files executable in __basecamp/example/basecamp/(milestone|person|project|todoitem|todolist)/*__
 # make writeable __basecamp/example/_logs__
 # run examples
 
