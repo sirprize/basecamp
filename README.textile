@@ -24,7 +24,8 @@ h3. First Steps
 # create a dummy project in your basecamp account
 # adjust __basecamp/example/basecamp/_config.php__ with your own settings
 # make files executable in __basecamp/example/basecamp/*__
-# run some examples
+# make writeable __basecamp/example/_logs__
+# run examples
 
 h3. Setup
 
