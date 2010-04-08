@@ -54,7 +54,7 @@ class Schema
 		if($this->_milestones === null)
 		{
 			require_once 'Sirprize/Basecamp/Exception.php';
-			throw new \Sirprize\Basecamp\Exception('call loadFromXml() before '.__METHOD__);
+			throw new \Sirprize\Basecamp\Exception('call loadFromFile() before '.__METHOD__);
 		}
 		
 		return $this->_milestones;
@@ -65,7 +65,7 @@ class Schema
 	/**
 	 * @return \Sirprize\Basecamp\Milestone\Collection
 	 */
-	public function loadFromXml($file, \Sirprize\Basecamp\Date $referenceDate = null)
+	public function loadFromFile($file, \Sirprize\Basecamp\Date $referenceDate = null)
 	{
 		if(!is_readable($file))
 		{
