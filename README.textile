@@ -60,7 +60,7 @@ h3. Replicate a project (push deadlines to a new date)
 
 bc.. /*
  *
- * this will populate the target-project with the milestones,
+ * populate the target-project with the milestones,
  * todo-lists and todo-items from the source-project.
  * the last milestone deadline is pushed to 2010-12-30 and
  * all other deadlines will be calculated relative to it
