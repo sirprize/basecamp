@@ -25,22 +25,34 @@ $basecamp->setLog($log);
 require_once 'Sirprize/Basecamp/Id.php';
 $projectId = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_PROJECT_ID);
 
-$milestones = $basecamp->getMilestonesInstance();
-$milestones->startAllByProjectId($projectId, \Sirprize\Basecamp\Milestone\Collection::FIND_ALL);
+$projects = $basecamp->getProjectsInstance();
+$project = $projects->startById($projectId);
 
-if($milestones->getResponse()->isError())
+if($project === null)
+{
+	die("Not found\n");
+}
+
+if($projects->getResponse()->isError())
 {
 	die("Error\n");
 }
 
-foreach($milestones as $milestone)
+$project->startSubElements();
+
+foreach($project->getMilestones() as $milestone)
 {
-	require_once 'Sirprize/Basecamp/Date.php';
-	$deadline = new \Sirprize\Basecamp\Date('2010-08-17');
+	print "(".$milestone->getId().") ".$milestone->getTitle()."\n";
 	
-	$milestone
-		->setTitle('My New Title')
-		->setDeadline($deadline)
-		->update()
-	;
+	foreach($milestone->getTodoLists() as $todoList)
+	{
+		print "    (".$todoList->getId().") ".$todoList->getName()."\n";
+		
+		foreach($todoList->getTodoItems() as $todoItem)
+		{
+			print "        (".$todoItem->getId().") ".$todoItem->getContent()."\n";
+		}
+	}
+	
+	print "------------------------------\n";
 }

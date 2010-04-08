@@ -18,19 +18,11 @@
 
 require_once '../_config.php';
 
-require_once 'Sirprize/Basecamp.php';
-$basecamp = new \Sirprize\Basecamp($config);
-
-require_once 'Sirprize/Basecamp/Person/Collection/Observer/Stout.php';
-$collectionObserverStout = new \Sirprize\Basecamp\Person\Collection\Observer\Stout();
-
-require_once 'Sirprize/Basecamp/Person/Collection/Observer/Log.php';
-$collectionObserverLog = new \Sirprize\Basecamp\Person\Collection\Observer\Log();
-$collectionObserverLog->setLog($log);
+require_once 'Sirprize/Basecamp/Cli.php';
+$basecamp = new \Sirprize\Basecamp\Cli($config);
+$basecamp->setLog($log);
 
 $persons = $basecamp->getPersonsInstance();
-$persons->attachObserver($collectionObserverStout);
-$persons->attachObserver($collectionObserverLog);
 $persons->startAll();
 
 if($persons->getResponse()->isError())

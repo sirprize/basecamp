@@ -18,22 +18,14 @@
 
 require_once '../_config.php';
 
-require_once 'Sirprize/Basecamp.php';
-$basecamp = new \Sirprize\Basecamp($config);
-
-require_once 'Sirprize/Basecamp/TodoList/Collection/Observer/Stout.php';
-$collectionObserverStout = new \Sirprize\Basecamp\TodoList\Collection\Observer\Stout();
-
-require_once 'Sirprize/Basecamp/TodoList/Collection/Observer/Log.php';
-$collectionObserverLog = new \Sirprize\Basecamp\TodoList\Collection\Observer\Log();
-$collectionObserverLog->setLog($log);
+require_once 'Sirprize/Basecamp/Cli.php';
+$basecamp = new \Sirprize\Basecamp\Cli($config);
+$basecamp->setLog($log);
 
 require_once 'Sirprize/Basecamp/Id.php';
 $id = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_TODOLIST_ID);
 
 $todoLists = $basecamp->getTodoListsInstance();
-$todoLists->attachObserver($collectionObserverStout);
-$todoLists->attachObserver($collectionObserverLog);
 $todoList = $todoLists->startById($id);
 
 if($todoList === null)

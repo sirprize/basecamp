@@ -18,29 +18,14 @@
 
 require_once '../_config.php';
 
-require_once 'Sirprize/Basecamp.php';
-$basecamp = new \Sirprize\Basecamp($config);
-
-require_once 'Sirprize/Basecamp/Milestone/Collection/Observer/Stout.php';
-$collectionObserverStout = new \Sirprize\Basecamp\Milestone\Collection\Observer\Stout();
-
-require_once 'Sirprize/Basecamp/Milestone/Collection/Observer/Log.php';
-$collectionObserverLog = new \Sirprize\Basecamp\Milestone\Collection\Observer\Log();
-$collectionObserverLog->setLog($log);
-
-require_once 'Sirprize/Basecamp/Milestone/Entity/Observer/Stout.php';
-$entityObserverStout = new \Sirprize\Basecamp\Milestone\Entity\Observer\Stout();
-
-require_once 'Sirprize/Basecamp/Milestone/Entity/Observer/Log.php';
-$entityObserverLog = new \Sirprize\Basecamp\Milestone\Entity\Observer\Log();
-$entityObserverLog->setLog($log);
+require_once 'Sirprize/Basecamp/Cli.php';
+$basecamp = new \Sirprize\Basecamp\Cli($config);
+$basecamp->setLog($log);
 
 require_once 'Sirprize/Basecamp/Id.php';
 $projectId = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_PROJECT_ID);
 
 $milestones = $basecamp->getMilestonesInstance();
-$milestones->attachObserver($collectionObserverStout);
-$milestones->attachObserver($collectionObserverLog);
 $milestones->startAllByProjectId($projectId, \Sirprize\Basecamp\Milestone\Collection::FIND_ALL);
 
 if($milestones->getResponse()->isError())
@@ -50,9 +35,5 @@ if($milestones->getResponse()->isError())
 
 foreach($milestones as $milestone)
 {
-	$milestone
-		->attachObserver($entityObserverStout)
-		->attachObserver($entityObserverLog)
-		->complete()
-	;
+	$milestone->complete();
 }

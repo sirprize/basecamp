@@ -269,6 +269,26 @@ class Entity
 	}
 	
 	
+	/*
+	public function getSchema($referenceMilestone = null)
+	{
+		$this->_checkIsLoaded();
+		
+		require_once 'Sirprize/Basecamp/Schema/Export.php';
+		$export = new \Sirprize\Basecamp\Schema\Export();
+		
+		$xml
+			= ($referenceMilestone === null)
+			? $export->getProjectXml($this, false)
+			: $export->getProjectXml($this, true, $referenceMilestone)
+		;
+		
+		$schema = $this->_getBasecamp()->getSchemaInstance();
+		$schema->loadFromString($xml, $referenceDate);
+		return $schema;
+	}
+	*/
+	
 	
 	protected function _getBasecamp()
 	{

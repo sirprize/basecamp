@@ -18,22 +18,14 @@
 
 require_once '../_config.php';
 
-require_once 'Sirprize/Basecamp.php';
-$basecamp = new \Sirprize\Basecamp($config);
-
-require_once 'Sirprize/Basecamp/Person/Collection/Observer/Stout.php';
-$collectionObserverStout = new \Sirprize\Basecamp\Person\Collection\Observer\Stout();
-
-require_once 'Sirprize/Basecamp/Person/Collection/Observer/Log.php';
-$collectionObserverLog = new \Sirprize\Basecamp\Person\Collection\Observer\Log();
-$collectionObserverLog->setLog($log);
+require_once 'Sirprize/Basecamp/Cli.php';
+$basecamp = new \Sirprize\Basecamp\Cli($config);
+$basecamp->setLog($log);
 
 require_once 'Sirprize/Basecamp/Id.php';
 $projectId = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_PROJECT_ID);
 
 $persons = $basecamp->getPersonsInstance();
-$persons->attachObserver($collectionObserverStout);
-$persons->attachObserver($collectionObserverLog);
 $persons->startAllByProjectId($projectId);
 
 if($persons->getResponse()->isError())
