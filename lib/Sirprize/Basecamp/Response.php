@@ -23,6 +23,7 @@ class Response
     
     protected $_httpResponse = null;
     protected $_data = null;
+	protected $_error = null;
 	
 	
     
@@ -30,9 +31,26 @@ class Response
     {
     	$this->_httpResponse = $httpResponse;
 		
+		/*
 		if(!$httpResponse->isError() && !preg_match('/^\s*$/', $httpResponse->getBody()))
     	{
 			$this->_data = simplexml_load_string($httpResponse->getBody());
+    	}
+		*/
+		
+		if(!preg_match('/^\s*$/', $httpResponse->getBody()))
+    	{
+			$this->_data = simplexml_load_string($httpResponse->getBody());
+			
+			if($httpResponse->isError())
+			{
+				$data = (array)$this->_data;
+				
+				if(isset($data['error']))
+				{
+					$this->_error = $data['error'];
+				}
+			}
     	}
     }
     
@@ -72,7 +90,7 @@ class Response
     
     public function getMessage()
     {
-		return null;
+		return $this->_error;
     }
     
 }
