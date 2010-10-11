@@ -30,8 +30,6 @@ class Entity
 	
 	const _COMMENTS_COUNT = 'comments-count';
 	const _COMPLETED = 'completed';
-	const _COMPLEETED_AT = 'completed-at';
-	const _COMPLETER_ID = 'completer-id';
 	const _CONTENT = 'content';
 	const _CREATED_AT = 'created-at';
 	const _CREATOR_ID = 'creator-id';
@@ -41,7 +39,6 @@ class Entity
 	const _RESPONSIBLE_PARTY_ID = 'responsible-party-id';
 	const _RESPONSIBLE_PARTY_TYPE = 'responsible-party-type';
 	const _TODOLIST_ID = 'todo-list-id';
-	const _COMPLETED_ON = 'completed-on';
 	const _CREATED_ON = 'created-on';
 	
 	
@@ -176,21 +173,6 @@ class Entity
 		return $this->_getVal(self::_COMPLETED);
 	}
 	
-	
-	public function getCompletedAt()
-	{
-		return $this->_getVal(self::_COMPLEETED_AT);
-	}
-	
-	/**
-	 * @return \Sirprize\Basecamp\Id
-	 */
-	public function getCompleterId()
-	{
-		return $this->_getVal(self::_COMPLETER_ID);
-	}
-	
-	
 	public function getContent()
 	{
 		return $this->_getVal(self::_CONTENT);
@@ -321,9 +303,6 @@ class Entity
 		$this->_data = array(
 			self::_COMMENTS_COUNT => $array[self::_COMMENTS_COUNT],
 			self::_COMPLETED => $completed,
-			#self::_COMPLEETED_AT => $array[self::_COMPLEETED_AT],
-			#self::_COMPLETER_ID => $completerId,
-			#self::_COMPLETED_ON => $array[self::_COMPLETED_ON],
 			self::_CONTENT => $array[self::_CONTENT],
 			self::_CREATED_AT => $array[self::_CREATED_AT],
 			self::_CREATOR_ID => $creatorId,

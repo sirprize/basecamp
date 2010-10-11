@@ -143,7 +143,27 @@ class Basecamp
 		return $milestones;
 	}
 	
+	public function getCommentsInstance()
+	{
+		require_once 'Sirprize/Basecamp/Comment/Collection.php';
+		$comments = new \Sirprize\Basecamp\Comment\Collection();
+		$comments
+			->setBasecamp($this)
+			->setHttpClient($this->_getHttpClient())
+		;
+		return $comments;
+	}
 	
+	public function getAttachmentsInstance()
+	{
+		require_once 'Sirprize/Basecamp/Attachment/Collection.php';
+		$attachments = new \Sirprize\Basecamp\Attachment\Collection();
+		$attachments
+			->setBasecamp($this)
+			->setHttpClient($this->_getHttpClient())
+		;
+		return $attachments;
+	}
 	
 	public function getTodoListsInstance()
 	{
