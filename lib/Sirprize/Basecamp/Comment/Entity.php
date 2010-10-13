@@ -126,6 +126,15 @@ class Entity
 		return $this->_getVal(self::_ID);
 	}
 	
+	
+	
+	public function getBody()
+	{
+		return $this->_getVal(self::_BODY);
+	}
+	
+	
+	
 	public function getAttachments()
 	{
 		if($this->_attachments === null)
@@ -153,6 +162,7 @@ class Entity
 		
 		$this->_loaded = true;
 		$array = (array) $xml;
+		//print_r($array); exit;
 		
 		if(isset($array[self::_ATTACHMENTS]))
 		{

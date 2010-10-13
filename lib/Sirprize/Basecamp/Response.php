@@ -40,6 +40,7 @@ class Response
 		
 		if(!preg_match('/^\s*$/', $httpResponse->getBody()))
     	{
+			//print $httpResponse->getBody();
 			$this->_data = simplexml_load_string($httpResponse->getBody());
 			
 			if($httpResponse->isError())
