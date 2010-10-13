@@ -9,6 +9,7 @@ h2. Supported Features
 * Milestone: startAllByProjectId(), create(), update(), delete(), complete(), uncomplete() etc
 * Todolist: startById(), startAllByProjectId(), startAllByResponsibiltyParty(), create(), update(), delete() etc
 * Todoitems: startAllByTodoListId(), startById(), create(), update(), delete(), complete(), uncomplete() etc
+* Comments: startAllByResourceId(), startById()
 
 h2. Requirements
 
@@ -116,5 +117,5 @@ h2. Todo
 * Companies
 * Categories
 * Messages
-* Comments
+* Comments (create(), update(), delete())
 * Time tracking
