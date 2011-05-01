@@ -31,7 +31,8 @@ $responsiblePartyId = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_USER_ID);
 
 $todoItem
 	->setTodoListId($todoListId)
+	->setResponsiblePartyId($responsiblePartyId)
 	->setContent('Whoaaaa')
+	->setNotify(true)
+	->create()
 ;
-
-$todoItem->create($responsiblePartyId, true);
