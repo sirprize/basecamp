@@ -116,6 +116,18 @@ class Basecamp
 		;
 		return $projects;
 	}
+
+	public function getTimeEntriesInstance()
+	{
+		require_once 'Sirprize/Basecamp/TimeEntry/Collection.php';
+		$entries = new \Sirprize\Basecamp\TimeEntry\Collection();
+		$entries
+			->setBasecamp($this)
+			->setHttpClient($this->_getHttpClient())
+		;
+		return $entries;
+	}
+
 	
 	
 	
