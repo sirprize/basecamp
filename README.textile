@@ -10,6 +10,7 @@ h2. Supported Features
 * Todolist: startById(), startAllByProjectId(), startAllByResponsibiltyParty(), create(), update(), delete() etc
 * Todoitems: startAllByTodoListId(), startById(), create(), update(), delete(), complete(), uncomplete() etc
 * Comments: startAllByResourceId(), startById()
+* Timetracking: startAllByProjectId(), startById()
 
 h2. Requirements
 
@@ -117,5 +118,5 @@ h2. Todo
 * Companies
 * Categories
 * Messages
-* Comments (create(), update(), delete())
-* Time tracking
+* Comments: create(), update(), delete()
+* Time tracking: startAllByTodoItemId(), create(), update(), delete()
