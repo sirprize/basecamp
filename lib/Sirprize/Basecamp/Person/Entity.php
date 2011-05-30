@@ -254,9 +254,41 @@ class Entity
 		$id = new \Sirprize\Basecamp\Id($array[self::_ID]);
 		$companyId = new \Sirprize\Basecamp\Id($array[self::_COMPANY_ID]);
 		
-		$administrator = ($array[self::_ADMINISTRATOR] == 'true');
-		$deleted = ($array[self::_DELETED] == 'true');
-		$hasAccessToNewProjects = ($array[self::_HAS_ACCESS_TO_NEW_PROJECTS] == 'true');
+		if (isset($array[self::_ADMINISTRATOR]))
+		{
+		  $administrator = ($array[self::_ADMINISTRATOR] == 'true');
+		}
+		else
+		{
+		  $administrator = false;
+		}
+		
+		if (isset($array[self::_DELETED]))
+		{
+		  $deleted = ($array[self::_DELETED] == 'true');
+		}
+		else
+		{
+		  $deleted = false;
+		}
+		
+		if (isset($array[self::_HAS_ACCESS_TO_NEW_PROJECTS]))
+		{
+		  $hasAccessToNewProjects = ($array[self::_HAS_ACCESS_TO_NEW_PROJECTS] == 'true');
+		}
+		else
+		{
+		  $hasAccessToNewProjects = false;
+		}
+		
+		if (isset($array[self::_USER_NAME]))
+		{
+		  $userRealName = $array[self::_USER_NAME];
+		}
+		else
+		{
+		  $userRealName = null;
+		}
 		
 		$this->_data = array(
 			self::_ADMINISTRATOR => $administrator,
@@ -279,7 +311,7 @@ class Entity
 			self::_FIRST_NAME => $array[self::_FIRST_NAME],
 			self::_LAST_NAME => $array[self::_LAST_NAME],
 			self::_COMPANY_ID => $companyId,
-			self::_USER_NAME => $array[self::_USER_NAME],
+			self::_USER_NAME => $userRealName,
 			self::_EMAIL_ADDRESS => $array[self::_EMAIL_ADDRESS],
 			self::_AVATAR_URL => $array[self::_AVATAR_URL]
 		);

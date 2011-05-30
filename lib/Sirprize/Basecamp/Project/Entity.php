@@ -189,18 +189,70 @@ class Entity
 		require_once 'Sirprize/Basecamp/Id.php';
 		$id = new \Sirprize\Basecamp\Id($array[self::_ID]);
 		
-		$showAnnouncement = ($array[self::_SHOW_ANNOUNCEMENT] == 'true');
-		$showWriteboards = ($array[self::_SHOW_WRITEBOARDS] == 'true');
+		if (isset($array[self::_SHOW_ANNOUNCEMENT]))
+		{
+		  $showAnnouncement = ($array[self::_SHOW_ANNOUNCEMENT] == 'true');
+		}
+		else
+		{
+		  $showAnnouncement = false;
+		}
+		
+		if (isset($array[self::_SHOW_WRITEBOARDS]))
+		{
+		  $showWriteboards = ($array[self::_SHOW_WRITEBOARDS] == 'true');
+		}
+		else
+		{
+		  $showWriteboards = false;
+		}
+		
+		if (isset($array[self::_ANNOUNCEMENT]))
+		{
+		  $announcement = $array[self::_ANNOUNCEMENT];
+		}
+		else
+		{
+		  $announcement = false;
+		}
+		
+		if (isset($array[self::_CREATED_ON]))
+		{
+		  $createdOn = $array[self::_CREATED_ON];
+		}
+		else
+		{
+		  $createdOn = false;
+		}
+		
+		if (isset($array[self::_LAST_CHANGED_ON]))
+		{
+		  $lastChangedOn = $array[self::_LAST_CHANGED_ON];
+		}
+		else
+		{
+		  $lastChangedOn = false;
+		}
+		
+		if (isset($array[self::_START_PAGE]))
+		{
+		  $startPage = $array[self::_START_PAGE];
+		}
+		else
+		{
+		  $startPage = false;
+		}
+		
 		
 		$this->_data = array(
-			self::_ANNOUNCEMENT => $array[self::_ANNOUNCEMENT],
-			self::_CREATED_ON => $array[self::_CREATED_ON],
+			self::_ANNOUNCEMENT => $announcement,
+			self::_CREATED_ON => $createdOn,
 			self::_ID => $id,
-			self::_LAST_CHANGED_ON => $array[self::_LAST_CHANGED_ON],
-			self::_NAME => $array[self::_NAME],
+			self::_LAST_CHANGED_ON => $lastChangedOn,
+			self::_NAME => $array[self::_NAME], 
 			self::_SHOW_ANNOUNCEMENT => $showAnnouncement,
 			self::_SHOW_WRITEBOARDS => $showWriteboards,
-			self::_START_PAGE => $array[self::_START_PAGE],
+			self::_START_PAGE => $startPage,
 			self::_STATUS => $array[self::_STATUS],
 			self::_COMPANY => $array[self::_COMPANY]
 		);
