@@ -34,15 +34,30 @@ class Basecamp
 		{
 			$this->_baseUri = $config['baseUri'];
 		}
+		else
+		{
+		  require_once 'Sirprize/Basecamp/Exception.php';
+		  throw new \Sirprize\Basecamp\Exception("you must set 'baseUri' in constructor config array");
+		}
 		
 		if(isset($config['username']))
 		{
 			$this->_username = $config['username'];
 		}
+		else
+		{
+		  require_once 'Sirprize/Basecamp/Exception.php';
+		  throw new \Sirprize\Basecamp\Exception("you must set 'username' in constructor config array");
+		}
 		
 		if(isset($config['password']))
 		{
 			$this->_password = $config['password'];
+		}
+		else
+		{
+		  require_once 'Sirprize/Basecamp/Exception.php';
+		  throw new \Sirprize\Basecamp\Exception("you must set 'password' in constructor config array");
 		}
 	}
 	
