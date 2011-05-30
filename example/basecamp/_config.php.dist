@@ -23,6 +23,7 @@ define('BASECAMP_EXAMPLE_TODOLIST_ID', 'xxxxxx');
 define('BASECAMP_EXAMPLE_TODOLIST_TEMPLATE_ID', 'xxxxxx');
 define('BASECAMP_EXAMPLE_TODOLISTITEM_ID', 'xxxxxx');
 define('BASECAMP_EXAMPLE_COMMENT_ID', 'xxxxxx');
+define('BASECAMP_EXAMPLE_TIMEENTRY_ID', 'xxxxxx');
 
 set_include_path(implode(PATH_SEPARATOR, array(
     realpath('/path/to/zend/framework'), # path to zend framework
