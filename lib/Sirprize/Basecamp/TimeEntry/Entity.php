@@ -66,7 +66,6 @@ class Entity
 	}
 	
 	
-	
 	public function getDate()
 	{
 		return $this->_getVal(self::_DATE);
@@ -137,7 +136,7 @@ class Entity
 		
     if ($array[self::_TODO_ITEM_ID]['nil'] != 'true')
     {
-      $todoItemId = $array[self::_TODO_ITEM_ID];
+		$todoItemId = $array[self::_TODO_ITEM_ID];
     }
     else
     {
@@ -146,12 +145,12 @@ class Entity
 		
 		$this->_data = array(
 			self::_ID => $id,
-		  self::_DATE => $array[self::_DATE],
-		  self::_DESCRIPTION => $array[self::_DESCRIPTION],
-		  self::_HOURS => $array[self::_HOURS],
-		  self::_PERSON_ID => $personId,
-		  self::_PROJECT_ID => $projectId,
-		  self::_TODO_ITEM_ID => $todoItemId
+			self::_DATE => $array[self::_DATE],
+			self::_DESCRIPTION => $array[self::_DESCRIPTION],
+			self::_HOURS => $array[self::_HOURS],
+			self::_PERSON_ID => $personId,
+			self::_PROJECT_ID => $projectId,
+			self::_TODO_ITEM_ID => $todoItemId
 		);
 		
 		return $this;
