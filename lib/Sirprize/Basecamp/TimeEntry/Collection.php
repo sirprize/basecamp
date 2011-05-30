@@ -159,7 +159,7 @@ class Collection extends \SplObjectStorage
 	 * @throws \Sirprize\Basecamp\Exception
 	 * @return null|\Sirprize\Basecamp\TimeEntry\Collection
 	 */
-	public function startByProjectId(\Sirprize\Basecamp\Id $id)
+	public function startAllByProjectId(\Sirprize\Basecamp\Id $id)
 	{
 		if($this->_started)
 		{
