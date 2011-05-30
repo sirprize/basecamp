@@ -122,5 +122,5 @@ h2. Todo
 * Time tracking: startAllByTodoItemId(), create(), update(), delete()
 
 h2. Contributors
-* [lacyrhoades](https://github.com/lacyrhoades)
-* [morrislaptop](https://github.com/morrislaptop)
+* "lacyrhoades":https://github.com/lacyrhoades
+* "morrislaptop":https://github.com/morrislaptop
