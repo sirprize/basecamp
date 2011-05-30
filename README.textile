@@ -120,3 +120,7 @@ h2. Todo
 * Messages
 * Comments: create(), update(), delete()
 * Time tracking: startAllByTodoItemId(), create(), update(), delete()
+
+h2. Contributors
+* [lacyrhoades](https://github.com/lacyrhoades)
+* [morrislaptop](https://github.com/morrislaptop)
