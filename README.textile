@@ -22,6 +22,10 @@ Please find plenty of working examples in the __basecamp/example/basecamp__ dire
 
 h3. First Steps
 
+# __git clone git://github.com/sirprize/basecamp.git sirprize-basecamp__
+# __cd sirprize-basecamp__
+# __git submodule init__
+# __git submodule update__
 # create a dummy project in your basecamp account
 # adjust __basecamp/example/basecamp/_config.php__ with your own settings
 # make files executable in __basecamp/example/basecamp/(milestone|person|project|todoitem|todolist)/*__
