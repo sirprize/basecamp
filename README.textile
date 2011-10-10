@@ -15,7 +15,6 @@ h2. Supported Features
 h2. Requirements
 
 * php 5.3+ (uses namespaces)
-* Recent version of zend framework (tested with 1.10) > uses Zend_Http_Client & Zend_Log (optional)
 
 h2. Getting Started
 
@@ -37,12 +36,11 @@ bc.. $config = array(
 	'password' => 'xxx'
 );
 
-require_once 'Sirprize/Basecamp.php';
-$basecamp = new \Sirprize\Basecamp($config);
+$service = new \Sirprize\Basecamp\Service($config);
 
 h3. Fetch all projects
 
-bc.. $projects = $basecamp->getProjectsInstance()->startAll();
+bc.. $projects = $service->getProjectsInstance()->startAll();
 
 foreach($projects as $project)
 {
@@ -58,11 +56,10 @@ bc.. /*
  *
  */
 
-require_once 'Sirprize/Basecamp/Id.php';
 $sourceProjectId = new \Sirprize\Basecamp\Id('xxx');
 $targetProjectId = new \Sirprize\Basecamp\Id('yyy');
 
-$projects = $basecamp->getProjectsInstance();
+$projects = $service->getProjectsInstance();
 $sourceProject = $projects->startById($sourceProjectId);
 $sourceProject->copy($targetProjectId);
 
@@ -77,29 +74,20 @@ bc.. /*
  *
  */
 
-require_once 'Sirprize/Basecamp/Id.php';
 $sourceProjectId = new \Sirprize\Basecamp\Id('xxx');
 $targetProjectId = new \Sirprize\Basecamp\Id('yyy');
 
-$projects = $basecamp->getProjectsInstance();
+$projects = $service->getProjectsInstance();
 $sourceProject = $projects->startById($sourceProjectId);
-
-require_once 'Sirprize/Basecamp/Date.php';
 $referenceDate = new \Sirprize\Basecamp\Date('2010-12-30');
-
-require_once 'Sirprize/Basecamp/Schema/Export.php';
 $referenceMilestone = \Sirprize\Basecamp\Schema\Export::REFERENCE_EXTREMITY_LAST;
 $sourceProject->replicate($targetProjectId, $referenceDate, $referenceMilestone);
 
 h3. Create a new milestone
 
-bc.. $milestones = $basecamp->getMilestonesInstance();
+bc.. $milestones = $service->getMilestonesInstance();
 $milestone = $milestones->getMilestoneInstance();
-
-require_once 'Sirprize/Basecamp/Date.php';
 $deadline = new \Sirprize\Basecamp\Date('2010-03-01');
-
-require_once 'Sirprize/Basecamp/Id.php';
 $projectId = new \Sirprize\Basecamp\Id('xxx');
 $userId = new \Sirprize\Basecamp\Id('xxx');
 
