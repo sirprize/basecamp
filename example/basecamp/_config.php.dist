@@ -25,21 +25,38 @@ define('BASECAMP_EXAMPLE_TODOLISTITEM_ID', 'xxxxxx');
 define('BASECAMP_EXAMPLE_COMMENT_ID', 'xxxxxx');
 define('BASECAMP_EXAMPLE_TIMEENTRY_ID', 'xxxxxx');
 
-set_include_path(implode(PATH_SEPARATOR, array(
-    realpath('/path/to/zend/framework'), # path to zend framework
-	realpath('../lib'), # path to basecamp lib
-)));
-
 $config = array(
 	'baseUri' => 'https://xxxxxx.basecamphq.com',
 	'username' => 'xxxxxx',
 	'password' => 'xxxxxx'
 );
 
-require_once 'Zend/Log/Writer/Stream.php';
-$logWriter = new Zend_Log_Writer_Stream(dirname(dirname(__FILE__)).'/_logs/'.gmdate('Ymd').'.log');
+$base = dirname(dirname(dirname(__FILE__)));
 
-require_once 'Zend/Log.php';
-$log = new Zend_Log($logWriter);
+require_once $base.'/vendor/doctrine2-common/lib/Doctrine/Common/ClassLoader.php';
+$loader = new \Doctrine\Common\ClassLoader('Zend', realpath($base.'/vendor/zend-framework/library'));
+$loader->setNamespaceSeparator('_');
+$loader->register();
+
+$loader = new \Doctrine\Common\ClassLoader('Doctrine\Common', realpath($base.'/vendor/doctrine2-common/lib'));
+$loader->register();
+
+$loader = new \Doctrine\Common\ClassLoader('Sirprize\Basecamp', realpath($base.'/lib'));
+$loader->register();
+
+
+set_include_path(
+	implode(
+		PATH_SEPARATOR,
+		array(
+			realpath($base.'/lib'),
+    		realpath($base.'/vendor/zend-framework/library'),
+		)
+	)
+);
 
 date_default_timezone_set('UTC');
+
+
+$logWriter = new Zend_Log_Writer_Stream($base.'/example/_logs/'.gmdate('Ymd').'.log');
+$log = new Zend_Log($logWriter);
