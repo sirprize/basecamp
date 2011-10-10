@@ -118,7 +118,6 @@ class Collection extends \SplObjectStorage
 	 */
 	public function getAttachmentInstance()
 	{
-		require_once 'Sirprize/Basecamp/Attachment/Entity.php';
 		$attachment = new \Sirprize\Basecamp\Attachment\Entity();
 		$attachment
 			->setHttpClient($this->_getHttpClient())
@@ -143,7 +142,6 @@ class Collection extends \SplObjectStorage
 	{
 		if(!$attachment instanceof \Sirprize\Basecamp\Attachment\Entity)
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('expecting an instance of \Sirprize\Basecamp\Attachment\Entity');
 		}
 		
@@ -161,7 +159,6 @@ class Collection extends \SplObjectStorage
 	{
 		if($this->_loaded)
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('collection has already been loaded');
 		}
 		
@@ -210,7 +207,6 @@ class Collection extends \SplObjectStorage
 	{
 		if($this->_basecamp === null)
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('call setBasecamp() before '.__METHOD__);
 		}
 		
@@ -222,7 +218,6 @@ class Collection extends \SplObjectStorage
 	{
 		if($this->_httpClient === null)
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('call setHttpClient() before '.__METHOD__);
 		}
 		

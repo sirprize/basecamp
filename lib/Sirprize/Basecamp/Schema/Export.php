@@ -41,7 +41,6 @@ class Export
 		
 		if($useRelativeDates && $referenceDate === null)
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception("milestone '$referenceMilestone' does not exist");
 		}
 		
@@ -154,8 +153,6 @@ class Export
 	
 	protected function _calculateOffsetDays($referenceDate, $effectiveDate, $referenceMilestone, $isMilestone)
 	{
-		require_once 'Zend/Date.php';
-		require_once 'Sirprize/Basecamp/Date.php';
 		$referenceDate = new \Zend_Date($referenceDate, \Sirprize\Basecamp\Date::FORMAT);
 		$effectiveDate = new \Zend_Date($effectiveDate, \Sirprize\Basecamp\Date::FORMAT);
 		

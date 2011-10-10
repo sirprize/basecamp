@@ -18,7 +18,6 @@
 namespace Sirprize\Basecamp\Milestone\Collection\Observer;
 
 
-require_once 'Sirprize/Basecamp/Milestone/Collection/Observer/Abstrakt.php';
 
 
 /**

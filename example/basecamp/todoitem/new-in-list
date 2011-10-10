@@ -18,14 +18,12 @@
 
 require_once '../_config.php';
 
-require_once 'Sirprize/Basecamp/Cli.php';
 $basecamp = new \Sirprize\Basecamp\Cli($config);
 $basecamp->setLog($log);
 
 $todoItems = $basecamp->getTodoItemsInstance();
 $todoItem = $todoItems->getTodoItemInstance();
 
-require_once 'Sirprize/Basecamp/Id.php';
 $todoListId = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_TODOLIST_ID);
 $responsiblePartyId = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_USER_ID);
 

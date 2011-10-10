@@ -41,7 +41,7 @@ $loader->register();
 $loader = new \Doctrine\Common\ClassLoader('Doctrine\Common', realpath($base.'/vendor/doctrine2-common/lib'));
 $loader->register();
 
-$loader = new \Doctrine\Common\ClassLoader('Sirprize\Basecamp', realpath($base.'/lib'));
+$loader = new \Doctrine\Common\ClassLoader('Sirprize', realpath($base.'/lib'));
 $loader->register();
 
 
@@ -49,7 +49,6 @@ set_include_path(
 	implode(
 		PATH_SEPARATOR,
 		array(
-			realpath($base.'/lib'),
     		realpath($base.'/vendor/zend-framework/library'),
 		)
 	)

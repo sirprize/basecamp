@@ -123,7 +123,6 @@ class Collection extends \SplObjectStorage
 	 */
 	public function getCommentInstance()
 	{
-		require_once 'Sirprize/Basecamp/Comment/Entity.php';
 		$comment = new \Sirprize\Basecamp\Comment\Entity();
 		$comment
 			->setHttpClient($this->_getHttpClient())
@@ -148,7 +147,6 @@ class Collection extends \SplObjectStorage
 	{
 		if(!$comment instanceof \Sirprize\Basecamp\Comment\Entity)
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('expecting an instance of \Sirprize\Basecamp\Comment\Entity');
 		}
 		
@@ -193,12 +191,10 @@ class Collection extends \SplObjectStorage
 				// connection error
 				$this->_onStartError();
 			
-				require_once 'Sirprize/Basecamp/Exception.php';
 				throw new \Sirprize\Basecamp\Exception($exception->getMessage());
 			}
 		}
 		
-		require_once 'Sirprize/Basecamp/Response.php';
 		$this->_response = new \Sirprize\Basecamp\Response($response);
 		
 		if($this->_response->isError())
@@ -246,12 +242,10 @@ class Collection extends \SplObjectStorage
 			{
 				$this->_onStartError();
 			
-				require_once 'Sirprize/Basecamp/Exception.php';
 				throw new \Sirprize\Basecamp\Exception($exception->getMessage());
 			}
 		}
 		
-		require_once 'Sirprize/Basecamp/Response.php';
 		$this->_response = new \Sirprize\Basecamp\Response($response);
 		
 		if($this->_response->isError())
@@ -277,7 +271,6 @@ class Collection extends \SplObjectStorage
 	{
 		if($this->_loaded)
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('collection has already been loaded');
 		}
 		
@@ -326,7 +319,6 @@ class Collection extends \SplObjectStorage
 	{
 		if($this->_basecamp === null)
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('call setBasecamp() before '.__METHOD__);
 		}
 		
@@ -338,7 +330,6 @@ class Collection extends \SplObjectStorage
 	{
 		if($this->_httpClient === null)
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('call setHttpClient() before '.__METHOD__);
 		}
 		

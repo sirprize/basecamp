@@ -4,7 +4,6 @@
 namespace Sirprize\Basecamp\Cli\Milestone;
 
 
-require_once 'Sirprize/Basecamp/Milestone/Collection.php';
 
 
 class Collection extends \Sirprize\Basecamp\Milestone\Collection
@@ -25,7 +24,6 @@ class Collection extends \Sirprize\Basecamp\Milestone\Collection
 	{
 		if($this->_log === null)
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('call setLog() before '.__METHOD__);
 		}
 		
@@ -40,14 +38,11 @@ class Collection extends \Sirprize\Basecamp\Milestone\Collection
 	 */
 	public function getMilestoneInstance()
 	{
-		require_once 'Sirprize/Basecamp/Milestone/Entity/Observer/Stout.php';
 		$milestoneObserverStout = new \Sirprize\Basecamp\Milestone\Entity\Observer\Stout();
 		
-		require_once 'Sirprize/Basecamp/Milestone/Entity/Observer/Log.php';
 		$milestoneObserverLog = new \Sirprize\Basecamp\Milestone\Entity\Observer\Log();
 		$milestoneObserverLog->setLog($this->_getLog());
 		
-		require_once 'Sirprize/Basecamp/Cli/Milestone/Entity.php';
 		$milestone = new \Sirprize\Basecamp\Cli\Milestone\Entity();
 		$milestone
 			->setHttpClient($this->_getHttpClient())

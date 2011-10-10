@@ -120,7 +120,6 @@ class Collection extends \SplObjectStorage
 	 */
 	public function getPersonInstance()
 	{
-		require_once 'Sirprize/Basecamp/Person/Entity.php';
 		$person = new \Sirprize\Basecamp\Person\Entity();
 		$person
 			->setHttpClient($this->_getHttpClient())
@@ -145,7 +144,6 @@ class Collection extends \SplObjectStorage
 	{
 		if(!$person instanceof \Sirprize\Basecamp\Person\Entity)
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('expecting an instance of \Sirprize\Basecamp\Person\Entity');
 		}
 		
@@ -190,12 +188,10 @@ class Collection extends \SplObjectStorage
 			{
 				$this->_onStartError();
 			
-				require_once 'Sirprize/Basecamp/Exception.php';
 				throw new \Sirprize\Basecamp\Exception($exception->getMessage());
 			}
 		}
 		
-		require_once 'Sirprize/Basecamp/Response.php';
 		$this->_response = new \Sirprize\Basecamp\Response($response);
 		
 		if($this->_response->isError())
@@ -248,12 +244,10 @@ class Collection extends \SplObjectStorage
 			{
 				$this->_onStartError();
 			
-				require_once 'Sirprize/Basecamp/Exception.php';
 				throw new \Sirprize\Basecamp\Exception($exception->getMessage());
 			}
 		}
 		
-		require_once 'Sirprize/Basecamp/Response.php';
 		$this->_response = new \Sirprize\Basecamp\Response($response);
 		
 		if($this->_response->isError())
@@ -299,11 +293,9 @@ class Collection extends \SplObjectStorage
 			// connection error
 			$this->_onStartError();
 			
-			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception($exception->getMessage());
 		}
 		
-		require_once 'Sirprize/Basecamp/Response.php';
 		$this->_response = new \Sirprize\Basecamp\Response($response);
 		
 		if($this->_response->isError())
@@ -353,12 +345,10 @@ class Collection extends \SplObjectStorage
 			{
 				$this->_onStartError();
 			
-				require_once 'Sirprize/Basecamp/Exception.php';
 				throw new \Sirprize\Basecamp\Exception($exception->getMessage());
 			}
 		}
 		
-		require_once 'Sirprize/Basecamp/Response.php';
 		$this->_response = new \Sirprize\Basecamp\Response($response);
 		
 		if($this->_response->isError())
@@ -385,7 +375,6 @@ class Collection extends \SplObjectStorage
 	{
 		if($this->_loaded)
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('collection has already been loaded');
 		}
 		
@@ -434,7 +423,6 @@ class Collection extends \SplObjectStorage
 	{
 		if($this->_basecamp === null)
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('call setBasecamp() before '.__METHOD__);
 		}
 		
@@ -446,7 +434,6 @@ class Collection extends \SplObjectStorage
 	{
 		if($this->_httpClient === null)
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('call setHttpClient() before '.__METHOD__);
 		}
 		

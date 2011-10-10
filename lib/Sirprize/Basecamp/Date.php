@@ -29,7 +29,6 @@ class Date
 	{
 		if(!preg_match(self::REGEX, $date))
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception("invalid date format '$date'");
 		}
 		
@@ -57,7 +56,6 @@ class Date
 	
 	public function addDays($numDays)
 	{
-		require_once 'Zend/Date.php';
 		$date = new \Zend_Date($this->_date, self::FORMAT);
 		$this->_date = $date->addSecond(60 * 60 * 24 * (int)$numDays)->toString(self::FORMAT);
 		return $this;
@@ -66,7 +64,6 @@ class Date
 	
 	public function subDays($numDays)
 	{
-		require_once 'Zend/Date.php';
 		$date = new \Zend_Date($this->_date, self::FORMAT);
 		$this->_date = $date->subSecond(60 * 60 * 24 * (int)$numDays)->toString(self::FORMAT);
 		return $this;

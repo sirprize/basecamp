@@ -18,17 +18,14 @@
 
 require_once '../_config.php';
 
-require_once 'Sirprize/Basecamp/Cli.php';
 $basecamp = new \Sirprize\Basecamp\Cli($config);
 $basecamp->setLog($log);
 
 $milestones = $basecamp->getMilestonesInstance();
 $milestone = $milestones->getMilestoneInstance();
 
-require_once 'Sirprize/Basecamp/Date.php';
 $date = new \Sirprize\Basecamp\Date('2010-03-01');
 
-require_once 'Sirprize/Basecamp/Id.php';
 $projectId = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_PROJECT_ID);
 $userId = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_USER_ID);
 

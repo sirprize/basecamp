@@ -26,7 +26,6 @@ class Id
 	{
 		if(!preg_match('/^[a-zA-Z0-9]+$/', $id))
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception("invalid id format '$id'");
 		}
 		

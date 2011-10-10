@@ -247,7 +247,6 @@ class Entity
 	{
 		if($this->_loaded && !$force)
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('entity has already been loaded');
 		}
 		
@@ -255,10 +254,8 @@ class Entity
 		$this->_loaded = true;
 		$array = (array) $xml;
 		
-		require_once 'Sirprize/Basecamp/Date.php';
 		$deadline = new \Sirprize\Basecamp\Date($array[self::_DEADLINE]);
 		
-		require_once 'Sirprize/Basecamp/Id.php';
 		$id = new \Sirprize\Basecamp\Id($array[self::_ID]);
 		$projectId = new \Sirprize\Basecamp\Id($array[self::_PROJECT_ID]);
 		$creatorId = new \Sirprize\Basecamp\Id($array[self::_CREATOR_ID]);
@@ -296,19 +293,16 @@ class Entity
 	{
 		if($this->getTitle() === null)
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('call setTitle() before '.__METHOD__);
 		}
 		
 		if($this->getDeadline() === null)
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('call setDeadline() before '.__METHOD__);
 		}
 		
 		if($this->getResponsiblePartyId() === null)
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('call setResponsiblePartyId() before  '.__METHOD__);
 		}
 		
@@ -333,7 +327,6 @@ class Entity
 	{
 		if($this->getProjectId() === null)
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('set project-id before  '.__METHOD__);
 		}
 		
@@ -363,12 +356,10 @@ class Entity
 			{
 				$this->onCreateError();
 			
-				require_once 'Sirprize/Basecamp/Exception.php';
 				throw new \Sirprize\Basecamp\Exception($exception->getMessage());
 			}
 		}
 		
-		require_once 'Sirprize/Basecamp/Response.php';
 		$this->_response = new \Sirprize\Basecamp\Response($response);
 		
 		if($this->_response->isError())
@@ -419,7 +410,6 @@ class Entity
 	{
 		if(!$this->_loaded)
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('call load() before '.__METHOD__);
 		}
 		
@@ -449,12 +439,10 @@ class Entity
 			{
 				$this->_onUpdateError();
 			
-				require_once 'Sirprize/Basecamp/Exception.php';
 				throw new \Sirprize\Basecamp\Exception($exception->getMessage());
 			}
 		}
 		
-		require_once 'Sirprize/Basecamp/Response.php';
 		$this->_response = new \Sirprize\Basecamp\Response($response);
 		
 		if($this->_response->isError())
@@ -500,12 +488,10 @@ class Entity
 			{
 				$this->_onDeleteError();
 			
-				require_once 'Sirprize/Basecamp/Exception.php';
 				throw new \Sirprize\Basecamp\Exception($exception->getMessage());
 			}
 		}
 		
-		require_once 'Sirprize/Basecamp/Response.php';
 		$this->_response = new \Sirprize\Basecamp\Response($response);
 		
 		if($this->_response->isError())
@@ -533,7 +519,6 @@ class Entity
 	{
 		if(!$this->_loaded)
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('call load() before '.__METHOD__);
 		}
 		
@@ -556,12 +541,10 @@ class Entity
 			{
 				$this->_onCompleteError();
 			
-				require_once 'Sirprize/Basecamp/Exception.php';
 				throw new \Sirprize\Basecamp\Exception($exception->getMessage());
 			}
 		}
 		
-		require_once 'Sirprize/Basecamp/Response.php';
 		$this->_response = new \Sirprize\Basecamp\Response($response);
 		
 		if($this->_response->isError())
@@ -588,7 +571,6 @@ class Entity
 	{
 		if(!$this->_loaded)
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('call load() before '.__METHOD__);
 		}
 		
@@ -611,12 +593,10 @@ class Entity
 			{
 				$this->_onCompleteError();
 			
-				require_once 'Sirprize/Basecamp/Exception.php';
 				throw new \Sirprize\Basecamp\Exception($exception->getMessage());
 			}
 		}
 		
-		require_once 'Sirprize/Basecamp/Response.php';
 		$this->_response = new \Sirprize\Basecamp\Response($response);
 		
 		if($this->_response->isError())
@@ -637,7 +617,6 @@ class Entity
 	{
 		if($this->_basecamp === null)
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('call setBasecamp() before '.__METHOD__);
 		}
 		
@@ -649,7 +628,6 @@ class Entity
 	{
 		if($this->_httpClient === null)
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('call setHttpClient() before '.__METHOD__);
 		}
 		

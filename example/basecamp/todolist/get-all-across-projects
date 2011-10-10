@@ -18,7 +18,6 @@
 
 require_once '../_config.php';
 
-require_once 'Sirprize/Basecamp/Cli.php';
 $basecamp = new \Sirprize\Basecamp\Cli($config);
 $basecamp->setLog($log);
 

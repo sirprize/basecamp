@@ -18,7 +18,6 @@
 namespace Sirprize\Basecamp\TimeEntry\Collection\Observer;
 
 
-require_once 'Sirprize/Basecamp/TimeEntry/Collection/Observer/Abstrakt.php';
 
 
 /**

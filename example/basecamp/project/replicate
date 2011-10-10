@@ -19,11 +19,9 @@
 
 require_once '../_config.php';
 
-require_once 'Sirprize/Basecamp/Cli.php';
 $basecamp = new \Sirprize\Basecamp\Cli($config);
 $basecamp->setLog($log);
 
-require_once 'Sirprize/Basecamp/Id.php';
 $sourceProjectId = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_PROJECT_ID);
 $targetProjectId = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_PROJECT_TARGET_ID);
 
@@ -40,10 +38,8 @@ if($projects->getResponse()->isError())
 	die("Source project error\n");
 }
 
-require_once 'Sirprize/Basecamp/Date.php';
 $referenceDate = new \Sirprize\Basecamp\Date('2010-12-30');
 
-require_once 'Sirprize/Basecamp/Schema/Export.php';
 $referenceMilestone = \Sirprize\Basecamp\Schema\Export::REFERENCE_EXTREMITY_LAST;
 
 $sourceProject->replicate($targetProjectId, $referenceDate, $referenceMilestone);

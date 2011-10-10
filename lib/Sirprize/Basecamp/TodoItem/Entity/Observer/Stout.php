@@ -18,7 +18,6 @@
 namespace Sirprize\Basecamp\TodoItem\Entity\Observer;
 
 
-require_once 'Sirprize/Basecamp/TodoItem/Entity/Observer/Abstrakt.php';
 
 
 /**

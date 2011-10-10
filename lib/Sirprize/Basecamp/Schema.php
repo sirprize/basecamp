@@ -40,7 +40,6 @@ class Schema
 	{
 		if($this->_basecamp === null)
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('call setBasecamp() before '.__METHOD__);
 		}
 		
@@ -53,7 +52,6 @@ class Schema
 	{
 		if($this->_milestones === null)
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('call loadFromFile() before '.__METHOD__);
 		}
 		
@@ -69,7 +67,6 @@ class Schema
 	{
 		if(!is_readable($file))
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception("'$file' must be readable");
 		}
 		
@@ -125,7 +122,6 @@ class Schema
 			$milestone = $this->_getBasecamp()->getMilestonesInstance()->getMilestoneInstance();
 			$milestone->setTitle($this->_getMilestoneTitle($title));
 			
-			require_once 'Sirprize/Basecamp/Date.php';
 			
 			if(\Sirprize\Basecamp\Date::isValid($deadline))
 			{
@@ -137,13 +133,11 @@ class Schema
 				$milestone->setDeadline(new \Sirprize\Basecamp\Date($deadline));
 			}
 			else {
-				require_once 'Sirprize/Basecamp/Exception.php';
 				throw new \Sirprize\Basecamp\Exception("invalid reference date and invalid reference date offset");
 			}
 			
 			if($responsiblePartyId !== null)
 			{
-				require_once 'Sirprize/Basecamp/Id.php';
 				$responsiblePartyId = new \Sirprize\Basecamp\Id($responsiblePartyId);
 				$milestone->setResponsiblePartyId($responsiblePartyId);
 			}
@@ -189,7 +183,6 @@ class Schema
 						->setNotify($notify)
 					;
 					
-					require_once 'Sirprize/Basecamp/Date.php';
 					
 					if(\Sirprize\Basecamp\Date::isValid($dueAt))
 					{
@@ -203,7 +196,6 @@ class Schema
 					
 					if($responsiblePartyId !== null)
 					{
-						require_once 'Sirprize/Basecamp/Id.php';
 						$responsiblePartyId = new \Sirprize\Basecamp\Id($responsiblePartyId);
 						$todoItem->setResponsiblePartyId($responsiblePartyId);
 					}
@@ -234,8 +226,6 @@ class Schema
 	
 	protected function _calculateDateFromOffsetDays(\Sirprize\Basecamp\Date $referenceDate, $referenceDateOffset)
 	{
-		require_once 'Zend/Date.php';
-		require_once 'Sirprize/Basecamp/Date.php';
 		$referenceDate = new \Zend_Date((string)$referenceDate, \Sirprize\Basecamp\Date::FORMAT);
 		$referenceDateOffset = (int)$referenceDateOffset;
 	

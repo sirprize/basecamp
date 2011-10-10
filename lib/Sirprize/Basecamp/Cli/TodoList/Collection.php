@@ -4,7 +4,6 @@
 namespace Sirprize\Basecamp\Cli\TodoList;
 
 
-require_once 'Sirprize/Basecamp/TodoList/Collection.php';
 
 
 class Collection extends \Sirprize\Basecamp\TodoList\Collection
@@ -25,7 +24,6 @@ class Collection extends \Sirprize\Basecamp\TodoList\Collection
 	{
 		if($this->_log === null)
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('call setLog() before '.__METHOD__);
 		}
 		
@@ -40,14 +38,11 @@ class Collection extends \Sirprize\Basecamp\TodoList\Collection
 	 */
 	public function getTodoListInstance()
 	{
-		require_once 'Sirprize/Basecamp/TodoList/Entity/Observer/Stout.php';
 		$todoListObserverStout = new \Sirprize\Basecamp\TodoList\Entity\Observer\Stout();
 		
-		require_once 'Sirprize/Basecamp/TodoList/Entity/Observer/Log.php';
 		$todoListObserverLog = new \Sirprize\Basecamp\TodoList\Entity\Observer\Log();
 		$todoListObserverLog->setLog($this->_getLog());
 		
-		require_once 'Sirprize/Basecamp/Cli/TodoList/Entity.php';
 		$todoList = new \Sirprize\Basecamp\Cli\TodoList\Entity();
 		$todoList
 			->setHttpClient($this->_getHttpClient())

@@ -242,7 +242,6 @@ class Entity
 	{
 		if($this->_loaded && !$force)
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('entity has already been loaded');
 		}
 		
@@ -250,7 +249,6 @@ class Entity
 		$this->_loaded = true;
 		$array = (array) $xml;
 		
-		require_once 'Sirprize/Basecamp/Id.php';
 		$id = new \Sirprize\Basecamp\Id($array[self::_ID]);
 		$companyId = new \Sirprize\Basecamp\Id($array[self::_COMPANY_ID]);
 		
@@ -325,7 +323,6 @@ class Entity
 	{
 		if($this->_basecamp === null)
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('call setBasecamp() before '.__METHOD__);
 		}
 		
@@ -338,7 +335,6 @@ class Entity
 	{
 		if($this->_httpClient === null)
 		{
-			require_once 'Sirprize/Basecamp/Exception.php';
 			throw new \Sirprize\Basecamp\Exception('call setHttpClient() before '.__METHOD__);
 		}
 		
