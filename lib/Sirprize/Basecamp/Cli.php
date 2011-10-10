@@ -6,7 +6,7 @@ namespace Sirprize\Basecamp;
 
 
 
-class Cli extends \Sirprize\Basecamp
+class Cli extends \Sirprize\Basecamp\Service
 {
 	
 	
@@ -41,7 +41,7 @@ class Cli extends \Sirprize\Basecamp
 		
 		$projects = new \Sirprize\Basecamp\Cli\Project\Collection();
 		$projects
-			->setBasecamp($this)
+			->setService($this)
 			->setHttpClient($this->_getHttpClient())
 			#->setLog($this->_getLog())
 			->attachObserver($projectsObserverStout)
@@ -61,7 +61,7 @@ class Cli extends \Sirprize\Basecamp
 		
 		$milestones = new \Sirprize\Basecamp\Cli\Milestone\Collection();
 		$milestones
-			->setBasecamp($this)
+			->setService($this)
 			->setHttpClient($this->_getHttpClient())
 			->setLog($this->_getLog())
 			->attachObserver($milestonesObserverStout)
@@ -81,7 +81,7 @@ class Cli extends \Sirprize\Basecamp
 		
 		$todoLists = new \Sirprize\Basecamp\Cli\TodoList\Collection();
 		$todoLists
-			->setBasecamp($this)
+			->setService($this)
 			->setHttpClient($this->_getHttpClient())
 			->setLog($this->_getLog())
 			->attachObserver($todoListsObserverStout)
@@ -101,7 +101,7 @@ class Cli extends \Sirprize\Basecamp
 		
 		$todoItems = new \Sirprize\Basecamp\Cli\TodoItem\Collection();
 		$todoItems
-			->setBasecamp($this)
+			->setService($this)
 			->setHttpClient($this->_getHttpClient())
 			->setLog($this->_getLog())
 			->attachObserver($todoItemsObserverStout)

@@ -39,7 +39,7 @@ class Entity
 	const _ATTACHMENTS_COUNT = 'attachments-count';	
 	const _ATTACHMENTS = 'attachments';
 	
-	protected $_basecamp = null;
+	protected $_service = null;
 	protected $_httpClient = null;
 	protected $_data = array();
 	protected $_loaded = false;
@@ -49,9 +49,9 @@ class Entity
 	
 	
 	
-	public function setBasecamp(\Sirprize\Basecamp $basecamp)
+	public function setService(\Sirprize\Basecamp\Service $service)
 	{
-		$this->_basecamp = $basecamp;
+		$this->_service = $service;
 		return $this;
 	}
 	
@@ -139,7 +139,7 @@ class Entity
 	{
 		if($this->_attachments === null)
 		{
-			$this->_attachments = $this->_getBasecamp()->getAttachmentsInstance();
+			$this->_attachments = $this->_getService()->getAttachmentsInstance();
 		}
 		
 		return $this->_attachments;
@@ -193,14 +193,14 @@ class Entity
 		return $this;
 	}
 
-	protected function _getBasecamp()
+	protected function _getService()
 	{
-		if($this->_basecamp === null)
+		if($this->_service === null)
 		{
-			throw new \Sirprize\Basecamp\Exception('call setBasecamp() before '.__METHOD__);
+			throw new \Sirprize\Basecamp\Exception('call setService() before '.__METHOD__);
 		}
 		
-		return $this->_basecamp;
+		return $this->_service;
 	}
 	
 	

@@ -44,7 +44,7 @@ class Entity
 	const _COMPANY = 'company'; // SimpleXMLElement
 	
 	
-	protected $_basecamp = null;
+	protected $_service = null;
 	protected $_httpClient = null;
 	protected $_data = array();
 	protected $_loaded = false;
@@ -59,9 +59,9 @@ class Entity
 	
 	
 	
-	public function setBasecamp(\Sirprize\Basecamp $basecamp)
+	public function setService(\Sirprize\Basecamp\Service $service)
 	{
-		$this->_basecamp = $basecamp;
+		$this->_service = $service;
 		return $this;
 	}
 	
@@ -264,7 +264,7 @@ class Entity
 	{
 		$this->_checkIsLoaded();
 		
-		$projects = $this->_getBasecamp()->getProjectsInstance();
+		$projects = $this->_getService()->getProjectsInstance();
 		$targetProject = $projects->startById($targetProjectId);
 
 		if($targetProject === null)
@@ -279,7 +279,7 @@ class Entity
 		
 		$export = new \Sirprize\Basecamp\Schema\Export();
 		$xml = $export->getProjectXml($this, false);
-		$schema = $this->_getBasecamp()->getSchemaInstance();
+		$schema = $this->_getService()->getSchemaInstance();
 		$schema->loadFromString($xml);
 		$targetProject->applySchema($schema);
 		return $targetProject;
@@ -291,7 +291,7 @@ class Entity
 	{
 		$this->_checkIsLoaded();
 		
-		$projects = $this->_getBasecamp()->getProjectsInstance();
+		$projects = $this->_getService()->getProjectsInstance();
 		$targetProject = $projects->startById($targetProjectId);
 
 		if($targetProject === null)
@@ -306,7 +306,7 @@ class Entity
 		
 		$export = new \Sirprize\Basecamp\Schema\Export();
 		$xml = $export->getProjectXml($this, true, $referenceMilestone);
-		$schema = $this->_getBasecamp()->getSchemaInstance();
+		$schema = $this->_getService()->getSchemaInstance();
 		$schema->loadFromString($xml, $referenceDate);
 		$targetProject->applySchema($schema);
 		return $targetProject;
@@ -326,21 +326,21 @@ class Entity
 			: $export->getProjectXml($this, true, $referenceMilestone)
 		;
 		
-		$schema = $this->_getBasecamp()->getSchemaInstance();
+		$schema = $this->_getService()->getSchemaInstance();
 		$schema->loadFromString($xml, $referenceDate);
 		return $schema;
 	}
 	*/
 	
 	
-	protected function _getBasecamp()
+	protected function _getService()
 	{
-		if($this->_basecamp === null)
+		if($this->_service === null)
 		{
-			throw new \Sirprize\Basecamp\Exception('call setBasecamp() before '.__METHOD__);
+			throw new \Sirprize\Basecamp\Exception('call setService() before '.__METHOD__);
 		}
 		
-		return $this->_basecamp;
+		return $this->_service;
 	}
 	
 	
@@ -383,8 +383,8 @@ class Entity
 			return $this;
 		}
 		
-		$this->_milestones = $this->_getBasecamp()->getMilestonesInstance()->startAllByProjectId($this->getId());
-		$this->_todoLists = $this->_getBasecamp()->getTodoListsInstance()->startAllByProjectId($this->getId());
+		$this->_milestones = $this->_getService()->getMilestonesInstance()->startAllByProjectId($this->getId());
+		$this->_todoLists = $this->_getService()->getTodoListsInstance()->startAllByProjectId($this->getId());
 		
 		foreach($this->_todoLists as $todoList)
 		{
@@ -414,7 +414,7 @@ class Entity
 	{
 		if($this->_milestones === null)
 		{
-			$this->_milestones = $this->_getBasecamp()->getMilestonesInstance();
+			$this->_milestones = $this->_getService()->getMilestonesInstance();
 		}
 		
 		return $this->_milestones;
@@ -426,7 +426,7 @@ class Entity
 	{
 		if($this->_todoLists === null)
 		{
-			$this->_todoLists = $this->_getBasecamp()->getTodoListsInstance();
+			$this->_todoLists = $this->_getService()->getTodoListsInstance();
 		}
 		
 		return $this->_todoLists;
@@ -496,7 +496,7 @@ class Entity
 	
 	public function findTodoListsByMilestoneId(\Sirprize\Basecamp\Id $milestoneId)
 	{
-		$todoLists = $this->_getBasecamp()->getTodoListsInstance();
+		$todoLists = $this->_getService()->getTodoListsInstance();
 		
 		foreach($this->getTodoLists() as $todoList)
 		{
@@ -514,14 +514,14 @@ class Entity
 	public function deleteMilestones()
 	{
 		$this->_checkIsLoaded();
-		$this->_milestones = $this->_getBasecamp()->getMilestonesInstance()->startAllByProjectId($this->getId());
+		$this->_milestones = $this->_getService()->getMilestonesInstance()->startAllByProjectId($this->getId());
 		
 		foreach($this->getMilestones() as $milestone)
 		{
 			$milestone->delete();
 		}
 		
-		$this->_milestones = $this->_getBasecamp()->getMilestonesInstance();
+		$this->_milestones = $this->_getService()->getMilestonesInstance();
 		return $this;
 	}
 	
@@ -530,14 +530,14 @@ class Entity
 	public function deleteTodoLists()
 	{
 		$this->_checkIsLoaded();
-		$this->_todoLists = $this->_getBasecamp()->getTodoListsInstance()->startAllByProjectId($this->getId());
+		$this->_todoLists = $this->_getService()->getTodoListsInstance()->startAllByProjectId($this->getId());
 		
 		foreach($this->getTodoLists() as $todoList)
 		{
 			$todoList->delete();
 		}
 		
-		$this->_todoLists = $this->_getBasecamp()->getTodoListsInstance();
+		$this->_todoLists = $this->_getService()->getTodoListsInstance();
 		return $this;
 	}
 	
@@ -603,7 +603,7 @@ class Entity
 		$reloadTodoItems = false;
 		
 		$this->_checkIsLoaded();
-		$this->_milestones = $this->_getBasecamp()->getMilestonesInstance()->startAllByProjectId($this->getId());
+		$this->_milestones = $this->_getService()->getMilestonesInstance()->startAllByProjectId($this->getId());
 		
 		foreach($schema->getMilestones() as $schemaMilestone)
 		{
@@ -619,10 +619,10 @@ class Entity
 		
 		if($reloadMilestones)
 		{
-			$this->_milestones = $this->_getBasecamp()->getMilestonesInstance()->startAllByProjectId($this->getId());
+			$this->_milestones = $this->_getService()->getMilestonesInstance()->startAllByProjectId($this->getId());
 		}
 		
-		$this->_todoLists = $this->_getBasecamp()->getTodoListsInstance()->startAllByProjectId($this->getId());
+		$this->_todoLists = $this->_getService()->getTodoListsInstance()->startAllByProjectId($this->getId());
 		
 		foreach($schema->getMilestones() as $schemaMilestone)
 		{
@@ -648,7 +648,7 @@ class Entity
 		
 		if($reloadTodoLists)
 		{
-			$this->_todoLists = $this->_getBasecamp()->getTodoListsInstance()->startAllByProjectId($this->getId());
+			$this->_todoLists = $this->_getService()->getTodoListsInstance()->startAllByProjectId($this->getId());
 		}
 		
 		foreach($schema->getMilestones() as $schemaMilestone)

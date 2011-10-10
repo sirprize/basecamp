@@ -46,7 +46,7 @@ class Collection extends \Sirprize\Basecamp\TodoList\Collection
 		$todoList = new \Sirprize\Basecamp\Cli\TodoList\Entity();
 		$todoList
 			->setHttpClient($this->_getHttpClient())
-			->setBasecamp($this->_getBasecamp())
+			->setService($this->_getService())
 			->attachObserver($todoListObserverStout)
 			->attachObserver($todoListObserverLog)
 		;

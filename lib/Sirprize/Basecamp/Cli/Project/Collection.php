@@ -19,7 +19,7 @@ class Collection extends \Sirprize\Basecamp\Project\Collection
 		$project = new \Sirprize\Basecamp\Cli\Project\Entity();
 		$project
 			->setHttpClient($this->_getHttpClient())
-			->setBasecamp($this->_getBasecamp())
+			->setService($this->_getService())
 		;
 		
 		return $project;

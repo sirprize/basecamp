@@ -41,7 +41,7 @@ class Entity
 	const _WANTS_NOTIFICATION = 'wants-notification';
 	
 	
-	protected $_basecamp = null;
+	protected $_service = null;
 	protected $_httpClient = null;
 	protected $_data = array();
 	protected $_loaded = false;
@@ -50,9 +50,9 @@ class Entity
 	
 	
 	
-	public function setBasecamp(\Sirprize\Basecamp $basecamp)
+	public function setService(\Sirprize\Basecamp\Service $service)
 	{
-		$this->_basecamp = $basecamp;
+		$this->_service = $service;
 		return $this;
 	}
 	
@@ -338,8 +338,8 @@ class Entity
 		
 		try {
 			$response = $this->_getHttpClient()
-				->setUri($this->_getBasecamp()->getBaseUri()."/projects/$projectId/milestones/create")
-				->setAuth($this->_getBasecamp()->getUsername(), $this->_getBasecamp()->getPassword())
+				->setUri($this->_getService()->getBaseUri()."/projects/$projectId/milestones/create")
+				->setAuth($this->_getService()->getUsername(), $this->_getService()->getPassword())
 				->setHeaders('Content-type', 'application/xml')
 				->setHeaders('Accept', 'application/xml')
 				->setRawData($xml)
@@ -421,8 +421,8 @@ class Entity
 		
 		try {
 			$response = $this->_getHttpClient()
-				->setUri($this->_getBasecamp()->getBaseUri()."/milestones/update/".$this->getId())
-				->setAuth($this->_getBasecamp()->getUsername(), $this->_getBasecamp()->getPassword())
+				->setUri($this->_getService()->getBaseUri()."/milestones/update/".$this->getId())
+				->setAuth($this->_getService()->getUsername(), $this->_getService()->getPassword())
 				->setHeaders('Content-type', 'application/xml')
 				->setHeaders('Accept', 'application/xml')
 				->setRawData($xml)
@@ -471,8 +471,8 @@ class Entity
 		
 		try {
 			$response = $this->_getHttpClient()
-				->setUri($this->_getBasecamp()->getBaseUri()."/milestones/delete/$id")
-				->setAuth($this->_getBasecamp()->getUsername(), $this->_getBasecamp()->getPassword())
+				->setUri($this->_getService()->getBaseUri()."/milestones/delete/$id")
+				->setAuth($this->_getService()->getUsername(), $this->_getService()->getPassword())
 				->setHeaders('Content-type', 'application/xml')
 				->setHeaders('Accept', 'application/xml')
 				->request('DELETE')
@@ -524,8 +524,8 @@ class Entity
 		
 		try {
 			$response = $this->_getHttpClient()
-				->setUri($this->_getBasecamp()->getBaseUri()."/milestones/complete/".$this->getId())
-				->setAuth($this->_getBasecamp()->getUsername(), $this->_getBasecamp()->getPassword())
+				->setUri($this->_getService()->getBaseUri()."/milestones/complete/".$this->getId())
+				->setAuth($this->_getService()->getUsername(), $this->_getService()->getPassword())
 				->setHeaders('Content-type', 'application/xml')
 				->setHeaders('Accept', 'application/xml')
 				->request('GET')
@@ -576,8 +576,8 @@ class Entity
 		
 		try {
 			$response = $this->_getHttpClient()
-				->setUri($this->_getBasecamp()->getBaseUri()."/milestones/uncomplete/".$this->getId())
-				->setAuth($this->_getBasecamp()->getUsername(), $this->_getBasecamp()->getPassword())
+				->setUri($this->_getService()->getBaseUri()."/milestones/uncomplete/".$this->getId())
+				->setAuth($this->_getService()->getUsername(), $this->_getService()->getPassword())
 				->setHeaders('Content-type', 'application/xml')
 				->setHeaders('Accept', 'application/xml')
 				->request('GET')
@@ -613,14 +613,14 @@ class Entity
 	
 	
 	
-	protected function _getBasecamp()
+	protected function _getService()
 	{
-		if($this->_basecamp === null)
+		if($this->_service === null)
 		{
-			throw new \Sirprize\Basecamp\Exception('call setBasecamp() before '.__METHOD__);
+			throw new \Sirprize\Basecamp\Exception('call setService() before '.__METHOD__);
 		}
 		
-		return $this->_basecamp;
+		return $this->_service;
 	}
 	
 	
@@ -746,7 +746,7 @@ class Entity
 	{
 		if($this->_todoLists === null)
 		{
-			$this->_todoLists = $this->_getBasecamp()->getTodoListsInstance();
+			$this->_todoLists = $this->_getService()->getTodoListsInstance();
 		}
 		
 		return $this->_todoLists;

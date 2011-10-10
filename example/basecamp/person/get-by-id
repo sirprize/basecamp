@@ -18,12 +18,12 @@
 
 require_once '../_config.php';
 
-$basecamp = new \Sirprize\Basecamp\Cli($config);
-$basecamp->setLog($log);
+$service = new \Sirprize\Basecamp\Cli($config);
+$service->setLog($log);
 
 $personId = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_USER_ID);
 
-$persons = $basecamp->getPersonsInstance();
+$persons = $service->getPersonsInstance();
 $person = $persons->startById($personId);
 
 if($person === null)

@@ -28,7 +28,7 @@ class Collection extends \SplObjectStorage
 {
 	const _ATTACHMENT = 'attachment';
 	
-	protected $_basecamp = null;
+	protected $_service = null;
 	protected $_httpClient = null;
 	protected $_started = false;
 	protected $_loaded = false;
@@ -38,9 +38,9 @@ class Collection extends \SplObjectStorage
 	
 	
 	
-	public function setBasecamp(\Sirprize\Basecamp $basecamp)
+	public function setService(\Sirprize\Basecamp\Service $service)
 	{
-		$this->_basecamp = $basecamp;
+		$this->_service = $service;
 		return $this;
 	}
 	
@@ -121,7 +121,7 @@ class Collection extends \SplObjectStorage
 		$attachment = new \Sirprize\Basecamp\Attachment\Entity();
 		$attachment
 			->setHttpClient($this->_getHttpClient())
-			->setBasecamp($this->_getBasecamp())
+			->setService($this->_getService())
 		;
 		
 		return $attachment;
@@ -203,14 +203,14 @@ class Collection extends \SplObjectStorage
 	
 	
 	
-	protected function _getBasecamp()
+	protected function _getService()
 	{
-		if($this->_basecamp === null)
+		if($this->_service === null)
 		{
-			throw new \Sirprize\Basecamp\Exception('call setBasecamp() before '.__METHOD__);
+			throw new \Sirprize\Basecamp\Exception('call setService() before '.__METHOD__);
 		}
 		
-		return $this->_basecamp;
+		return $this->_service;
 	}
 	
 	

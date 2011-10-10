@@ -22,28 +22,28 @@ class Schema
 {
 	
 	
-	protected $_basecamp = null;
+	protected $_service = null;
 	protected $_milestones = null;
 	
 	
 	
 	
-	public function setBasecamp(\Sirprize\Basecamp $basecamp)
+	public function setService(\Sirprize\Basecamp\Service $service)
 	{
-		$this->_basecamp = $basecamp;
+		$this->_service = $service;
 		return $this;
 	}
 	
 	
 	
-	protected function _getBasecamp()
+	protected function _getService()
 	{
-		if($this->_basecamp === null)
+		if($this->_service === null)
 		{
-			throw new \Sirprize\Basecamp\Exception('call setBasecamp() before '.__METHOD__);
+			throw new \Sirprize\Basecamp\Exception('call setService() before '.__METHOD__);
 		}
 		
-		return $this->_basecamp;
+		return $this->_service;
 	}
 	
 	
@@ -101,7 +101,7 @@ class Schema
 	 */
 	protected function _load(\DOMDocument $xml, \Sirprize\Basecamp\Date $referenceDate = null)
 	{
-		$this->_milestones = $this->_getBasecamp()->getMilestonesInstance();
+		$this->_milestones = $this->_getService()->getMilestonesInstance();
 		
 		foreach($xml->getElementsByTagName('milestone') as $milestoneElement)
 		{
@@ -119,7 +119,7 @@ class Schema
 				continue;
 			}
 			
-			$milestone = $this->_getBasecamp()->getMilestonesInstance()->getMilestoneInstance();
+			$milestone = $this->_getService()->getMilestonesInstance()->getMilestoneInstance();
 			$milestone->setTitle($this->_getMilestoneTitle($title));
 			
 			

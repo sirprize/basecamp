@@ -34,7 +34,7 @@ class Collection extends \SplObjectStorage
 	const FIND_ALL = 'all';
 	const _MILESTONE = 'milestone';
 	
-	protected $_basecamp = null;
+	protected $_service = null;
 	protected $_httpClient = null;
 	protected $_started = false;
 	protected $_loaded = false;
@@ -44,9 +44,9 @@ class Collection extends \SplObjectStorage
 	
 	
 	
-	public function setBasecamp(\Sirprize\Basecamp $basecamp)
+	public function setService(\Sirprize\Basecamp\Service $service)
 	{
-		$this->_basecamp = $basecamp;
+		$this->_service = $service;
 		return $this;
 	}
 	
@@ -127,7 +127,7 @@ class Collection extends \SplObjectStorage
 		$milestone = new \Sirprize\Basecamp\Milestone\Entity();
 		$milestone
 			->setHttpClient($this->_getHttpClient())
-			->setBasecamp($this->_getBasecamp())
+			->setService($this->_getService())
 		;
 		
 		return $milestone;
@@ -181,8 +181,8 @@ class Collection extends \SplObjectStorage
 		
 		try {
 			$response = $this->_getHttpClient()
-				->setUri($this->_getBasecamp()->getBaseUri()."/projects/$projectId/milestones/create")
-				->setAuth($this->_getBasecamp()->getUsername(), $this->_getBasecamp()->getPassword())
+				->setUri($this->_getService()->getBaseUri()."/projects/$projectId/milestones/create")
+				->setAuth($this->_getService()->getUsername(), $this->_getService()->getPassword())
 				->setHeaders('Content-Type', 'application/xml')
 				->setHeaders('Accept', 'application/xml')
 				->setRawData($xml)
@@ -265,8 +265,8 @@ class Collection extends \SplObjectStorage
 		
 		try {
 			$response = $this->_getHttpClient()
-				->setUri($this->_getBasecamp()->getBaseUri()."/projects/$projectId/milestones/list.xml$query")
-				->setAuth($this->_getBasecamp()->getUsername(), $this->_getBasecamp()->getPassword())
+				->setUri($this->_getService()->getBaseUri()."/projects/$projectId/milestones/list.xml$query")
+				->setAuth($this->_getService()->getUsername(), $this->_getService()->getPassword())
 				->request('GET')
 			;
 		}
@@ -345,14 +345,14 @@ class Collection extends \SplObjectStorage
 	
 	
 	
-	protected function _getBasecamp()
+	protected function _getService()
 	{
-		if($this->_basecamp === null)
+		if($this->_service === null)
 		{
-			throw new \Sirprize\Basecamp\Exception('call setBasecamp() before '.__METHOD__);
+			throw new \Sirprize\Basecamp\Exception('call setService() before '.__METHOD__);
 		}
 		
-		return $this->_basecamp;
+		return $this->_service;
 	}
 	
 	

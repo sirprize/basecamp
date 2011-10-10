@@ -42,7 +42,7 @@ class Entity
 	const _COMPLETE = 'complete';
 	
 	
-	protected $_basecamp = null;
+	protected $_service = null;
 	protected $_httpClient = null;
 	protected $_data = array();
 	protected $_loaded = false;
@@ -54,9 +54,9 @@ class Entity
 	
 	
 	
-	public function setBasecamp(\Sirprize\Basecamp $basecamp)
+	public function setService(\Sirprize\Basecamp\Service $service)
 	{
-		$this->_basecamp = $basecamp;
+		$this->_service = $service;
 		return $this;
 	}
 	
@@ -270,7 +270,7 @@ class Entity
 	{
 		if($this->_todoItems === null)
 		{
-			$this->_todoItems = $this->_getBasecamp()->getTodoItemsInstance();
+			$this->_todoItems = $this->_getService()->getTodoItemsInstance();
 		}
 		
 		return $this->_todoItems;
@@ -430,8 +430,8 @@ class Entity
 		
 		try {
 			$response = $this->_getHttpClient()
-				->setUri($this->_getBasecamp()->getBaseUri()."/projects/$projectId/todo_lists.xml")
-				->setAuth($this->_getBasecamp()->getUsername(), $this->_getBasecamp()->getPassword())
+				->setUri($this->_getService()->getBaseUri()."/projects/$projectId/todo_lists.xml")
+				->setAuth($this->_getService()->getUsername(), $this->_getService()->getPassword())
 				->setHeaders('Content-type', 'application/xml')
 				->setHeaders('Accept', 'application/xml')
 				->setRawData($xml)
@@ -489,8 +489,8 @@ class Entity
 		
 		try {
 			$response = $this->_getHttpClient()
-				->setUri($this->_getBasecamp()->getBaseUri()."/todo_lists/$id.xml")
-				->setAuth($this->_getBasecamp()->getUsername(), $this->_getBasecamp()->getPassword())
+				->setUri($this->_getService()->getBaseUri()."/todo_lists/$id.xml")
+				->setAuth($this->_getService()->getUsername(), $this->_getService()->getPassword())
 				->setHeaders('Content-type', 'application/xml')
 				->setHeaders('Accept', 'application/xml')
 				->setRawData($xml)
@@ -538,8 +538,8 @@ class Entity
 		
 		try {
 			$response = $this->_getHttpClient()
-				->setUri($this->_getBasecamp()->getBaseUri()."/todo_lists/$id.xml")
-				->setAuth($this->_getBasecamp()->getUsername(), $this->_getBasecamp()->getPassword())
+				->setUri($this->_getService()->getBaseUri()."/todo_lists/$id.xml")
+				->setAuth($this->_getService()->getUsername(), $this->_getService()->getPassword())
 				->setHeaders('Content-type', 'application/xml')
 				->setHeaders('Accept', 'application/xml')
 				->request('DELETE')
@@ -577,14 +577,14 @@ class Entity
 	
 	
 	
-	protected function _getBasecamp()
+	protected function _getService()
 	{
-		if($this->_basecamp === null)
+		if($this->_service === null)
 		{
-			throw new \Sirprize\Basecamp\Exception('call setBasecamp() before '.__METHOD__);
+			throw new \Sirprize\Basecamp\Exception('call setService() before '.__METHOD__);
 		}
 		
-		return $this->_basecamp;
+		return $this->_service;
 	}
 	
 	

@@ -18,12 +18,12 @@
 
 require_once '../_config.php';
 
-$basecamp = new \Sirprize\Basecamp\Cli($config);
-$basecamp->setLog($log);
+$service = new \Sirprize\Basecamp\Cli($config);
+$service->setLog($log);
 
 $projectId = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_PROJECT_ID);
 
-$milestones = $basecamp->getMilestonesInstance();
+$milestones = $service->getMilestonesInstance();
 $milestones->startAllByProjectId($projectId, \Sirprize\Basecamp\Milestone\Collection::FIND_ALL);
 
 if($milestones->getResponse()->isError())

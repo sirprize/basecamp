@@ -19,13 +19,13 @@
 
 require_once '../_config.php';
 
-$basecamp = new \Sirprize\Basecamp\Cli($config);
-$basecamp->setLog($log);
+$service = new \Sirprize\Basecamp\Cli($config);
+$service->setLog($log);
 
 $sourceProjectId = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_PROJECT_ID);
 $targetProjectId = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_PROJECT_TARGET_ID);
 
-$projects = $basecamp->getProjectsInstance();
+$projects = $service->getProjectsInstance();
 $sourceProject = $projects->startById($sourceProjectId);
 
 if($sourceProject === null)

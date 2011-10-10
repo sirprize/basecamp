@@ -46,7 +46,7 @@ class Collection extends \Sirprize\Basecamp\Milestone\Collection
 		$milestone = new \Sirprize\Basecamp\Cli\Milestone\Entity();
 		$milestone
 			->setHttpClient($this->_getHttpClient())
-			->setBasecamp($this->_getBasecamp())
+			->setService($this->_getService())
 			->attachObserver($milestoneObserverStout)
 			->attachObserver($milestoneObserverLog)
 		;

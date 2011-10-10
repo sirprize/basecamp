@@ -29,7 +29,7 @@ class Collection extends \SplObjectStorage
 	
 	const _TIME_ENTRY = 'time-entry';
 	
-	protected $_basecamp = null;
+	protected $_service = null;
 	protected $_httpClient = null;
 	protected $_started = false;
 	protected $_loaded = false;
@@ -39,9 +39,9 @@ class Collection extends \SplObjectStorage
 	
 	
 	
-	public function setBasecamp(\Sirprize\Basecamp $basecamp)
+	public function setService(\Sirprize\Basecamp\Service $service)
 	{
-		$this->_basecamp = $basecamp;
+		$this->_service = $service;
 		return $this;
 	}
 	
@@ -122,7 +122,7 @@ class Collection extends \SplObjectStorage
 		$entry = new \Sirprize\Basecamp\TimeEntry\Entity();
 		$entry
 			->setHttpClient($this->_getHttpClient())
-			->setBasecamp($this->_getBasecamp())
+			->setService($this->_getService())
 		;
 		
 		return $entry;
@@ -168,8 +168,8 @@ class Collection extends \SplObjectStorage
 		
 		try {
 			$response = $this->_getHttpClient()
-				->setUri($this->_getBasecamp()->getBaseUri()."/projects/$id/time_entries.xml")
-				->setAuth($this->_getBasecamp()->getUsername(), $this->_getBasecamp()->getPassword())
+				->setUri($this->_getService()->getBaseUri()."/projects/$id/time_entries.xml")
+				->setAuth($this->_getService()->getUsername(), $this->_getService()->getPassword())
 				->request('GET')
 			;
 		}
@@ -221,8 +221,8 @@ class Collection extends \SplObjectStorage
 		
 		try {
 			$response = $this->_getHttpClient()
-				->setUri($this->_getBasecamp()->getBaseUri()."/time_entries/$id.xml")
-				->setAuth($this->_getBasecamp()->getUsername(), $this->_getBasecamp()->getPassword())
+				->setUri($this->_getService()->getBaseUri()."/time_entries/$id.xml")
+				->setAuth($this->_getService()->getUsername(), $this->_getService()->getPassword())
 				->request('GET')
 			;
 		}
@@ -312,14 +312,14 @@ class Collection extends \SplObjectStorage
 	
 	
 	
-	protected function _getBasecamp()
+	protected function _getService()
 	{
-		if($this->_basecamp === null)
+		if($this->_service === null)
 		{
-			throw new \Sirprize\Basecamp\Exception('call setBasecamp() before '.__METHOD__);
+			throw new \Sirprize\Basecamp\Exception('call setService() before '.__METHOD__);
 		}
 		
-		return $this->_basecamp;
+		return $this->_service;
 	}
 	
 	
