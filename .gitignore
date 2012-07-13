@@ -2,3 +2,4 @@
 !.gitkeep
 tests/TestConfiguration.php
 example/basecamp/_config.php
+example/_logs/*
