@@ -31,5 +31,6 @@ if($persons->getResponse()->isError())
 	
 foreach($persons as $person)
 {
-	print $person->getFirstname().' '.$person->getLastname().' - '.$person->getId()."\n";
+    // the username will only be shown if the current user has admin privileges
+	print $person->getFirstname().' '.$person->getLastname().' ('.$person->getUsername().")\n";
 }
