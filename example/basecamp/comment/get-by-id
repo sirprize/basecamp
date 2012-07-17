@@ -1,34 +1,28 @@
 #!/usr/bin/env php
 <?php
 
-/**
- * Basecamp API Wrapper for PHP 5.3+ 
+/*
+ * This file is part of the Basecamp Classic API Wrapper for PHP 5.3+ package
  *
- * LICENSE
- *
- * This source file is subject to the MIT license that is bundled
- * with this package in the file LICENSE.txt
- *
- * @category   Sirprize
- * @package    Basecamp
- * @subpackage Try
- * @copyright  Copyright (c) 2010, Christian Hoegl, Switzerland (http://sirprize.me)
- * @license    MIT License
+ * (c) Christian Hoegl <chrigu@sirprize.me>
  */
 
 require_once '../_config.php';
 
-$service = new \Sirprize\Basecamp\Cli($config);
+use Sirprize\Basecamp\Id;
+use Sirprize\Basecamp\Cli;
+
+$service = new Cli($config);
 $service->setLog($log);
 
-$commentId = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_COMMENT_ID);
+$commentId = new Id(BASECAMP_EXAMPLE_COMMENT_ID);
 
 $comments = $service->getCommentsInstance();
 $comment = $comments->startById($commentId);
 
 if($comments->getResponse()->isError())
 {
-	die("Error\n");
+    die("Error\n");
 }
-	
+
 print $comment->getBody().' - '.$comment->getId()."\n";

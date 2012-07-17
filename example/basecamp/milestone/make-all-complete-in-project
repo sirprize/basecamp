@@ -1,37 +1,32 @@
 #!/usr/bin/env php
 <?php
 
-/**
- * Basecamp API Wrapper for PHP 5.3+ 
+/*
+ * This file is part of the Basecamp Classic API Wrapper for PHP 5.3+ package
  *
- * LICENSE
- *
- * This source file is subject to the MIT license that is bundled
- * with this package in the file LICENSE.txt
- *
- * @category   Sirprize
- * @package    Basecamp
- * @subpackage Try
- * @copyright  Copyright (c) 2010, Christian Hoegl, Switzerland (http://sirprize.me)
- * @license    MIT License
+ * (c) Christian Hoegl <chrigu@sirprize.me>
  */
 
 require_once '../_config.php';
 
-$service = new \Sirprize\Basecamp\Cli($config);
+use Sirprize\Basecamp\Id;
+use Sirprize\Basecamp\Cli;
+use Sirprize\Basecamp\Milestone\Collection;
+
+$service = new Cli($config);
 $service->setLog($log);
 
-$projectId = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_PROJECT_ID);
+$projectId = new Id(BASECAMP_EXAMPLE_PROJECT_ID);
 
 $milestones = $service->getMilestonesInstance();
-$milestones->startAllByProjectId($projectId, \Sirprize\Basecamp\Milestone\Collection::FIND_ALL);
+$milestones->startAllByProjectId($projectId, Collection::FIND_ALL);
 
 if($milestones->getResponse()->isError())
 {
-	die("Error\n");
+    die("Error\n");
 }
 
 foreach($milestones as $milestone)
 {
-	$milestone->complete();
+    $milestone->complete();
 }

@@ -1,45 +1,40 @@
 #!/usr/bin/env php
 <?php
 
-/**
- * Basecamp API Wrapper for PHP 5.3+ 
+/*
+ * This file is part of the Basecamp Classic API Wrapper for PHP 5.3+ package
  *
- * LICENSE
- *
- * This source file is subject to the MIT license that is bundled
- * with this package in the file LICENSE.txt
- *
- * @category   Sirprize
- * @package    Basecamp
- * @subpackage Try
- * @copyright  Copyright (c) 2010, Christian Hoegl, Switzerland (http://sirprize.me)
- * @license    MIT License
+ * (c) Christian Hoegl <chrigu@sirprize.me>
  */
-
 
 require_once '../_config.php';
 
-$service = new \Sirprize\Basecamp\Cli($config);
+use Sirprize\Basecamp\Id;
+use Sirprize\Basecamp\Cli;
+use Sirprize\Basecamp\Date;
+use Sirprize\Basecamp\Schema\Export;
+
+$service = new Cli($config);
 $service->setLog($log);
 
-$sourceProjectId = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_PROJECT_ID);
-$targetProjectId = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_PROJECT_TARGET_ID);
+$sourceProjectId = new Id(BASECAMP_EXAMPLE_PROJECT_ID);
+$targetProjectId = new Id(BASECAMP_EXAMPLE_PROJECT_TARGET_ID);
 
 $projects = $service->getProjectsInstance();
 $sourceProject = $projects->startById($sourceProjectId);
 
 if($sourceProject === null)
 {
-	die("Source project not found\n");
+    die("Source project not found\n");
 }
 
 if($projects->getResponse()->isError())
 {
-	die("Source project error\n");
+    die("Source project error\n");
 }
 
-$referenceDate = new \Sirprize\Basecamp\Date('2010-12-30');
+$referenceDate = new Date('2012-12-30');
 
-$referenceMilestone = \Sirprize\Basecamp\Schema\Export::REFERENCE_EXTREMITY_LAST;
+$referenceMilestone = Export::REFERENCE_EXTREMITY_LAST;
 
 $sourceProject->replicate($targetProjectId, $referenceDate, $referenceMilestone);

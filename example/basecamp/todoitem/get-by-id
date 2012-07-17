@@ -1,45 +1,37 @@
 #!/usr/bin/env php
 <?php
 
-/**
- * Basecamp API Wrapper for PHP 5.3+ 
+/*
+ * This file is part of the Basecamp Classic API Wrapper for PHP 5.3+ package
  *
- * LICENSE
- *
- * This source file is subject to the MIT license that is bundled
- * with this package in the file LICENSE.txt
- *
- * @category   Sirprize
- * @package    Basecamp
- * @subpackage Try
- * @copyright  Copyright (c) 2010, Christian Hoegl, Switzerland (http://sirprize.me)
- * @license    MIT License
+ * (c) Christian Hoegl <chrigu@sirprize.me>
  */
 
 require_once '../_config.php';
 
-$service = new \Sirprize\Basecamp\Cli($config);
+use Sirprize\Basecamp\Id;
+use Sirprize\Basecamp\Cli;
+
+$service = new Cli($config);
 $service->setLog($log);
 
-$id = new \Sirprize\Basecamp\Id(BASECAMP_EXAMPLE_TODOLISTITEM_ID);
+$id = new Id(BASECAMP_EXAMPLE_TODOLISTITEM_ID);
 
 $todoItems = $service->getTodoItemsInstance();
 $todoItem = $todoItems->startById($id);
 
 if($todoItem === null)
 {
-	die("Not found\n");
+    die("Not found\n");
 }
 
 if($todoItems->getResponse()->isError())
 {
-	die("Error\n");
+    die("Error\n");
 }
 
 print "comments count: ".$todoItem->getCommentsCount()."\n";
 print "completed: ".$todoItem->getIsCompleted()."\n";
-print "completed at: ".$todoItem->getCompletedAt()."\n";
-print "completer id: ".$todoItem->getCompleterId()."\n";
 print "content: ".$todoItem->getContent()."\n";
 print "created at: ".$todoItem->getCreatedAt()."\n";
 print "creator id: ".$todoItem->getCreatorId()."\n";
@@ -47,5 +39,4 @@ print "due at: ".$todoItem->getDueAt()."\n";
 print "id: ".$todoItem->getId()."\n";
 print "position: ".$todoItem->getPosition()."\n";
 print "todoList id: ".$todoItem->getTodoListId()."\n";
-print "completed on: ".$todoItem->getCompletedOn()."\n";
 print "created on: ".$todoItem->getCreatedOn()."\n";

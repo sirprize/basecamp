@@ -1,20 +1,10 @@
 <?php
 
-/**
- * Basecamp API Wrapper for PHP 5.3+ 
+/*
+ * This file is part of the Basecamp Classic API Wrapper for PHP 5.3+ package
  *
- * LICENSE
- *
- * This source file is subject to the MIT license that is bundled
- * with this package in the file LICENSE.txt
- *
- * @category   Sirprize
- * @package    Basecamp
- * @subpackage UnitTests
- * @copyright  Copyright (c) 2010, Christian Hoegl, Switzerland (http://sirprize.me)
- * @license    MIT License
+ * (c) Christian Hoegl <chrigu@sirprize.me>
  */
-
 
 /*
  * Start output buffering
@@ -29,7 +19,6 @@ $pear = "/usr/local/pear/PEAR"; # path to phpunit
 $zend = realpath(dirname(__FILE__) . '/../../../vendor/zend/library'); # path to zend framework
 $lib = realpath(dirname(__FILE__) . '/../lib'); # path to lib
 $tests = dirname(__FILE__); # path to tests
-
 
 /*
  * Omit from code coverage reports the contents of the tests directory
@@ -46,16 +35,14 @@ foreach (array('php', 'phtml', 'csv') as $suffix)
  * this copy.
  */
 $path = array(
-	$pear,
-	$zend,
+    $pear,
+    $zend,
     $tests,
-	$lib,
+    $lib,
     get_include_path()
 );
 
-
 set_include_path(implode(PATH_SEPARATOR, $path));
-
 
 /*
  * Include PHPUnit dependencies
