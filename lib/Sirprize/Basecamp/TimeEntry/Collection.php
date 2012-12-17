@@ -139,7 +139,7 @@ class Collection extends \SplObjectStorage
      * @throws \Sirprize\Basecamp\Exception
      * @return null|\Sirprize\Basecamp\TimeEntry\Collection
      */
-    public function startAllByProjectId(Id $id)
+    public function startAllByProjectId(Id $id, $page = 1)
     {
         if($this->_started)
         {
@@ -151,6 +151,7 @@ class Collection extends \SplObjectStorage
         try {
             $response = $this->_getHttpClient()
                 ->setUri($this->_getService()->getBaseUri()."/projects/$id/time_entries.xml")
+                ->setParameterGet('page', (int) $page)
                 ->setAuth($this->_getService()->getUsername(), $this->_getService()->getPassword())
                 ->request('GET')
             ;

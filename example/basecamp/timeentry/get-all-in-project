@@ -18,18 +18,18 @@ $service->setLog($log);
 $projectId = new Id(BASECAMP_EXAMPLE_PROJECT_ID);
 
 $timeEntries = $service->getTimeEntriesInstance();
-$timeEntries->startAllByProjectId($projectId);
+$timeEntries->startAllByProjectId($projectId, 1);
 
 if($timeEntries->getResponse()->isError())
 {
     die("Error\n");
 }
 
+print "Page ".$timeEntries->getResponse()->getHttpResponse()->getHeader('X-Page');
+print " of ".$timeEntries->getResponse()->getHttpResponse()->getHeader('X-Pages')."\n";
+print "------------------\n";
+
 foreach($timeEntries as $timeEntry)
 {
-    print "id: ".$timeEntry->getId()."\n";
-    print "date: ".$timeEntry->getDate()."\n";
-    print "hours: ".$timeEntry->getHours()."\n";
-    print "description: ".$timeEntry->getDescription()."\n";
-    print "--------------------------\n";
+    print $timeEntry->getDate()." - ".$timeEntry->getHours()."h - ".$timeEntry->getDescription()."\n";
 }
