@@ -26,25 +26,7 @@ $config = array(
 
 $base = dirname(dirname(dirname(__FILE__)));
 
-require_once $base.'/vendor/doctrine2-common/lib/Doctrine/Common/ClassLoader.php';
-$loader = new ClassLoader('Zend', realpath($base.'/vendor/zend-framework/library'));
-$loader->setNamespaceSeparator('_');
-$loader->register();
-
-$loader = new ClassLoader('Doctrine\Common', realpath($base.'/vendor/doctrine2-common/lib'));
-$loader->register();
-
-$loader = new ClassLoader('Sirprize', realpath($base.'/lib'));
-$loader->register();
-
-set_include_path(
-    implode(
-        PATH_SEPARATOR,
-        array(
-            realpath($base.'/vendor/zend-framework/library'),
-        )
-    )
-);
+require_once $base . '/vendor/autoload.php';
 
 date_default_timezone_set('UTC');
 

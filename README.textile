@@ -24,8 +24,8 @@ h3. First Steps
 
 # __git clone git://github.com/sirprize/basecamp.git sirprize-basecamp__
 # __cd sirprize-basecamp__
-# __git submodule init__
-# __git submodule update__
+# __curl -sS https://getcomposer.org/installer | php__
+# __php composer.phar install__
 # create a dummy project in your basecamp account
 # adjust __sirprize-basecamp/example/basecamp/_config.php__ with your own settings
 # make files executable in __sirprize-basecamp/example/basecamp/(milestone|person|project|todoitem|todolist)/*__
@@ -34,13 +34,15 @@ h3. First Steps
 
 h3. Setup
 
-bc.. $config = array(
+bc.. use Sirprize\Basecamp\Service;
+
+$config = array(
 	'baseUri' => 'https://xxx.basecamphq.com',
 	'username' => 'xxx',
 	'password' => 'xxx'
 );
 
-$service = new \Sirprize\Basecamp\Service($config);
+$service = new Service($config);
 
 h3. Fetch all projects
 
@@ -53,15 +55,17 @@ foreach($projects as $project)
 
 h3. Copy a project
 
-bc.. /*
+bc.. use Sirprize\Basecamp\Id;
+
+/*
  *
  * populate the target-project with the milestones,
  * todo-lists and todo-items from the source-project
  *
  */
 
-$sourceProjectId = new \Sirprize\Basecamp\Id('xxx');
-$targetProjectId = new \Sirprize\Basecamp\Id('yyy');
+$sourceProjectId = new Id('xxx');
+$targetProjectId = new Id('yyy');
 
 $projects = $service->getProjectsInstance();
 $sourceProject = $projects->startById($sourceProjectId);
@@ -69,7 +73,11 @@ $sourceProject->copy($targetProjectId);
 
 h3. Replicate a project (push deadlines to a new date)
 
-bc.. /*
+bc.. use Sirprize\Basecamp\Id;
+use Sirprize\Basecamp\Date;
+use Sirprize\Basecamp\Schema\Export;
+
+/*
  *
  * populate the target-project with the milestones,
  * todo-lists and todo-items from the source-project.
@@ -78,22 +86,25 @@ bc.. /*
  *
  */
 
-$sourceProjectId = new \Sirprize\Basecamp\Id('xxx');
-$targetProjectId = new \Sirprize\Basecamp\Id('yyy');
+$sourceProjectId = new Id('xxx');
+$targetProjectId = new Id('yyy');
 
 $projects = $service->getProjectsInstance();
 $sourceProject = $projects->startById($sourceProjectId);
-$referenceDate = new \Sirprize\Basecamp\Date('2010-12-30');
-$referenceMilestone = \Sirprize\Basecamp\Schema\Export::REFERENCE_EXTREMITY_LAST;
+$referenceDate = new Date('2010-12-30');
+$referenceMilestone = Export::REFERENCE_EXTREMITY_LAST;
 $sourceProject->replicate($targetProjectId, $referenceDate, $referenceMilestone);
 
 h3. Create a new milestone
 
-bc.. $milestones = $service->getMilestonesInstance();
+bc.. use Sirprize\Basecamp\Id;
+use Sirprize\Basecamp\Date;
+
+$milestones = $service->getMilestonesInstance();
 $milestone = $milestones->getMilestoneInstance();
-$deadline = new \Sirprize\Basecamp\Date('2010-03-01');
-$projectId = new \Sirprize\Basecamp\Id('xxx');
-$userId = new \Sirprize\Basecamp\Id('xxx');
+$deadline = new Date('2010-03-01');
+$projectId = new Id('xxx');
+$userId = new Id('xxx');
 
 $milestone
 	->setProjectId($projectId)

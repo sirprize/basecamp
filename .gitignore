@@ -3,3 +3,5 @@
 tests/TestConfiguration.php
 example/basecamp/_config.php
 example/_logs/*
+vendor
+composer.phar
