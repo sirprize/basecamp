@@ -19,7 +19,7 @@ class Collection extends TodoListCollection
 
     protected $_log = null;
 
-    public function setLog(\Zend_Log $log)
+    public function setLog(\Zend\Log\Logger $log)
     {
         $this->_log = $log;
         return $this;

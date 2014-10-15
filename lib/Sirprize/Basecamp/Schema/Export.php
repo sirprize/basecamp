@@ -140,24 +140,20 @@ class Export
 
     protected function _calculateOffsetDays($referenceDate, $effectiveDate, $referenceMilestone, $isMilestone)
     {
-        $referenceDate = new \Zend_Date($referenceDate, Date::FORMAT);
-        $effectiveDate = new \Zend_Date($effectiveDate, Date::FORMAT);
+        $referenceDate = new \DateTime($referenceDate);
+        $effectiveDate = new \DateTime($effectiveDate);
 
-        $offset
-            = ($referenceMilestone == self::REFERENCE_EXTREMITY_LAST)
-            ? ($referenceDate->getTimestamp() - $effectiveDate->getTimestamp()) * -1
-            : $effectiveDate->getTimestamp() - $referenceDate->getTimestamp()
-        ;
+        $offset = $referenceDate->diff($effectiveDate);
 
         if($isMilestone)
         {
-            return $offset / 60 / 60 / 24;
+            return $offset->days;
         }
 
         return // quick fix for todo-item dates which seem to be 1 day off (?)
               ($referenceMilestone == self::REFERENCE_EXTREMITY_LAST)
-            ? ($offset / 60 / 60 / 24) + 1
-            : ($offset / 60 / 60 / 24) - 1
+            ? $offset->days + 1
+            : $offset->days - 1
         ;
     }
 }
