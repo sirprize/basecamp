@@ -26,6 +26,7 @@ class Entity
     const _DEADLINE = 'deadline';
     const _COMMENTS_COUNT = 'comments-count';
     const _COMPLETED = 'completed';
+    const _COMPLETED_ON = 'completed-on';
     const _CREATED_ON = 'created-on';
     const _CREATOR_ID = 'creator-id';
     const _PROJECT_ID = 'project-id';
@@ -165,6 +166,11 @@ class Entity
         return $this->_getVal(self::_COMPLETED);
     }
 
+    public function getCompletedOn()
+    {
+        return $this->_getVal(self::_COMPLETED_ON);
+    }
+    
     public function getCreatedOn()
     {
         return $this->_getVal(self::_CREATED_ON);
@@ -237,6 +243,7 @@ class Entity
             self::_DEADLINE => $deadline,
             self::_COMMENTS_COUNT => $array[self::_COMMENTS_COUNT],
             self::_COMPLETED => $completed,
+            self::_COMPLETED_ON => $array[self::_COMPLETED_ON],
             self::_CREATED_ON => $array[self::_CREATED_ON],
             self::_CREATOR_ID => $creatorId,
             self::_PROJECT_ID => $projectId,
