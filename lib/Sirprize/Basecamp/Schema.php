@@ -196,15 +196,15 @@ class Schema
 
     protected function _calculateDateFromOffsetDays(Date $referenceDate, $referenceDateOffset)
     {
-        $referenceDate = new \Zend_Date((string)$referenceDate, Date::FORMAT);
+        $referenceDate = new \DateTime((string)$referenceDate);
         $referenceDateOffset = (int)$referenceDateOffset;
 
         if($referenceDateOffset >= 0)
         {
-            return $referenceDate->addSecond(60 * 60 * 24 * $referenceDateOffset)->toString(Date::FORMAT);
+            return $referenceDate->modify("+".$referenceDateOffset." days")->format(Date::FORMAT);
         }
 
-        return $referenceDate->subSecond(60 * 60 * 24 * $referenceDateOffset * -1)->toString(Date::FORMAT);
+        return $referenceDate->modify("-".$referenceDateOffset." days")->format(Date::FORMAT);
     }
 
     public function dumpIndices()

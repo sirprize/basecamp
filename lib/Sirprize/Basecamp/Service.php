@@ -90,7 +90,7 @@ class Service
         return $this->_password;
     }
 
-    public function setHttpClient(\Zend_Http_Client $httpClient)
+    public function setHttpClient(\Zend\Http\Client $httpClient)
     {
         $this->_httpClient = $httpClient;
         return $this;
@@ -100,7 +100,7 @@ class Service
     {
         if($this->_httpClient === null)
         {
-            $this->_httpClient = new \Zend_Http_Client();
+            $this->_httpClient = new \Zend\Http\Client();
         }
 
         return $this->_httpClient;

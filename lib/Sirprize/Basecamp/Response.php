@@ -15,7 +15,7 @@ class Response
     protected $_data = null;
     protected $_error = null;
 
-    public function __construct(\Zend_Http_Response $httpResponse)
+    public function __construct(\Zend\Http\Response $httpResponse)
     {
         $this->_httpResponse = $httpResponse;
 

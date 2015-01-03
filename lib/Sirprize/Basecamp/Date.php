@@ -25,17 +25,17 @@ class Date
             throw new Exception("invalid date format '$date'");
         }
 
-        $this->_date = $date;
+        $this->_date = new \DateTime($date);
     }
 
     public function __toString()
     {
-        return $this->_date;
+        return $this->_date->format(self::FORMAT);
     }
 
     public function get()
     {
-        return $this->_date;
+        return $this->_date->format(self::FORMAT);
     }
 
     public static function isValid($date)
@@ -45,15 +45,19 @@ class Date
 
     public function addDays($numDays)
     {
-        $date = new \Zend_Date($this->_date, self::FORMAT);
-        $this->_date = $date->addSecond(60 * 60 * 24 * (int)$numDays)->toString(self::FORMAT);
+        $date = new \DateTime;
+        $dateOffset = new \DateInterval('P0');
+        $dateOffset->d = $numDays;
+        $this->_date = $date->add($dateOffset);
         return $this;
     }
 
     public function subDays($numDays)
     {
-        $date = new \Zend_Date($this->_date, self::FORMAT);
-        $this->_date = $date->subSecond(60 * 60 * 24 * (int)$numDays)->toString(self::FORMAT);
+        $date = new \DateTime;
+        $dateOffset = new \DateInterval('P0');
+        $dateOffset->d = $numDays;
+        $this->_date = $date->add($dateOffset);
         return $this;
     }
 }
