@@ -112,14 +112,18 @@ class Entity
         $personId = new Id($array[self::_PERSON_ID]);
         $projectId = new Id($array[self::_PROJECT_ID]);
 
-    if ($array[self::_TODO_ITEM_ID]['nil'] != 'true')
-    {
-        $todoItemId = $array[self::_TODO_ITEM_ID];
-    }
-    else
-    {
-      $todoItemId = null;
-    }
+        try {
+            if ($array[self::_TODO_ITEM_ID]['nil'] != 'true')
+            {
+                $todoItemId = $array[self::_TODO_ITEM_ID];
+            }
+            else {
+                $todoItemId = null;
+            }
+        }
+        catch(\Exception $exception) {
+            $todoItemId = null;
+        }
 
         $this->_data = array(
             self::_ID => $id,
